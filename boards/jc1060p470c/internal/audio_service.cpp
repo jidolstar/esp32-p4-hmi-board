@@ -10,7 +10,6 @@
 
 #include "config.hpp"
 #include "internal/audio_output.hpp"
-#include "internal/sd_storage.hpp"
 #include "internal/wav_reader.hpp"
 
 namespace hmi::boards::jc1060p470c::internal {
@@ -114,6 +113,11 @@ void AudioService::worker() {
 AudioError AudioService::play_file(const char* path, Command& next,
                                    bool& has_next) {
   set(AudioState::starting, AudioError::none);
+  // 열린 FILE*의 전체 수명 동안 lease를 유지해 USB raw 전환과 겹치지 않게 한다.
+  auto storage_lease = storage_.acquire_exclusive_lease();
+  if (!storage_lease) {
+    return AudioError::unavailable;
+  }
   std::FILE* file = storage_.open_read_stream(path);
   if (file == nullptr) {
     return storage_.ready() ? AudioError::file : AudioError::unavailable;

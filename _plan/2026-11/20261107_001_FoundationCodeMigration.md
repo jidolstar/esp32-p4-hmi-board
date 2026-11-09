@@ -65,7 +65,7 @@
 CMakeLists.txt
 CMakePresets.json
 .gitignore
-START_HERE.md
+README.md
 include/
   lv_conf.h
   hmi_lvgl_mem.h
@@ -308,7 +308,7 @@ F1~F5는 `complete`, F6은 `blocked`다. 구현과 자동 검증은 완료됐으
 
 **작업**
 
-1. `START_HERE.md`에 지원 환경, 최초 구성, 빌드, 실행, 테스트 명령을 적는다.
+1. `README.md`에 지원 환경, 최초 구성, 빌드, 실행, 테스트 명령을 적는다.
 2. 인터넷이 필요한 최초 LVGL/SDL 다운로드 조건을 적는다.
 3. 구현하지 않은 HMI, 프로필 registry, sample, 자산 생성 기능을 명시한다.
 4. 각 단계의 명령·결과·수동 근거를 이 계획에 기록한다.
@@ -330,7 +330,7 @@ F1~F5는 `complete`, F6은 `blocked`다. 구현과 자동 검증은 완료됐으
 
 **현재 근거와 차단 항목 (2026-11-07)**
 
-- `START_HERE.md`에 지원 환경, 최초 구성, build, 실행, test, 미구현 범위를 기록했다.
+- `README.md`에 지원 환경, 최초 구성, build, 실행, test, 미구현 범위를 기록했다.
 - 기존 cache와 분리한 `build/clean-check`에서 configure, 지정 대상 전체 build, CTest 5/5가 통과했다.
 - `CMakePresets.json` JSON parsing이 통과하고 `windows-debug`에서 동일한 CTest 5개가 등록된다.
 - build와 `.git`을 제외한 파일의 Windows 절대 경로 검색 결과는 0건이다.
@@ -420,7 +420,7 @@ F1~F5는 `complete`, F6은 `blocked`다. 구현과 자동 검증은 완료됐으
 - [x] 공통 모듈에서 LVGL·SDL·Arduino·ESP-IDF include가 0건이다.
 - [x] 앱에서 SDL·하드웨어 내부 API·원본 저장소 경로 참조가 0건이다.
 - [x] 추적 대상 파일에 개인 절대 경로·제품 데이터·고정 serial 포트·운영 주소가 없다.
-- [x] `START_HERE.md`의 preset과 target 이름이 실제 빌드 정의와 일치한다.
+- [x] `README.md`의 preset과 target 이름이 실제 빌드 정의와 일치한다.
 
 ## Manual Verification Checklist
 

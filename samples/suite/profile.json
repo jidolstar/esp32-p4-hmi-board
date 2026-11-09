@@ -10,6 +10,7 @@
   "sources": {
     "common": [
       "app.cpp",
+      "storage_access_lock.cpp",
       "dashboard/dashboard_page.cpp",
       "generated/fonts/fixed/title_32_bold.c",
       "generated/fonts/fixed/body_18_regular.c",
@@ -21,7 +22,7 @@
     "hmi": []
   },
   "include_dirs": ["."],
-  "modules": ["connectivity", "i18n", "settings", "text", "ui"],
+  "modules": ["connectivity", "i18n", "settings", "storage", "text", "ui"],
   "hosts": {
     "windows": { "enabled": true },
     "hmi": { "enabled": true, "board": "jc1060p470c" }
@@ -49,6 +50,11 @@
   "verification": {
     "tests": [
       "hmi_sample_suite_windows_smoke",
+      "hmi_board_storage_access_guard",
+      "hmi_board_msc_sector_transfer",
+      "hmi_board_usb_msc_event_state",
+      "hmi_board_storage_msc_transition",
+      "hmi_storage_access_controller",
       "hmi_sample_suite_navigation",
       "hmi_sample_suite_state",
       "hmi_sample_suite_interaction",
@@ -71,6 +77,8 @@
       "hmi_sample_suite_display_audio_interaction",
       "hmi_sample_suite_wifi_settings_state",
       "hmi_sample_suite_wifi_settings_interaction",
+      "hmi_sample_suite_sd_storage_state",
+      "hmi_sample_suite_sd_storage_interaction",
       "hmi_sample_suite_text_input_state",
       "hmi_sample_suite_text_input_interaction",
       "hmi_windows_sdl_keyboard"

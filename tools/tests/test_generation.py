@@ -99,7 +99,7 @@ class GenerationTest(unittest.TestCase):
         )
         source = (target / "page_registry.cpp").read_text(encoding="utf-8")
         self.assertEqual(
-            ["ui-basics", "text-input", "display-audio", "wifi"],
+            ["ui-basics", "text-input", "display-audio", "wifi", "sd-storage"],
             [page["id"] for page in resolved["pages"]],
         )
         self.assertIn(
@@ -114,6 +114,10 @@ class GenerationTest(unittest.TestCase):
             "samples/suite/pages/wifi/wifi_settings_page.cpp",
             resolved["source_groups"]["pages"],
         )
+        self.assertIn(
+            "samples/suite/pages/sd_storage/sd_storage_page.cpp",
+            resolved["source_groups"]["pages"],
+        )
         self.assertEqual(
             [
                 "modules/connectivity/src/wifi_scan_service.cpp",
@@ -122,6 +126,7 @@ class GenerationTest(unittest.TestCase):
                 "modules/i18n/src/locale.cpp",
                 "modules/i18n/src/format.cpp",
                 "modules/settings/src/level_settings.cpp",
+                "modules/storage/src/storage_access_controller.cpp",
                 "modules/text/src/utf8.cpp",
                 "modules/text/src/editor.cpp",
                 "modules/text/src/hangul_composer.cpp",
@@ -135,6 +140,7 @@ class GenerationTest(unittest.TestCase):
                 "modules/ui/src/user_text_input_line.cpp",
                 "modules/ui/src/virtual_keyboard.cpp",
                 "platform/windows/connectivity/virtual_wifi_sta.cpp",
+                "platform/windows/storage/virtual_storage_access.cpp",
             ],
             resolved["source_groups"]["modules"],
         )
@@ -143,6 +149,7 @@ class GenerationTest(unittest.TestCase):
         self.assertIn('"page.ui_basics.title"', source)
         self.assertIn('"display-audio"', source)
         self.assertIn('"wifi"', source)
+        self.assertIn('"sd-storage"', source)
         self.assertNotIn('"UI Basics"', source)
         self.assertEqual(177, len(resolved["assets"]))
         self.assertTrue(all(len(asset["sha256"]) == 64 for asset in resolved["assets"]))
@@ -162,6 +169,7 @@ class GenerationTest(unittest.TestCase):
         self.assertIn("-D HMI_PROFILE_HAS_ASSETS=1", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_SETTINGS=1", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_CONNECTIVITY=1", platformio_input)
+        self.assertIn("-D HMI_PROFILE_HAS_STORAGE=1", platformio_input)
         self.assertIn(
             "+<platform/hmi/connectivity/esp_hosted_wifi_sta.cpp>",
             platformio_input,
@@ -180,6 +188,18 @@ class GenerationTest(unittest.TestCase):
         )
         self.assertIn(
             "+<boards/jc1060p470c/internal/asset_usb_updater.cpp>",
+            platformio_input,
+        )
+        self.assertIn(
+            "+<boards/jc1060p470c/internal/usb_msc_driver.cpp>",
+            platformio_input,
+        )
+        self.assertIn(
+            "+<platform/hmi/storage/board_storage_access.cpp>",
+            platformio_input,
+        )
+        self.assertIn(
+            "+<modules/storage/src/storage_access_controller.cpp>",
             platformio_input,
         )
 
@@ -211,9 +231,13 @@ class GenerationTest(unittest.TestCase):
         self.assertIn("-D HMI_PROFILE_HAS_ASSETS=0", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_SETTINGS=0", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_CONNECTIVITY=0", platformio_input)
+        self.assertIn("-D HMI_PROFILE_HAS_STORAGE=0", platformio_input)
         self.assertNotIn("platform/hmi/connectivity", platformio_input)
         self.assertNotIn("asset_usb_updater.cpp", platformio_input)
         self.assertNotIn("audio_service.cpp", platformio_input)
+        self.assertNotIn("usb_msc_driver.cpp", platformio_input)
+        self.assertNotIn("platform/hmi/storage", platformio_input)
+        self.assertNotIn("modules/storage", platformio_input)
 
     def test_root_platformio_selects_generated_main_not_common_base(self) -> None:
         root_config = (REPOSITORY_ROOT / "platformio.ini").read_text(encoding="utf-8")

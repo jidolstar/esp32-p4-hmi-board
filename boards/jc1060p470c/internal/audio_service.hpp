@@ -7,11 +7,11 @@
 #include <freertos/queue.h>
 
 #include "audio.hpp"
+#include "storage.hpp"
 
 class TwoWire;
 
 namespace hmi::boards::jc1060p470c::internal {
-class SdStorage;
 
 /**
  * Board가 값으로 소유하는 단일 WAV worker다.
@@ -21,7 +21,7 @@ class SdStorage;
  */
 class AudioService {
  public:
-  AudioService(SdStorage& storage, TwoWire& wire)
+  AudioService(Storage& storage, TwoWire& wire)
       : storage_(storage), wire_(wire) {}
   AudioService(const AudioService&) = delete;
   AudioService& operator=(const AudioService&) = delete;
@@ -44,7 +44,7 @@ class AudioService {
   AudioError play_file(const char* path, Command& next, bool& has_next);
   void set(AudioState state, AudioError error) noexcept;
 
-  SdStorage& storage_;
+  Storage& storage_;
   TwoWire& wire_;
   QueueHandle_t queue_ = nullptr;
   std::atomic<AudioState> state_{AudioState::idle};

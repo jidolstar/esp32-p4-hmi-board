@@ -74,6 +74,24 @@
       "capabilities": ["connectivity", "i18n", "text-input"],
       "verification": ["wifi_settings_state", "wifi_settings_interaction"],
       "data_key": "wifi"
+    },
+    {
+      "id": "sd-storage",
+      "title_key": "page.sd_storage.title",
+      "description_key": "page.sd_storage.description",
+      "order": 50,
+      "entry": {
+        "header": "pages/sd_storage/sd_storage_page.hpp",
+        "type": "hmi::samples::suite::SdStoragePage"
+      },
+      "sources": {
+        "common": ["pages/sd_storage/sd_storage_page.cpp"],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["storage", "i18n"],
+      "verification": ["sd_storage_state", "sd_storage_interaction"],
+      "data_key": "sd_storage"
     }
   ]
 }

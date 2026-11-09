@@ -25,7 +25,7 @@
 3. 첫 Dashboard에서 기능별 page로 이동하는 단일 `sample-suite` 앱과 정식 샘플 page 9개.
 4. 필요할 때 추가하는 업데이트 page와 PC 관리 도구.
 5. 원본·최소 생성 자산·fixture·의존성 명세·라이선스·검증 설정.
-6. 처음 준비하는 사람의 유일한 시작 문서 `START_HERE.md`.
+6. 처음 준비하는 사람의 유일한 시작 문서 `README.md`.
 
 **배포 목표:** 필요한 개발 도구가 준비된 PC에서 Git clone 또는 pull 후, 문서의 준비 명령과 실행 명령으로 기본 앱 및 선택 샘플을 실행한다. 최초 의존성 다운로드에 필요한 인터넷과 도구 설치 조건은 미리 명시한다. 기존 작업 폴더·개인 설정·외부 운영 서버에 의존하지 않는다.
 
@@ -93,7 +93,7 @@
 아래 경로는 새 시작 프로젝트의 목표 구조다.
 
 ```text
-START_HERE.md
+README.md
 CMakeLists.txt
 CMakePresets.json
 platformio.ini
@@ -334,7 +334,7 @@ python tools/project.py run --host windows --profile main
 
 위 결과를 확보한 버전에만 바로 시작할 수 있는 배포본이라는 상태를 부여한다. 현재 문서의 설계 완료와 배포본의 실행 검증 완료는 별도로 기록한다.
 
-## 8. 단일 시작 문서 `START_HERE.md`
+## 8. 단일 시작 문서 `README.md`
 
 문서의 목적은 새 직원이 한 파일에서 준비·실행·수정·검증 방법을 찾게 하는 것이다. 다음 순서로 작성한다.
 

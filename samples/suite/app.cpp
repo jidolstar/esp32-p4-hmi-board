@@ -21,6 +21,7 @@ bool SampleSuiteApp::create(const hmi::profiles::AppContext &context) {
   fonts_ = context.fonts;
   level_settings_ = context.level_settings;
   wifi_registration_ = context.wifi_registration;
+  storage_access_ = context.storage_access;
   screen_ = lv_obj_create(nullptr);
   if (screen_ == nullptr) {
     theme_.reset();
@@ -43,12 +44,25 @@ bool SampleSuiteApp::create(const hmi::profiles::AppContext &context) {
     destroy();
     return false;
   }
+  if (storage_access_ != nullptr) {
+    if (!rebuild_storage_lock()) {
+      destroy();
+      return false;
+    }
+    storage_timer_ =
+        lv_timer_create(&SampleSuiteApp::handle_storage_timer, 50U, this);
+    if (storage_timer_ == nullptr) {
+      destroy();
+      return false;
+    }
+    refresh_storage_access_lock();
+  }
   lv_scr_load(screen_);
   return true;
 }
 
 bool SampleSuiteApp::request_page(const char *page_id) noexcept {
-  if (screen_ == nullptr || page_id == nullptr) {
+  if (screen_ == nullptr || page_id == nullptr || storage_locked()) {
     return false;
   }
   const PageDescriptor *descriptors = generated::page_descriptors();
@@ -64,7 +78,7 @@ bool SampleSuiteApp::request_page(const char *page_id) noexcept {
 }
 
 bool SampleSuiteApp::request_dashboard() noexcept {
-  if (screen_ == nullptr) {
+  if (screen_ == nullptr || storage_locked()) {
     return false;
   }
   pending_view_ = PendingView::kDashboard;
@@ -72,7 +86,7 @@ bool SampleSuiteApp::request_dashboard() noexcept {
 }
 
 bool SampleSuiteApp::request_theme_toggle() noexcept {
-  if (screen_ == nullptr) {
+  if (screen_ == nullptr || storage_locked()) {
     return false;
   }
   pending_view_ = PendingView::kThemeToggle;
@@ -108,6 +122,11 @@ bool SampleSuiteApp::flush_pending_transition() noexcept {
 }
 
 bool SampleSuiteApp::apply_pending_transition() noexcept {
+  refresh_storage_access_lock();
+  if (storage_locked()) {
+    pending_view_ = PendingView::kNone;
+    return false;
+  }
   const PendingView target = pending_view_;
   const std::size_t page_index = pending_page_index_;
   pending_view_ = PendingView::kNone;
@@ -115,7 +134,7 @@ bool SampleSuiteApp::apply_pending_transition() noexcept {
     return true;
   }
   if (target == PendingView::kDashboard) {
-    return show_dashboard();
+    return show_dashboard() && rebuild_storage_lock();
   }
   if (target == PendingView::kLocaleRefresh) {
     return rebuild_active_page();
@@ -145,10 +164,11 @@ bool SampleSuiteApp::rebuild_active_page() noexcept {
     return false;
   }
   lv_obj_invalidate(screen_);
-  return true;
+  return rebuild_storage_lock();
 }
 
 bool SampleSuiteApp::rebuild_for_theme_toggle() noexcept {
+  storage_lock_.destroy();
   const SuiteView previous_view = view_;
   const std::size_t previous_page_index = active_page_index_;
   if (previous_view == SuiteView::kPage && active_page_ != nullptr) {
@@ -182,9 +202,9 @@ bool SampleSuiteApp::rebuild_for_theme_toggle() noexcept {
     }
     active_page_index_ = previous_page_index;
     view_ = SuiteView::kPage;
-    return true;
+    return rebuild_storage_lock();
   }
-  return show_dashboard();
+  return show_dashboard() && rebuild_storage_lock();
 }
 
 bool SampleSuiteApp::show_dashboard() noexcept {
@@ -234,14 +254,64 @@ PageContext SampleSuiteApp::make_page_context() noexcept {
   PageContext page_context;
   page_context.request_dashboard = &SampleSuiteApp::handle_page_back;
   page_context.request_theme_toggle = &SampleSuiteApp::handle_theme_toggle;
+  page_context.refresh_storage_lock =
+      &SampleSuiteApp::handle_storage_lock_refresh;
   page_context.set_locale = &SampleSuiteApp::handle_locale_change;
   page_context.locale = locale_;
   page_context.fonts = fonts_;
   page_context.level_settings = &level_settings_;
   page_context.wifi_registration = wifi_registration_;
+  page_context.storage_access = storage_access_;
   page_context.theme = &theme_;
   page_context.user_data = this;
   return page_context;
+}
+
+bool SampleSuiteApp::rebuild_storage_lock() noexcept {
+  storage_lock_.destroy();
+  if (storage_access_ == nullptr) {
+    return true;
+  }
+  const bool created =
+      storage_lock_.create(screen_, *storage_access_, locale_, theme_);
+  if (created) {
+    storage_lock_.refresh();
+  }
+  return created;
+}
+
+bool SampleSuiteApp::storage_locked() const noexcept {
+  return storage_access_ != nullptr && storage_access_->snapshot().lock_required;
+}
+
+void SampleSuiteApp::refresh_storage_access_lock() noexcept {
+  if (storage_access_ == nullptr) {
+    return;
+  }
+  if (storage_access_->snapshot().lock_required) {
+    if (transition_scheduled_) {
+      lv_async_call_cancel(&SampleSuiteApp::process_transition_async, this);
+      transition_scheduled_ = false;
+    }
+    pending_view_ = PendingView::kNone;
+  }
+  storage_lock_.refresh();
+}
+
+void SampleSuiteApp::handle_storage_lock_refresh(void *user_data) noexcept {
+  auto *self = static_cast<SampleSuiteApp *>(user_data);
+  if (self != nullptr) {
+    self->refresh_storage_access_lock();
+  }
+}
+
+void SampleSuiteApp::handle_storage_timer(lv_timer_t *timer) noexcept {
+  auto *self = timer == nullptr
+                   ? nullptr
+                   : static_cast<SampleSuiteApp *>(timer->user_data);
+  if (self != nullptr) {
+    self->refresh_storage_access_lock();
+  }
 }
 
 void SampleSuiteApp::handle_dashboard_selection(void *user_data,
@@ -269,7 +339,7 @@ void SampleSuiteApp::handle_theme_toggle(void *user_data) noexcept {
 bool SampleSuiteApp::handle_locale_change(void *user_data,
                                           hmi::i18n::Locale locale) noexcept {
   auto *self = static_cast<SampleSuiteApp *>(user_data);
-  if (self == nullptr) {
+  if (self == nullptr || self->storage_locked()) {
     return false;
   }
   if (self->locale_ == locale) {
@@ -288,11 +358,13 @@ bool SampleSuiteApp::handle_locale_change(void *user_data,
 }
 
 bool SampleSuiteApp::handle_utf8_input(const char *utf8) noexcept {
-  return active_page_ != nullptr && active_page_->handle_utf8_input(utf8);
+  return !storage_locked() && active_page_ != nullptr &&
+         active_page_->handle_utf8_input(utf8);
 }
 
 bool SampleSuiteApp::handle_key(hmi::profiles::AppKey key) noexcept {
-  return active_page_ != nullptr && active_page_->handle_key(key);
+  return !storage_locked() && active_page_ != nullptr &&
+         active_page_->handle_key(key);
 }
 
 SampleSuiteSnapshot SampleSuiteApp::snapshot() const noexcept {
@@ -305,6 +377,7 @@ SampleSuiteSnapshot SampleSuiteApp::snapshot() const noexcept {
   if (active_page_ != nullptr) {
     value.page = active_page_->snapshot();
   }
+  value.storage_lock = storage_lock_.snapshot();
   return value;
 }
 
@@ -314,6 +387,11 @@ void SampleSuiteApp::destroy() noexcept {
   }
   transition_scheduled_ = false;
   pending_view_ = PendingView::kNone;
+  if (storage_timer_ != nullptr) {
+    lv_timer_del(storage_timer_);
+  }
+  storage_timer_ = nullptr;
+  storage_lock_.destroy();
   destroy_active_view();
   if (screen_ != nullptr && lv_scr_act() == screen_) {
     lv_obj_t *empty = lv_obj_create(nullptr);
@@ -331,6 +409,7 @@ void SampleSuiteApp::destroy() noexcept {
   fonts_ = {};
   level_settings_ = {};
   wifi_registration_ = nullptr;
+  storage_access_ = nullptr;
 }
 
 SampleSuiteApp::~SampleSuiteApp() { destroy(); }

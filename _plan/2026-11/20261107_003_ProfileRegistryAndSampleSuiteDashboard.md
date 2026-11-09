@@ -37,7 +37,7 @@
 - `sample-suite` 첫 화면에 page card/button 목록이 있고 `UI Basics`를 눌러 page로 이동한 뒤 Dashboard로 돌아올 수 있다.
 - `ui-basics` page는 button, long press, scroll, toast, confirm/cancel을 시연한다.
 - 새 sample page를 추가할 때 기존 app/page, Board, LVGL port 내부를 수정하지 않고 새 page 폴더와 page registry 항목만 추가하는 경로가 검증된다.
-- `START_HERE.md`가 profile 목록 확인, 진단, Windows 실행, HMI build의 단일 시작 경로를 설명한다.
+- `README.md`가 profile 목록 확인, 진단, Windows 실행, HMI build의 단일 시작 경로를 설명한다.
 
 ## 3. 현재 상태와 확인 근거
 
@@ -49,7 +49,7 @@
 - `boards/jc1060p470c/`와 `platform/hmi/`는 LCD·touch·LVGL runtime과 allocator를 제공한다.
 - `platformio.ini`는 `hmi-main` 한 환경의 production source를 `build_src_filter`에 직접 나열한다.
 - 루트 `CMakeLists.txt`와 `apps/main/CMakeLists.txt`는 `main`을 고정 subdirectory와 target으로 연결한다.
-- `START_HERE.md`는 현재 직접 CMake/PlatformIO 명령과 `main` 하나만 설명한다.
+- `README.md`는 현재 직접 CMake/PlatformIO 명령과 `main` 하나만 설명한다.
 - profile manifest, registry, `.generated/`, `tools/project.py`, `samples/suite/`는 아직 없다.
 
 ### 3.2 현재 경계에서 바꿔야 할 점
@@ -663,7 +663,7 @@ rg -n "lv_tick_inc|lv_timer_handler|lv_init" hosts/hmi apps/main samples/suite
 
 **범위**
 
-- 포함: `START_HERE.md`, CLI 도움말, clean generation/build, 임시 fixture page 추가/제거 검사, 사용자 HMI 확인 절차
+- 포함: `README.md`, CLI 도움말, clean generation/build, 임시 fixture page 추가/제거 검사, 사용자 HMI 확인 절차
 - 제외: export/bundle/CI, 추가 정식 sample, upload 자동화
 
 **산출물**
@@ -693,7 +693,7 @@ git check-ignore .generated .pio
 
 **수동 검증**
 
-1. 사용자가 `START_HERE.md`만 보고 `main`과 `sample-suite`를 Windows에서 각각 실행한다.
+1. 사용자가 `README.md`만 보고 `main`과 `sample-suite`를 Windows에서 각각 실행한다.
 2. Dashboard만 보고 각 page의 목적과 지원 상태를 이해할 수 있는지 확인한다.
 3. 사용자가 직접 `sample-suite` firmware를 업로드한다.
 4. 실제 LCD에서 Dashboard↔`UI Basics`, list, toast, confirm dialog가 잘리지 않는지 확인한다.
@@ -714,7 +714,7 @@ git check-ignore .generated .pio
 
 **자동 게이트 완료 근거 (2026-11-07)**
 
-- `START_HERE.md`를 현재 profile registry 기준으로 다시 작성했다. `main`/`sample-suite` 목록·doctor·Windows build/run·check·HMI build, 실제 executable/firmware 경로, 생성물 정리, sample page 추가 경계, G2 i18n/text-input 계획과 G4 외부 배포 게이트를 한 문서에 맞췄다. upload는 사용자 전용 절차로만 남겼다.
+- `README.md`를 현재 profile registry 기준으로 다시 작성했다. `main`/`sample-suite` 목록·doctor·Windows build/run·check·HMI build, 실제 executable/firmware 경로, 생성물 정리, sample page 추가 경계, G2 i18n/text-input 계획과 G4 외부 배포 게이트를 한 문서에 맞췄다. upload는 사용자 전용 절차로만 남겼다.
 - `python tools/project.py --help`, `list`, Windows/HMI의 `main`·`sample-suite` doctor가 모두 종료 코드 0이었다. 문서의 오래된 `sample-ui`, 단일 `.pio/build/hmi-main`, 미구현 registry 설명은 0건이다.
 - `tools/tests/test_generation.py`에 완전한 임시 저장소에서 no-op page를 등록·생성·제거하는 회귀를 추가했다. 생성 registry에만 임시 descriptor/source가 반영되고, 제거 후 생성물 byte가 baseline과 같으며 production app/page/Board/platform/host snapshot은 바뀌지 않는다. 전체 `python -m unittest discover -s tools/tests -v`는 27개가 통과했다.
 - 기존 configure/object/executable과 HMI profile build directory를 치운 뒤, 다운로드된 Windows 제3자 dependency source cache만 재사용해 두 Windows profile을 다시 configure/build했다. `main` input/smoke 2개와 `sample-suite` navigation/state/interaction/smoke 4개가 모두 통과했고 isolation은 `windows/main`, `windows/sample-suite`를 확인했다.
@@ -814,6 +814,6 @@ git check-ignore .generated .pio
 - [X] Windows `main`의 기존 다섯 문구와 pointer 상태 전환이 유지된다.
 - [X] Windows `sample-suite`의 Dashboard↔`UI Basics`, Back, press, long press, scroll, toast, confirm/cancel이 동작한다.
 - [X] Windows의 dialog/toast 문구가 균형 있게 정렬되고 잘리지 않는다.
-- [X] 사용자가 Windows 검증과 갱신된 `START_HERE.md`를 P6 수용 근거로 승인했다.
+- [X] 사용자가 Windows 검증과 갱신된 `README.md`를 P6 수용 근거로 승인했다.
 - [X] 미수행 실기기 항목을 실제 통과로 오인하지 않고 G4 실기기 수용 게이트로 이관했다.
 - [X] 사용자가 내부 재사용 권한을 확인했고 외부 배포 조건은 G4의 별도 게이트로 분리했다.

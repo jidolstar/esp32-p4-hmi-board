@@ -1,5 +1,5 @@
 {
-  "content_hash": "2bb4e13363aa6b8538639a5d495473bca47610c7dcd882c0e78e2583d99f6240",
+  "content_hash": "71ba1a40ad9d2796cb94a03fd39fd8a29ad673d0c3b90fb5c1f2d6ae771215f0",
   "cpp_namespace": "hmi::samples::suite::generated",
   "entries": [
     {
@@ -138,6 +138,16 @@
       "role": "page_title"
     },
     {
+      "key": "page.sd_storage.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.sd_storage.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
       "key": "page.text_input.description",
       "placeholders": [],
       "role": "body"
@@ -166,6 +176,261 @@
       "key": "page.wifi.title",
       "placeholders": [],
       "role": "page_title"
+    },
+    {
+      "key": "storage.action.confirm_return",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "storage.action.connect",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "storage.action.refresh",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "storage.action.retry",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "storage.action.return",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "storage.card.capacity",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.card.status",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.filesystem.fat",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.label.filesystem",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "storage.label.free",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "storage.label.owner",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "storage.label.status",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "storage.label.total",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "storage.label.used",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "storage.lock.active.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.lock.active.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.lock.confirm.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.lock.confirm.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.lock.error.drain",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "storage.lock.exposing.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.lock.exposing.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.lock.failed.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.lock.failed.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.lock.quiescing.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.lock.quiescing.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.lock.reclaiming.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.lock.reclaiming.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.lock.status.active",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.lock.status.failed",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "storage.lock.status.suspended",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.lock.status.waiting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.lock.status.working",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.lock.waiting.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.lock.waiting.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "storage.message.busy",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "storage.message.error",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "storage.message.locked",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.message.no_media",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "storage.message.ready",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.message.returned",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.owner.hmi",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.owner.pc",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.status.connecting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.status.failed",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "storage.status.pc_active",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.status.ready",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.status.reclaiming",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.status.unavailable",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "storage.status.waiting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "storage.usb.note",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "storage.value.unknown",
+      "placeholders": [],
+      "role": "status"
     },
     {
       "key": "text_input.action.clear",
@@ -723,10 +988,10 @@
   "schema_version": 1,
   "sources": {
     "i18n/catalog.json": "e6b7aec4af6fb6f1a603a8858ee77742031952718c9aa6a0f7b3eaa6b0972ae3",
-    "i18n/en.yaml": "ca5798a795e5b0c9b8cf6f134f2721eedd811fefa9bd641ad5fbe2bb901ccd3a",
-    "i18n/ko.yaml": "75b1045165dc792487f1656d432f3e737ad25b332c147bd505a59603f3203281",
-    "i18n/typography.yaml": "8b442e56a8966efa5dcbb6e77771615334b94af043465ebd79389a4dab01ea24"
+    "i18n/en.yaml": "f6682cf085d7d437bc1050f29a7a55f065c236d96cb27e1e067473d569b3f8b3",
+    "i18n/ko.yaml": "8a3914da017cfab061c463f1185a22379a613e5a7df36bbfd01f75525740499b",
+    "i18n/typography.yaml": "f61a259020975851ffa4c6c6ff548bfc96a35283af6bd700b13f04094eefe7e5"
   },
   "symbol_prefix": "hmi_sample_suite",
-  "text_count": 131
+  "text_count": 184
 }

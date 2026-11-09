@@ -11,6 +11,7 @@
 #include "hmi/ui/theme.hpp"
 #include "page_contract.hpp"
 #include "profiles/runtime/app_contract.hpp"
+#include "storage_access_lock.hpp"
 
 namespace hmi::samples::suite {
 
@@ -22,6 +23,7 @@ struct SampleSuiteSnapshot {
   hmi::i18n::Locale locale = hmi::i18n::Locale::ko_kr;
   const char *active_page_id = nullptr;
   PageSnapshot page{};
+  StorageAccessLockSnapshot storage_lock{};
 };
 
 /**
@@ -47,6 +49,7 @@ class SampleSuiteApp {
   bool handle_utf8_input(const char *utf8) noexcept;
   bool handle_key(hmi::profiles::AppKey key) noexcept;
   bool flush_pending_transition() noexcept;
+  void refresh_storage_access_lock() noexcept;
   [[nodiscard]] SampleSuiteSnapshot snapshot() const noexcept;
 
  private:
@@ -62,6 +65,8 @@ class SampleSuiteApp {
                                          const char *page_id) noexcept;
   static void handle_page_back(void *user_data) noexcept;
   static void handle_theme_toggle(void *user_data) noexcept;
+  static void handle_storage_lock_refresh(void *user_data) noexcept;
+  static void handle_storage_timer(lv_timer_t *timer) noexcept;
   static bool handle_locale_change(void *user_data,
                                    hmi::i18n::Locale locale) noexcept;
   static void process_transition_async(void *user_data);
@@ -73,6 +78,8 @@ class SampleSuiteApp {
   void destroy_active_view() noexcept;
   bool rebuild_active_page() noexcept;
   bool rebuild_for_theme_toggle() noexcept;
+  bool rebuild_storage_lock() noexcept;
+  [[nodiscard]] bool storage_locked() const noexcept;
 
   lv_obj_t *screen_ = nullptr;
   lv_obj_t *content_ = nullptr;
@@ -80,6 +87,9 @@ class SampleSuiteApp {
   hmi::profiles::BinaryFontPort fonts_{};
   hmi::settings::LevelSettingsPort level_settings_{};
   hmi::connectivity::WifiStaRegistration* wifi_registration_ = nullptr;
+  hmi::storage::StorageAccessController* storage_access_ = nullptr;
+  StorageAccessLock storage_lock_{};
+  lv_timer_t* storage_timer_ = nullptr;
   hmi::i18n::Locale locale_ = hmi::i18n::Locale::ko_kr;
   DashboardPage dashboard_{};
   std::unique_ptr<SamplePage> active_page_{};

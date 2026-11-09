@@ -8,8 +8,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <utility>
 
-#include "internal/sd_storage.hpp"
 #include "log.hpp"
 
 namespace hmi::boards::jc1060p470c::internal {
@@ -65,7 +65,7 @@ bool valid_profile_id(const char* value) noexcept {
 
 }  // namespace
 
-AssetUsbUpdater::AssetUsbUpdater(SdStorage& storage) noexcept : storage_(storage) {
+AssetUsbUpdater::AssetUsbUpdater(Storage& storage) noexcept : storage_(storage) {
   mbedtls_sha256_init(&file_sha_);
 }
 
@@ -119,7 +119,9 @@ bool AssetUsbUpdater::begin(const char* profile_id,
     return false;
   }
   // SD 오류가 있어도 CDC receiver는 살아 있어야 PC가 무응답 대신 원인을 받는다.
-  storage_available_ = storage_.ready() && recover_transaction();
+  // 시작 복구도 짧은 transaction lease 아래 수행해 USB raw 전환과 겹치지 않게 한다.
+  auto recovery_lease = storage_.acquire_exclusive_lease();
+  storage_available_ = recovery_lease && recover_transaction();
   enabled_ = true;
   HMI_LOG_INFO("[asset-usb] ready profile=%s root=%s storage=%s\r\n",
                profile_id_, active_root_,
@@ -279,6 +281,8 @@ void AssetUsbUpdater::handle_line() noexcept {
       Serial.printf("ASSET_ERROR profile_mismatch %s\n", profile_id_);
     } else if (!storage_available_) {
       Serial.print("ASSET_ERROR storage_unavailable\n");
+    } else if (!storage_.ready()) {
+      Serial.print("ASSET_BUSY\n");
     } else {
       Serial.printf("ASSET_V2 %s\n", profile_id_);
     }
@@ -299,7 +303,7 @@ void AssetUsbUpdater::handle_line() noexcept {
   if (std::strncmp(line_, "ASSET_BEGIN ", 12U) == 0) {
     if (!storage_available_) {
       Serial.print("ASSET_ERROR storage_unavailable\n");
-    } else if (active_) {
+    } else if (active_ || !storage_.ready()) {
       Serial.print("ASSET_BUSY\n");
     } else {
       begin_bundle();
@@ -380,12 +384,21 @@ void AssetUsbUpdater::begin_bundle() noexcept {
   if (std::sscanf(line_, "ASSET_BEGIN %64s %u %lu %c", bundle_id, &count,
                   &total, &extra) != 3 ||
       !decode_sha(bundle_id, bundle_digest) || count == 0U ||
-      count > kMaxFiles || total == 0U || total > kMaxBundleBytes ||
-      storage_.free_bytes() < static_cast<std::uint64_t>(total) + 4096U ||
+      count > kMaxFiles || total == 0U || total > kMaxBundleBytes) {
+    Serial.print("ASSET_ERROR invalid_begin_or_storage\n");
+    return;
+  }
+  auto transaction_lease = storage_.acquire_exclusive_lease();
+  if (!transaction_lease) {
+    Serial.print("ASSET_BUSY\n");
+    return;
+  }
+  if (storage_.free_bytes() < static_cast<std::uint64_t>(total) + 4096U ||
       !begin_transaction()) {
     Serial.print("ASSET_ERROR invalid_begin_or_storage\n");
     return;
   }
+  storage_lease_ = std::move(transaction_lease);
   expected_file_count_ = static_cast<std::uint16_t>(count);
   expected_total_bytes_ = static_cast<std::uint32_t>(total);
   accepted_file_count_ = 0U;
@@ -615,6 +628,7 @@ void AssetUsbUpdater::commit_bundle() noexcept {
   active_ = false;
   phase_ = AssetUpdatePhase::completed;
   preparation_ = AssetUpdatePreparationStep::none;
+  storage_lease_ = Storage::ExclusiveLease{};
   Serial.print("ASSET_COMPLETE\n");
   HMI_LOG_INFO("[asset-usb] complete profile=%s files=%u bytes=%lu\r\n",
                profile_id_, static_cast<unsigned>(accepted_file_count_),
@@ -623,9 +637,11 @@ void AssetUsbUpdater::commit_bundle() noexcept {
 
 void AssetUsbUpdater::send_status() noexcept {
   Serial.printf("ASSET_PROFILE %s\n", profile_id_);
-  if (storage_available_) {
+  if (storage_available_ && storage_.ready()) {
     Serial.printf("ASSET_SPACE %llu\n",
                   static_cast<unsigned long long>(storage_.free_bytes()));
+  } else if (storage_available_) {
+    Serial.print("ASSET_STORAGE busy\n");
   } else {
     Serial.print("ASSET_STORAGE unavailable\n");
   }
@@ -641,6 +657,7 @@ void AssetUsbUpdater::abort(const char* reason) noexcept {
   window_used_ = 0U;
   window_chunks_ = 0U;
   recover_transaction();
+  storage_lease_ = Storage::ExclusiveLease{};
   Serial.printf("ASSET_ERROR %s\n", reason == nullptr ? "unknown" : reason);
   HMI_LOG_ERROR("[asset-usb] failed reason=%s\r\n",
                 reason == nullptr ? "unknown" : reason);

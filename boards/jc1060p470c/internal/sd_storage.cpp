@@ -29,8 +29,12 @@ constexpr std::uint32_t kMountFrequenciesKhz[] = {
 SdStorage::~SdStorage() { end(); }
 
 bool SdStorage::begin() {
-  if (mounted_) {
+  if (mounted_.load(std::memory_order_acquire)) {
     return true;
+  }
+  if (access_.raw_access_active()) {
+    HMI_LOG_ERROR("[storage] mount rejected during USB raw access\r\n");
+    return false;
   }
 
   if (!SD_MMC.setPins(config::kSdClock, config::kSdCommand, config::kSdData0,
@@ -56,9 +60,13 @@ bool SdStorage::begin() {
       continue;
     }
 
-    mounted_ = true;
+    total_bytes_ = SD_MMC.totalBytes();
+    const std::uint64_t used = SD_MMC.usedBytes();
+    last_free_bytes_ = used <= total_bytes_ ? total_bytes_ - used : 0U;
+    mounted_.store(true, std::memory_order_release);
+    generation_.fetch_add(1U, std::memory_order_acq_rel);
     HMI_LOG_INFO("[storage] SD ready bytes=%llu freq=%ukHz\r\n",
-                 static_cast<unsigned long long>(SD_MMC.totalBytes()),
+                 static_cast<unsigned long long>(total_bytes_),
                  static_cast<unsigned>(frequency_khz));
     return true;
   }
@@ -68,17 +76,54 @@ bool SdStorage::begin() {
 }
 
 void SdStorage::end() noexcept {
-  if (mounted_) {
+  if (mounted_.exchange(false, std::memory_order_acq_rel)) {
     SD_MMC.end();
-    mounted_ = false;
+    generation_.fetch_add(1U, std::memory_order_acq_rel);
   }
+  access_.end_raw_access();
+  total_bytes_ = 0U;
+  last_free_bytes_ = 0U;
 }
 
-bool SdStorage::ready() const noexcept { return mounted_; }
+bool SdStorage::ready() const noexcept {
+  return mounted_.load(std::memory_order_acquire) &&
+         !access_.raw_access_active();
+}
+
+StorageStatus SdStorage::status() const noexcept {
+  StorageStatus result{};
+  const bool physical_mount = mounted_.load(std::memory_order_acquire);
+  const bool raw_access = access_.raw_access_active();
+  result.mounted = physical_mount && !raw_access;
+  result.total_bytes = total_bytes_;
+  result.free_bytes = last_free_bytes_;
+  result.generation = generation_.load(std::memory_order_acquire);
+  result.owner = raw_access
+                     ? StorageOwner::usb_msc
+                     : (physical_mount ? StorageOwner::hmi
+                                       : StorageOwner::none);
+  return result;
+}
+
+bool SdStorage::acquire_file_lease() noexcept {
+  return mounted_.load(std::memory_order_acquire) &&
+         access_.try_acquire_file_lease();
+}
+
+void SdStorage::release_file_lease() noexcept {
+  access_.release_file_lease();
+}
+
+bool SdStorage::try_begin_raw_access() noexcept {
+  return mounted_.load(std::memory_order_acquire) &&
+         access_.try_begin_raw_access();
+}
+
+void SdStorage::end_raw_access() noexcept { access_.end_raw_access(); }
 
 bool SdStorage::resolve_path(const char* path, char* output,
                              std::size_t capacity) const noexcept {
-  if (!mounted_ || path == nullptr || output == nullptr || capacity == 0U ||
+  if (!ready() || path == nullptr || output == nullptr || capacity == 0U ||
       path[0] != '/' || std::strstr(path, "..") != nullptr) {
     return false;
   }
@@ -95,12 +140,13 @@ bool SdStorage::exists(const char* path) const noexcept {
 }
 
 std::uint64_t SdStorage::free_bytes() const noexcept {
-  if (!mounted_) {
+  if (!ready()) {
     return 0U;
   }
-  const std::uint64_t total = SD_MMC.totalBytes();
+  const std::uint64_t total = total_bytes_;
   const std::uint64_t used = SD_MMC.usedBytes();
-  return used <= total ? total - used : 0U;
+  last_free_bytes_ = used <= total ? total - used : 0U;
+  return last_free_bytes_;
 }
 
 bool SdStorage::file_size(const char* path, std::uint64_t& size) const noexcept {

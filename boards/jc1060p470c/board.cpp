@@ -10,16 +10,20 @@
 #if HMI_PROFILE_HAS_ASSETS
 #include "internal/asset_usb_updater.hpp"
 #endif
+#if HMI_PROFILE_HAS_STORAGE
+#include "internal/storage_msc_transition.hpp"
+#endif
 #include "log.hpp"
 
 namespace hmi::boards::jc1060p470c {
 
 Board::Board()
 #if HMI_PROFILE_HAS_SETTINGS
-    : touch_(touch_i2c_), audio_service_(storage_, touch_i2c_),
+    : touch_(touch_i2c_), storage_facade_(storage_),
+      audio_service_(storage_facade_, touch_i2c_),
       audio_(audio_service_) {}
 #else
-    : touch_(touch_i2c_) {}
+    : touch_(touch_i2c_), storage_facade_(storage_) {}
 #endif
 
 Board::~Board() = default;
@@ -78,11 +82,12 @@ bool Board::set_backlight_level(std::uint8_t level) {
 }
 
 bool Board::begin_storage() {
+  if (!storage_facade_.ready() && !storage_.begin()) {
+    return false;
+  }
+
   if (lvgl_storage_ready_) {
     return true;
-  }
-  if (!storage_.begin()) {
-    return false;
   }
 
   // lv_font_load의 A: 경로가 Arduino VFS의 /sdcard mount를 사용하도록 연결한다.
@@ -92,14 +97,56 @@ bool Board::begin_storage() {
   return true;
 }
 
-bool Board::storage_ready() const noexcept { return storage_.ready(); }
+bool Board::storage_ready() const noexcept { return storage_facade_.ready(); }
+
+UsbMscEnterResult Board::enter_usb_msc() noexcept {
+#if HMI_PROFILE_HAS_STORAGE
+  return internal::enter_storage_usb_msc(storage_, usb_msc_);
+#else
+  return UsbMscEnterResult::unavailable;
+#endif
+}
+
+UsbMscExitResult Board::exit_usb_msc(
+    std::uint32_t drain_timeout_ms) noexcept {
+#if HMI_PROFILE_HAS_STORAGE
+  return internal::exit_storage_usb_msc(storage_, usb_msc_,
+                                        drain_timeout_ms);
+#else
+  (void)drain_timeout_ms;
+  return UsbMscExitResult::not_active;
+#endif
+}
+
+bool Board::retry_storage_mount() noexcept {
+  return !storage_facade_.ready() && storage_.begin();
+}
+
+UsbMscStatus Board::usb_msc_status() const noexcept {
+#if HMI_PROFILE_HAS_STORAGE
+  const auto status = usb_msc_.snapshot();
+  return {status.active,
+          status.media_present,
+          status.host_seen,
+          status.host_active,
+          status.host_ejected,
+          status.usb_started,
+          status.usb_stopped,
+          status.suspended,
+          status.io_error,
+          status.in_flight,
+          status.event_revision};
+#else
+  return {};
+#endif
+}
 
 bool Board::enable_usb_asset_updates(const char* profile_id,
                                      const char* storage_root) {
 #if HMI_PROFILE_HAS_ASSETS
   if (!asset_usb_updater_) {
     asset_usb_updater_.reset(
-        new (std::nothrow) internal::AssetUsbUpdater(storage_));
+        new (std::nothrow) internal::AssetUsbUpdater(storage_facade_));
   }
   return asset_usb_updater_ != nullptr &&
          asset_usb_updater_->begin(profile_id, storage_root);

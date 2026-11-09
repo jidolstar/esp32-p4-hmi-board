@@ -9,6 +9,7 @@
 #include "internal/sd_storage.hpp"
 #include "internal/lvgl_port.hpp"
 #include "internal/touch_controller.hpp"
+#include "storage.hpp"
 #include "touch_point.hpp"
 
 #ifndef HMI_PROFILE_HAS_SETTINGS
@@ -22,6 +23,14 @@
 
 #ifndef HMI_PROFILE_HAS_ASSETS
 #define HMI_PROFILE_HAS_ASSETS 0
+#endif
+
+#ifndef HMI_PROFILE_HAS_STORAGE
+#define HMI_PROFILE_HAS_STORAGE 0
+#endif
+
+#if HMI_PROFILE_HAS_STORAGE
+#include "internal/usb_msc_driver.hpp"
 #endif
 
 namespace hmi::boards::jc1060p470c {
@@ -76,6 +85,21 @@ class Board {
   /** TF 카드가 FAT filesystem으로 mount됐는지 반환한다. */
   [[nodiscard]] bool storage_ready() const noexcept;
 
+  /** SD 구현 세부사항을 숨긴 Board-owned 저장소 facade를 반환한다. */
+  Storage& storage() noexcept { return storage_facade_; }
+
+  /** file lease가 없을 때 SD를 USB MSC raw owner로 전환한다. */
+  UsbMscEnterResult enter_usb_msc() noexcept;
+
+  /** 새 USB I/O를 차단하고 callback drain 뒤 SD를 HMI filesystem으로 재마운트한다. */
+  UsbMscExitResult exit_usb_msc(std::uint32_t drain_timeout_ms) noexcept;
+
+  /** remount 실패 뒤 SD filesystem mount만 다시 시도한다. */
+  bool retry_storage_mount() noexcept;
+
+  /** USB callback이 기록한 작은 상태 snapshot을 반환한다. */
+  [[nodiscard]] UsbMscStatus usb_msc_status() const noexcept;
+
  private:
   bool begin_hardware();
 
@@ -83,6 +107,10 @@ class Board {
   internal::MipiDsiDisplay display_;
   internal::TouchController touch_;
   internal::SdStorage storage_;
+  Storage storage_facade_;
+#if HMI_PROFILE_HAS_STORAGE
+  internal::UsbMscDriver usb_msc_;
+#endif
 #if HMI_PROFILE_HAS_SETTINGS
   internal::AudioService audio_service_;
   Audio audio_;

@@ -1,7 +1,7 @@
 # S05 계획: SD Storage & PC USB MSC Page
 
 작성: 2026-11-08. 상세화: 2026-11-09. 상태: `in_progress`.
-현재 단계: M0 `in_progress`. 선행 조건: S04 `wifi` `complete`
+현재 단계: M6 `in_progress`. 선행 조건: M5·M4·M3·M2·M1·M0 `complete`, S04 `wifi` `complete`
 (2026-11-09 사용자 완료 처리 승인).
 
 ## 1. 목적과 결정 요약
@@ -291,8 +291,8 @@ button 없이 자동으로 앱을 복구한다.
 
 202609의 이동 전용 `Storage::ExclusiveLease` 의미를 현재 보드에 맞게 이식한다.
 
-- lease count는 0 또는 1만 허용한다.
-- raw mode 진입 전 MSC가 lease를 획득하고 종료·rollback까지 보유한다.
+- HMI file lease는 bounded counter로 공유할 수 있지만 owner는 항상 `hmi` 하나로 표현한다.
+- raw mode 진입은 lease count가 정확히 0일 때만 하나의 atomic CAS로 성공한다.
 - raw mode에서는 새 lease와 모든 file API를 거부한다.
 - mount polling과 remount도 lease 규칙을 따른다.
 - lease move/destruction, double release, raw race를 native test한다.
@@ -418,14 +418,14 @@ clickable root가 모든 pointer 입력을 흡수한다. lock은 active page보�
 - `tools/hmi_project/generate.py`
 - `tools/tests/test_manifest.py`
 - `tools/tests/test_generation.py`
-- `START_HERE.md`
+- `README.md`
 
 storage module과 HMI MSC source는 `sample-suite`가 해당 capability를 선언할 때만 선택한다.
 `main` profile에 USB MSC code·문구·page가 섞이지 않는 것을 isolation test로 확인한다.
 
 ## 13. 단계별 실행 계획
 
-### M0. 이식 근거와 USB 구성 확정 — `in_progress`
+### M0. 이식 근거와 USB 구성 확정 — `complete`
 
 **목표**
 
@@ -456,13 +456,13 @@ storage module과 HMI MSC source는 `sample-suite`가 해당 capability를 선�
 
 **수동 검증**
 
-- 보드의 asset updater CDC connector와 MSC로 사용할 OTG connector를 식별한다.
-- 현재 framework 조합에서 MSC 추가/제거 후 CDC updater 또는 serial log가 유지되는지 확인한다.
+- 실기기 upload가 필요한 connector 식별과 CDC 유지 확인은 M6 수동 수용으로 이동한다.
+- M0는 framework API, build flag, source map과 202609 구현 근거로 조립 방향을 확정한다.
 
 **종료 조건**
 
-- USB 구성과 물리 connector가 문서화돼 있다.
-- MSC start/stop이 CDC를 끊지 않는 조립 방식이 결정돼 있다.
+- USB 구성과 connector 확인 절차가 문서화돼 있다.
+- 전체 USB stack이 아니라 MSC interface만 동적으로 start/stop하는 조립 방식이 결정돼 있다.
 - 자동 복귀 event와 suspend 제외 규칙이 확정돼 있다.
 
 **의존**
@@ -479,10 +479,12 @@ storage module과 HMI MSC source는 `sample-suite`가 해당 capability를 선�
 - 현재 설치 framework에서 USB started/stopped/suspend/resume event와
   `USBMSC::onStartStop/onRead/onWrite` API를 확인했다.
 - 202609의 facade·lease·raw mode·MSC driver·flow·native test를 직접 대조했다.
-- 물리 connector와 MSC start/stop 뒤 CDC 유지 여부는 실제 보드 확인이 남아 있어 M0는
-  `in_progress`를 유지한다.
+- MSC는 `USBMSC::begin/end`만 제어하고 전역 `USB.end()`를 호출하지 않아 CDC-on-boot
+  stack을 유지하는 방식으로 확정했다.
+- 물리 connector와 MSC start/stop 뒤 CDC 유지 여부는 Codex가 upload하지 않는 원칙에 따라
+  M6 실기기 수동 수용 항목으로 이동했다. 따라서 M0 자동 근거 gate는 `complete`다.
 
-### M1. 저장소 facade·lease·raw mode — `pending`
+### M1. 저장소 facade·lease·raw mode — `complete`
 
 **목표**
 
@@ -526,7 +528,21 @@ HMI file access와 USB raw access가 동시에 참이 될 수 없는 Board 저�
 
 - M0 complete.
 
-### M2. USB MSC driver와 HMI 비동기 adapter — `pending`
+**완료 근거 (2026-11-09)**
+
+- public `Storage` facade와 32-byte 이하 `StorageStatus`, generation, owner를 추가했다.
+- 각 file API는 짧은 lease를 자동 취득하고 asset transaction과 WAV stream은 전체 수명 동안
+  이동 전용 lease를 유지한다.
+- HMI lease count와 USB raw owner는 하나의 atomic word를 사용하므로 동시에 성공할 수 없다.
+- `hmi_board_storage_access_guard`가 다중 HMI lease, raw 거부, raw 중 file 거부,
+  중복 release/end를 검증했다.
+- board storage/generator Python test 15개가 통과했다.
+- Windows sample-suite 26개 기존 test와 새 ownership direct test가 통과했다.
+- HMI sample-suite build가 RAM 36,220 bytes, flash 1,391,268 bytes로 성공했다.
+- 공통 Board 회귀 확인을 위한 HMI main build도 RAM 28,256 bytes, flash 661,610 bytes로
+  성공했다. upload/flash는 실행하지 않았다.
+
+### M2. USB MSC driver와 HMI 비동기 adapter — `complete`
 
 **목표**
 
@@ -539,6 +555,7 @@ HMI file access와 USB raw access가 동시에 참이 될 수 없는 Board 저�
 - event atomics와 in-flight counter
 - Board MSC enter/exit/rollback
 - HMI storage adapter worker
+- sample-suite에만 driver/adapter를 넣기 위한 storage module 최소 build wiring
 - UI와 page는 제외
 
 **산출물**
@@ -573,7 +590,23 @@ HMI file access와 USB raw access가 동시에 참이 될 수 없는 Board 저�
 
 - M1 complete.
 
-### M3. 공통 controller와 Windows fixture — `pending`
+**완료 근거 (2026-11-10)**
+
+- 512-byte 정렬 buffer 하나를 사용하는 partial/full/multi-sector helper를 구현했고 overflow는
+  어떤 sector도 변경하기 전에 거부한다.
+- USB start/read/write/start-stop/eject/stopped/suspend/resume와 callback in-flight를 atomic
+  event state로 분리했다. callback에서는 mount나 LVGL을 호출하지 않는다.
+- MSC 종료는 먼저 media를 숨기고 in-flight가 0이 될 때까지 최대 500 ms 기다리며 timeout이면
+  raw owner를 유지한다.
+- Board enter/exit helper가 raw 예약, driver start rollback, drain, raw 해제, unmount/remount 순서를
+  고정하고 HMI adapter worker가 blocking 작업을 6,144-byte stack task에서 수행한다.
+- storage module build flag로 USBMSC/worker source를 sample-suite에만 선택하고 main에는 넣지 않았다.
+- sector/event/transition native test와 전체 Windows sample-suite 30개 test가 통과했다.
+- HMI sample-suite compile이 RAM 37,100 bytes, flash 1,393,588 bytes로 성공했다.
+- isolation check가 windows/main, windows/sample-suite, hmi/main, hmi/sample-suite 모두 통과했다.
+  upload/flash와 실제 PC 연결 검증은 수행하지 않았다.
+
+### M3. 공통 controller와 Windows fixture — `complete`
 
 **목표**
 
@@ -618,7 +651,29 @@ HMI file access와 USB raw access가 동시에 참이 될 수 없는 Board 저�
 
 - M2 complete.
 
-### M4. SD page와 sample-suite global lock — `pending`
+**완료 근거 (2026-11-10)**
+
+- `StorageAccessController`가 HMI 준비, quiescing, exposing, host 대기, PC active,
+  reclaiming, remount 실패를 하나의 플랫폼 독립 상태 machine으로 관리한다.
+- 전환 요청이 수락되는 즉시 `lock_required`가 켜지고, 성공한 remount/retry에서만 잠금이
+  해제되며 `rescan_revision`이 정확히 한 번 증가한다.
+- eject는 즉시 자동 복귀하고, cable unplug는 실제 host 접근 뒤 `USB_STOPPED`가 200 ms
+  유지된 경우에만 복귀한다. USB suspend는 분리로 오인하지 않는다.
+- operation/token 불일치와 stale completion을 폐기하고 drain timeout·remount 실패에서는
+  USB owner와 잠금 상태를 유지한다.
+- Windows virtual adapter는 실제 drive를 열지 않고 no-media, busy, host read, eject, unplug,
+  suspend, start/remount 실패, stale completion을 재현한다.
+- AppContext와 Windows/HMI host가 같은 controller를 주입하고 storage capability가 없는
+  `main` profile에는 관련 adapter source가 포함되지 않는다.
+- 생성/manifest/Board contract Python test 30개와 Windows sample-suite 전체 31개 test가
+  통과했다.
+- HMI sample-suite compile이 RAM 86,036 bytes, flash 1,453,614 bytes로 성공했다. RAM 증가는
+  controller를 실제 조립하면서 링크된 TinyUSB MSC/CDC 정적 endpoint buffer가 주원인이며,
+  사용자 controller snapshot은 64 bytes 이하의 bounded scalar 구조를 유지한다.
+- isolation check가 windows/main, windows/sample-suite, hmi/main, hmi/sample-suite 모두 통과했다.
+  upload/flash와 실제 PC storage 접근은 수행하지 않았다.
+
+### M4. SD page와 sample-suite global lock — `complete`
 
 **목표**
 
@@ -664,7 +719,29 @@ SD 상태 page와 profile 전체를 확실히 막는 full-screen lock UI를 구�
 
 - M3 complete.
 
-### M5. HMI 조립·기존 기능 회귀·자원 검증 — `pending`
+**완료 근거 (2026-11-10)**
+
+- Dashboard에 `sd-storage` card/page를 등록하고 SD 상태, owner, FAT mount, 전체/사용/여유
+  용량과 사용률을 1024×600 한 화면에 표시했다.
+- PC 연결 요청이 수락되는 즉시 clickable full-screen system overlay를 최상위로 올리고,
+  예약된 async navigation을 취소한 뒤 page/dashboard/theme/locale/keyboard intent를 거부한다.
+- 잠금 화면은 SD runtime asset을 참조하지 않고 catalog와 firmware 고정 font만 사용한다.
+  한국어·영어 multiline 본문에는 6 px line spacing과 고정 wrap 영역을 적용했다.
+- 명시적 복귀는 한 번 더 확인한 뒤 reclaim하고, PC eject와 host 접근 후 cable unplug는
+  자동 reclaim한다. 성공 시 기존 `sd-storage` page를 유지하며 잠금을 해제한다.
+- callback drain/remount 실패는 잠금을 유지하고 `다시 시도`만 허용하며, retry 성공에서만
+  앱 기능을 다시 연다.
+- SD page state/interaction test가 pending navigation 폐기, shell input 차단, explicit/eject/
+  unplug 복귀, remount 실패·retry, one-shot rescan revision을 검증한다.
+- 전체 Windows sample-suite 33개 test와 repository Python test 49개가 통과했다.
+- typography generator가 두 locale 184개 문구의 key/placeholder/role parity를 통과했고 생성
+  산출물 check도 통과했다.
+- 한국어/영어 page·lock 및 Dashboard 1024×600 capture를 확인했고 잘림이나 stale redraw가 없다.
+- HMI sample-suite compile이 RAM 86,100 bytes, flash 1,480,052 bytes로 성공했으며 M3 대비
+  RAM +64 bytes, flash +26,438 bytes다.
+- isolation check가 네 generated output 모두 통과했다. upload/flash는 수행하지 않았다.
+
+### M5. HMI 조립·기존 기능 회귀·자원 검증 — `complete`
 
 **목표**
 
@@ -684,7 +761,7 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
 - HMI/Windows profile build evidence
 - isolation evidence
 - RAM/flash, worker stack, sector buffer, controller/page size 기록
-- `START_HERE.md` 사용법과 제한
+- `README.md` 사용법과 제한
 
 **자동 검증**
 
@@ -711,7 +788,25 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
 
 - M4 complete.
 
-### M6. 실제 PC·SD 수용 — `pending`
+**완료 근거 (2026-11-10)**
+
+- HMI host가 BoardStorageAccess worker와 공통 controller를 장기 수명으로 조립하고
+  AppContext에는 public controller만 주입한다. sample/page/module에는 Board internal,
+  USBMSC, SD_MMC, FreeRTOS include가 없다.
+- asset updater transaction과 audio stream은 같은 Storage facade lease를 사용하므로 MSC
+  raw owner와 동시에 파일 handle을 열 수 없다.
+- blocking expose/reclaim/remount는 6,144-byte worker stack에서 수행하고 sector 변환 buffer는
+  512 bytes 하나다. port/controller snapshot은 각각 64 bytes 이하, adapter/controller는
+  각각 128 bytes 이하 size guard를 유지한다.
+- Windows sample-suite 33개 test, repository Python 49개 test, catalog generator check와
+  네 profile isolation check가 모두 통과했다.
+- HMI sample-suite compile은 RAM 86,100 / flash 1,480,454 bytes, storage capability가 없는
+  HMI main compile은 RAM 28,256 / flash 661,610 bytes로 성공했다.
+- `README.md`에 SD page, 전체 화면 잠금, explicit/eject/unplug 복귀, suspend 제외,
+  remount retry, CDC asset updater busy 조건과 실기기 checklist를 추가했다.
+- `git diff --check`가 whitespace 오류 없이 통과했다. upload/flash는 수행하지 않았다.
+
+### M6. 실제 PC·SD 수용 — `in_progress`
 
 **목표**
 
@@ -736,6 +831,8 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
 **수동 검증**
 
 - 아래 Manual Verification Checklist 전체를 수행한다.
+- asset updater CDC connector와 MSC OTG connector를 실제 보드에서 식별한다.
+- MSC interface의 추가/제거 뒤 CDC updater 또는 serial log가 유지되는지 확인한다.
 
 **종료 조건**
 
@@ -751,16 +848,16 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
 
 | 단계 | 상태 | 핵심 종료 조건 | 다음 단계 허용 |
 | --- | --- | --- | --- |
-| M0 | `in_progress` | USB/CDC/MSC 구성과 이식 경계 확정 | M1 |
-| M1 | `pending` | 단일 owner lease/raw contract 통과 | M2 |
-| M2 | `pending` | MSC driver/event/worker lifetime 통과 | M3 |
-| M3 | `pending` | 공통 상태 machine과 Windows fixture 통과 | M4 |
-| M4 | `pending` | global lock과 세 복귀 경로 UI 통과 | M5 |
-| M5 | `pending` | Windows/HMI/isolation/memory gate 통과 | M6 |
-| M6 | `pending` | 실제 PC/SD/USB 수용과 사용자 승인 | S05 complete |
+| M0 | `complete` | USB/CDC/MSC 구성과 이식 경계 확정 | M1 |
+| M1 | `complete` | 단일 owner lease/raw contract 통과 | M2 |
+| M2 | `complete` | MSC driver/event/worker lifetime 통과 | M3 |
+| M3 | `complete` | 공통 상태 machine과 Windows fixture 통과 | M4 |
+| M4 | `complete` | global lock과 세 복귀 경로 UI 통과 | M5 |
+| M5 | `complete` | Windows/HMI/isolation/memory gate 통과 | M6 |
+| M6 | `in_progress` | 실제 PC/SD/USB 수용과 사용자 승인 | S05 complete |
 
-동시에 하나의 단계만 `in_progress`로 둔다. 현재는 M0만 진행하며 M0 종료 근거 없이 M1
-production code를 변경하지 않는다.
+동시에 하나의 단계만 `in_progress`로 둔다. 현재는 M6만 진행하며 사용자가 직접 upload한
+장치의 실제 PC/SD/USB 확인 근거 없이는 M6와 S05를 완료 처리하지 않는다.
 
 ## 15. 위험과 완화
 
@@ -832,7 +929,7 @@ S05는 다음 조건을 모두 만족해야 `complete`다.
 - [ ] Board 공통 source 변경 시 `python tools/project.py build --host hmi --profile main`이 통과한다.
 - [ ] `rg` 검사에서 sample/module UI에 Board internal, SD_MMC, USBMSC, FreeRTOS include가 없다.
 - [ ] controller snapshot, adapter/page/lock 객체, worker stack, sector buffer, RAM/flash 크기가 기록된다.
-- [ ] `START_HERE.md`에 PC 연결·안전 제거·자동 복귀·실패 복구·USB connector 제한이 기록된다.
+- [ ] `README.md`에 PC 연결·안전 제거·자동 복귀·실패 복구·USB connector 제한이 기록된다.
 
 ## Manual Verification Checklist
 

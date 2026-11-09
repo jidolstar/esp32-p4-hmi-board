@@ -71,7 +71,7 @@
 ```text
 platformio.ini
 .gitignore
-START_HERE.md
+README.md
 include/
   lv_conf.h
   hmi_lvgl_mem.h
@@ -208,7 +208,7 @@ git -C ../dev_202609_hmi diff --name-only -- <HMI-허용-목록>
 
 **범위**
 
-- 포함: `platformio.ini`, `.pio/` ignore, 최소 `hosts/hmi/main.cpp`, `START_HERE.md`의 현재 지원 상태
+- 포함: `platformio.ini`, `.pio/` ignore, 최소 `hosts/hmi/main.cpp`, `README.md`의 현재 지원 상태
 - 제외: LVGL 초기화, LCD·touch, 공통 앱 연결, upload
 
 **산출물**
@@ -422,7 +422,7 @@ rg -n "apps/main|lv_obj_|lv_label_|lv_btn_" boards/jc1060p470c platform/hmi
 
 **범위**
 
-- 포함: clean build, `START_HERE.md`, source map 최종화, 사용자 실기기 확인 절차
+- 포함: clean build, `README.md`, source map 최종화, 사용자 실기기 확인 절차
 - 제외: Codex의 upload/flash, SD 자산 배포, 제품 기능 수용, 외부 공개·납품용 배포 라이선스 결정
 
 **산출물**

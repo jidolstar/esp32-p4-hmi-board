@@ -6,10 +6,9 @@
 #include <mbedtls/sha256.h>
 
 #include "asset_update_status.hpp"
+#include "storage.hpp"
 
 namespace hmi::boards::jc1060p470c::internal {
-
-class SdStorage;
 
 /**
  * USB CDC로 받은 현재 profile 자산 묶음을 SD staging에 기록하고 교체한다.
@@ -21,7 +20,7 @@ class SdStorage;
  */
 class AssetUsbUpdater {
  public:
-  explicit AssetUsbUpdater(SdStorage& storage) noexcept;
+  explicit AssetUsbUpdater(Storage& storage) noexcept;
   AssetUsbUpdater(const AssetUsbUpdater&) = delete;
   AssetUsbUpdater& operator=(const AssetUsbUpdater&) = delete;
   ~AssetUsbUpdater();
@@ -60,7 +59,8 @@ class AssetUsbUpdater {
   bool make_transaction_paths(const char* active_root) noexcept;
   static bool decode_sha(const char* text, std::uint8_t* output) noexcept;
 
-  SdStorage& storage_;
+  Storage& storage_;
+  Storage::ExclusiveLease storage_lease_{};
   mbedtls_sha256_context file_sha_{};
   char profile_id_[32]{};
   char active_root_[96]{};

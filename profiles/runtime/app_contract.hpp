@@ -9,6 +9,10 @@ namespace hmi::connectivity {
 class WifiStaRegistration;
 }
 
+namespace hmi::storage {
+class StorageAccessController;
+}
+
 namespace hmi::profiles {
 
 enum class AppKey : std::uint8_t {
@@ -41,6 +45,7 @@ struct AppContext {
   BinaryFontPort fonts{};
   hmi::settings::LevelSettingsPort level_settings{};
   hmi::connectivity::WifiStaRegistration* wifi_registration = nullptr;
+  hmi::storage::StorageAccessController* storage_access = nullptr;
 };
 
 }  // namespace hmi::profiles

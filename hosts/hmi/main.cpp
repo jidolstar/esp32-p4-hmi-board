@@ -20,6 +20,10 @@
 #include "connectivity/preferences_wifi_station_settings_store.hpp"
 #include "hmi/connectivity/wifi_sta_registration.hpp"
 #endif
+#if HMI_PROFILE_HAS_STORAGE
+#include "hmi/storage/storage_access_controller.hpp"
+#include "storage/board_storage_access.hpp"
+#endif
 
 namespace {
 
@@ -38,12 +42,27 @@ bool board_ready = false;
 #if HMI_PROFILE_HAS_CONNECTIVITY
 bool wifi_ready = false;
 #endif
+#if HMI_PROFILE_HAS_STORAGE
+bool storage_access_ready = false;
+#endif
 
 #if HMI_PROFILE_HAS_SETTINGS
 hmi::platform::settings::PreferencesLevelSettings& level_settings() {
   static hmi::platform::settings::PreferencesLevelSettings instance(
       board(), hmi::profiles::generated::kSelectedNvsNamespace,
       hmi::profiles::generated::kSelectedAssetStorageRoot);
+  return instance;
+}
+#endif
+
+#if HMI_PROFILE_HAS_STORAGE
+hmi::platform::hmi_host::storage::BoardStorageAccess& storage_port() {
+  static hmi::platform::hmi_host::storage::BoardStorageAccess instance(board());
+  return instance;
+}
+
+hmi::storage::StorageAccessController& storage_access() {
+  static hmi::storage::StorageAccessController instance(storage_port());
   return instance;
 }
 #endif
@@ -169,20 +188,33 @@ void setup() {
     app_context.wifi_registration = &wifi_registration();
   }
 #endif
-#if HMI_PROFILE_HAS_ASSETS
+#if HMI_PROFILE_HAS_ASSETS || HMI_PROFILE_HAS_STORAGE
   {
     if (!board().begin_storage()) {
       HMI_LOG_ERROR("[hmi-profile] storage unavailable\r\n");
     }
+#if HMI_PROFILE_HAS_ASSETS
     // SD mount 실패 중에도 CDC receiver를 시작해 PC에 진단 오류를 반환한다.
     if (!board().enable_usb_asset_updates(
             hmi::profiles::generated::kSelectedProfileId,
             hmi::profiles::generated::kSelectedAssetStorageRoot)) {
       HMI_LOG_ERROR("[hmi-profile] USB asset updater unavailable\r\n");
     }
+#endif
   }
+#endif
+#if HMI_PROFILE_HAS_ASSETS
   if (board().storage_ready()) {
     app_context.fonts = {nullptr, &load_font, &free_font};
+  }
+#endif
+#if HMI_PROFILE_HAS_STORAGE
+  storage_access_ready = storage_port().begin();
+  if (!storage_access_ready) {
+    HMI_LOG_ERROR("[hmi-profile] storage access worker unavailable\r\n");
+  } else {
+    storage_access().tick(millis());
+    app_context.storage_access = &storage_access();
   }
 #endif
   if (!app().create(app_context)) {
@@ -200,6 +232,11 @@ void loop() {
 #if HMI_PROFILE_HAS_CONNECTIVITY
   if (wifi_ready) {
     wifi_registration().tick(millis());
+  }
+#endif
+#if HMI_PROFILE_HAS_STORAGE
+  if (storage_access_ready) {
+    storage_access().tick(millis());
   }
 #endif
   delay(1);

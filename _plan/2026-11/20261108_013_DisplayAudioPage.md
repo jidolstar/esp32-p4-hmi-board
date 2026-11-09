@@ -75,7 +75,7 @@ S03을 `complete`로 전환한다.
 - `platform/windows/settings/`
 - `platform/hmi/settings/`
 - 필요한 Board public backlight/audio service와 private 구현
-- `samples/suite/page_registry.json`, profile/build 입력, test, `START_HERE.md`
+- `samples/suite/page_registry.json`, profile/build 입력, test, `README.md`
 
 ## 5. 실행 근거
 

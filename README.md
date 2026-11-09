@@ -5,12 +5,12 @@
 | Profile | 목적 | 현재 화면 |
 | --- | --- | --- |
 | `main` | 새 응용 기능을 시작하는 최소 앱 | 외부 자산 없는 실행·입력 진단 화면 |
-| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, `UI Basics`, `Text Input`, `Display & Audio` page |
+| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage page |
 
 `sample-suite`의 Dashboard는 생성된 page descriptor만 사용한다. 현재 활성 page 하나만 만들며 page 구현끼리 참조하지 않는다. 한·영 i18n과 키보드 입력의 기반은 `_plan/2026-11/20261107_004_BilingualI18nAndTextInput.md`, 완성된 입력 UX와 검증 기준은 `_plan/2026-11/20261108_010_TextInputUxCompletion.md`에 기록돼 있다.
 
-다음 개발 순서는 `wifi`(STA 설정) →
-`sd-storage`(PC USB MSC 접근) → `wav-sounds`(등록 음원 재생) →
+`wifi`(STA 설정)와 `sd-storage`(PC USB MSC 접근)까지 구현돼 있다. 다음 개발 순서는
+`wav-sounds`(등록 음원 재생) →
 `camera-gallery`(촬영·저장·보기·삭제) → `wifi-ap-web`(QR·웹 4-switch) →
 `interfaces-info`(RS485·I/O·USB command 안내)다. 독립 `assets` page는 만들지 않으며
 asset pipeline은 폰트와 WAV를 배포하는 내부 기반으로만 사용한다. 상세 상태는
@@ -105,6 +105,22 @@ Dashboard의 `화면과 음량` card에서는 다음을 확인한다.
 3. 음량 0은 mute이며 `미리 듣기`는 등록된 WAV asset을 재생한다.
 4. page를 나가면 재생 중인 preview가 멈추고, 다시 들어오면 저장값을 복원한다.
 
+Dashboard의 `Wi-Fi 설정` card에서는 주변 AP 검색, 보안 AP 선택·비밀번호 입력,
+연결·저장·연결 해제와 한국어/영어 상태 문구를 확인한다.
+
+Dashboard의 `SD 저장소` card에서는 mount 상태, HMI/PC owner, FAT 여부와
+전체·사용·여유 용량을 확인한다. `PC에 연결`을 누르는 순간 전체 화면 잠금이 표시되고
+Dashboard 이동, 다른 page, theme/locale, 키 입력은 차단된다. PC가 SD를 사용하는 동안
+HMI file API와 CDC asset updater는 SD에 접근하지 않는다. 다음 세 경우에 SD를 HMI로
+재마운트한 뒤 같은 page에서 앱 기능을 다시 사용할 수 있다.
+
+1. 잠금 화면의 `HMI로 돌아가기`를 누르고 연결 종료를 한 번 더 확인한다.
+2. PC 운영체제에서 이동식 디스크를 안전 제거한다.
+3. PC가 SD에 한 번 접근한 뒤 USB 케이블을 분리한다.
+
+PC의 USB 절전(suspend)은 분리로 취급하지 않는다. 재마운트에 실패하면 잠금을 유지하며
+`다시 시도`만 제공한다.
+
 ## 4. 자동 검사
 
 profile별 선언 test를 실행한다.
@@ -192,6 +208,9 @@ python tools/project.py bundle-assets --profile sample-suite
 분리하지 않고 같은 묶음을 전송할 수 있다. 먼저 사용 가능한 COM port를 확인하고,
 로컬 파일·크기·SHA-256만 검사한 뒤 실제 전송한다.
 
+SD가 PC USB MSC owner인 동안 asset 전송은 `ASSET_BUSY`로 거부된다. 잠금 화면에서
+HMI로 돌아오거나 PC 안전 제거/USB 분리 후 SD 재마운트가 끝난 다음 다시 실행한다.
+
 ```powershell
 .\samples_update_hmi_assets.bat --list-ports
 .\samples_update_hmi_assets.bat --dry-run
@@ -256,6 +275,14 @@ VS Code PlatformIO를 사용하는 경우에도 `hmi-sample-suite` 환경을 선
 13. serial log의 `[storage] SD ready`를 확인하고 혼합 사용자 문자열에 네모 대체문자나 의도하지 않은 공백이 없는지 확인한다.
 14. `화면과 음량`에서 밝기 1·10, 음량 0·10, `미리 듣기`와 page 이탈 중지를 확인한다.
 15. 재부팅 후 마지막 밝기·음량이 복원되는지 확인한다.
+16. `Wi-Fi 설정`에서 AP 검색, 연결, 저장, 연결 해제와 재부팅 복원을 확인한다.
+17. `SD 저장소`에서 실제 카드 용량과 HMI owner가 표시되는지 확인한다.
+18. `PC에 연결` 직후 전체 화면 잠금이 나타나고 Back·Dashboard·다른 page·theme·locale이 동작하지 않는지 확인한다.
+19. PC에서 이동식 디스크를 열고 작은 파일을 생성·수정·삭제한 뒤 안전 제거하면 잠금이 풀리고 SD page 용량이 다시 표시되는지 확인한다.
+20. 다시 연결해 PC가 디스크를 읽은 뒤 USB 케이블을 분리하면 자동으로 HMI owner를 복원하는지 확인한다.
+21. 다시 연결해 `HMI로 돌아가기`를 두 단계로 확인하면 PC 접근이 끝나고 앱 기능이 다시 열리는지 확인한다.
+22. USB suspend만 발생한 경우 잠금과 PC owner가 유지되는지 확인한다.
+23. asset updater CDC와 MSC connector를 실제 보드에서 식별하고 MSC 전환 전후 CDC log/asset protocol이 유지되는지 확인한다.
 
 확인 결과를 P6 근거로 기록하기 전에는 firmware compile 성공을 실기기 완료로 간주하지 않는다.
 

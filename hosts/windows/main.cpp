@@ -12,6 +12,13 @@
 #else
 #define HMI_WINDOWS_HAS_FONT_REPOSITORY 0
 #endif
+#if __has_include("hmi/storage/storage_access_controller.hpp")
+#define HMI_WINDOWS_HAS_STORAGE 1
+#include "hmi/storage/storage_access_controller.hpp"
+#include "storage/virtual_storage_access.hpp"
+#else
+#define HMI_WINDOWS_HAS_STORAGE 0
+#endif
 #include "selected_profile.hpp"
 #include "settings/memory_level_settings.hpp"
 #if __has_include("hmi/connectivity/wifi_sta_registration.hpp")
@@ -138,6 +145,11 @@ int main(int argc, char **argv) {
                                                                wifi_store);
       const bool wifi_ready = wifi_registration.begin(lv_tick_get(), true);
 #endif
+#if HMI_WINDOWS_HAS_STORAGE
+      hmi::platform::windows::storage::VirtualStorageAccess storage_port;
+      hmi::storage::StorageAccessController storage_access(storage_port);
+      storage_access.tick(lv_tick_get());
+#endif
       auto app = std::make_unique<hmi::profiles::generated::SelectedProfileApp>();
       hmi::profiles::AppContext app_context;
       app_context.host_name = "windows";
@@ -147,6 +159,9 @@ int main(int argc, char **argv) {
       app_context.level_settings = level_settings.port();
 #if HMI_WINDOWS_HAS_CONNECTIVITY
       app_context.wifi_registration = wifi_ready ? &wifi_registration : nullptr;
+#endif
+#if HMI_WINDOWS_HAS_STORAGE
+      app_context.storage_access = &storage_access;
 #endif
       if (!app->create(app_context)) {
         result = 4;
@@ -162,6 +177,9 @@ int main(int argc, char **argv) {
             wifi_registration.tick(lv_tick_get());
           }
 #endif
+#if HMI_WINDOWS_HAS_STORAGE
+          storage_access.tick(lv_tick_get());
+#endif
         }
         if (arguments.screenshot_path != nullptr &&
             !port->save_screenshot(arguments.screenshot_path)) {
@@ -174,6 +192,9 @@ int main(int argc, char **argv) {
           if (wifi_ready) {
             wifi_registration.tick(lv_tick_get());
           }
+#endif
+#if HMI_WINDOWS_HAS_STORAGE
+          storage_access.tick(lv_tick_get());
 #endif
         }
       }

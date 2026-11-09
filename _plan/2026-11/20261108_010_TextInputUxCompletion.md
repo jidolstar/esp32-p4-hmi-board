@@ -324,7 +324,7 @@ dry-run→generate→check와 생성기 unit test 8/8을 통과했다. 관련 Wi
 수용할 수 있음을 확인한다.
 
 **범위:** generated source list, 관련 Windows tests/captures, HMI `sample-suite` build,
-memory/경계 검사, `START_HERE.md`, 사용자 실기기 확인. Codex upload는 제외한다.
+memory/경계 검사, `README.md`, 사용자 실기기 확인. Codex upload는 제외한다.
 
 **산출물:** Windows dark/light·ko/en capture, 관련 test 근거, HMI RAM/flash와 객체 크기,
 실기기 절차와 사용자 확인.
@@ -381,7 +381,7 @@ gate를 통과한 것으로 기록하고 UX5와 S02 UX 계획을 `complete`로 �
 | `samples/suite/pages/text_input/tests/*` | form state, pointer/keyboard, capture |
 | `samples/suite/app.*` | theme 재생성 중 active page 객체와 in-memory 입력 상태 유지 |
 | `samples/suite/CMakeLists.txt`, generated profile source | 새 공통 component/test 조립 |
-| `START_HERE.md` | 완성된 sample 사용법과 실제 장치 확인 절차 |
+| `README.md` | 완성된 sample 사용법과 실제 장치 확인 절차 |
 
 `boards/`, `platform/`, `hosts/`, Dashboard와 다른 sample page 내부는 변경 대상이 아니다.
 

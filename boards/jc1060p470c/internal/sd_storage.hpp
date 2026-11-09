@@ -3,6 +3,10 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
+#include <atomic>
+
+#include "internal/storage_access_guard.hpp"
+#include "storage.hpp"
 
 namespace hmi::boards::jc1060p470c::internal {
 
@@ -23,6 +27,17 @@ class SdStorage {
   bool begin();
   void end() noexcept;
   [[nodiscard]] bool ready() const noexcept;
+  [[nodiscard]] StorageStatus status() const noexcept;
+  [[nodiscard]] std::uint32_t generation() const noexcept {
+    return generation_.load(std::memory_order_acquire);
+  }
+
+  /** Storage facade와 장시간 service가 USB raw 전환을 막는 file lease다. */
+  [[nodiscard]] bool acquire_file_lease() noexcept;
+  void release_file_lease() noexcept;
+  /** Board의 MSC 전환 worker만 호출한다. 진행 중인 file lease가 있으면 실패한다. */
+  [[nodiscard]] bool try_begin_raw_access() noexcept;
+  void end_raw_access() noexcept;
 
   // 아래 파일 연산은 Board가 소유한 asset updater만 사용한다.
   [[nodiscard]] bool exists(const char* path) const noexcept;
@@ -50,7 +65,11 @@ class SdStorage {
                        std::size_t size, const char* mode) noexcept;
   bool remove_tree_impl(const char* full_path, unsigned depth) noexcept;
 
-  bool mounted_ = false;
+  std::atomic<bool> mounted_{false};
+  std::atomic<std::uint32_t> generation_{0U};
+  StorageAccessGuard access_{};
+  std::uint64_t total_bytes_ = 0U;
+  mutable std::uint64_t last_free_bytes_ = 0U;
 };
 
 }  // namespace hmi::boards::jc1060p470c::internal

@@ -11,7 +11,7 @@ from pathlib import Path
 from .manifest import Profile, ProfileRegistry, SUPPORTED_HOSTS
 from .pages import check_page_source_isolation, load_page_registry
 
-GENERATOR_VERSION = 15
+GENERATOR_VERSION = 18
 
 MODULE_INPUTS = {
     "connectivity": {
@@ -29,6 +29,10 @@ MODULE_INPUTS = {
     "settings": {
         "sources": ("modules/settings/src/level_settings.cpp",),
         "include_dirs": ("modules/settings/include",),
+    },
+    "storage": {
+        "sources": ("modules/storage/src/storage_access_controller.cpp",),
+        "include_dirs": ("modules/storage/include",),
     },
     "text": {
         "sources": (
@@ -73,6 +77,7 @@ BOARD_INPUTS = {
     "jc1060p470c": {
         "sources": (
             "boards/jc1060p470c/board.cpp",
+            "boards/jc1060p470c/storage.cpp",
             "boards/jc1060p470c/internal/i2c_transaction.cpp",
             "boards/jc1060p470c/internal/lvgl_port.cpp",
             "boards/jc1060p470c/internal/mipi_dsi_display.cpp",
@@ -198,6 +203,10 @@ def resolve_profile_inputs(
                     "platform/hmi/connectivity/preferences_wifi_station_settings_store.cpp",
                 )
             )
+    if "storage" in profile.data["modules"] and host == "windows":
+        module_sources.append(
+            "platform/windows/storage/virtual_storage_access.cpp"
+        )
     board_sources: list[str] = []
     board_include_dirs: list[str] = []
     if host == "hmi":
@@ -222,6 +231,13 @@ def resolve_profile_inputs(
         if profile.data["assets"]:
             board_sources.append(
                 "boards/jc1060p470c/internal/asset_usb_updater.cpp"
+            )
+        if "storage" in profile.data["modules"]:
+            host_sources.append(
+                "platform/hmi/storage/board_storage_access.cpp"
+            )
+            board_sources.append(
+                "boards/jc1060p470c/internal/usb_msc_driver.cpp"
             )
         board_include_dirs.extend(BOARD_INPUTS[board_id]["include_dirs"])
 
@@ -337,6 +353,8 @@ def _selected_header(resolved: dict) -> str:
         f"inline constexpr bool kSelectedHasAssets = {str(bool(resolved['assets'])).lower()};\n"
         f"inline constexpr bool kSelectedHasConnectivity = "
         f"{str('connectivity' in profile['modules']).lower()};\n"
+        f"inline constexpr bool kSelectedHasStorage = "
+        f"{str('storage' in profile['modules']).lower()};\n"
         f'inline constexpr char kSelectedAssetRoot[] = "{resolved["asset_root"]}";\n\n'
         f'inline constexpr char kSelectedAssetStorageRoot[] = "/{resolved["asset_destination_root"]}";\n\n'
         f'inline constexpr char kSelectedNvsNamespace[] = "{resolved["profile"]["data"]["nvs_namespace"]}";\n'
@@ -407,6 +425,10 @@ def _platformio_profile_input(
     build_flags.append(
         "  -D HMI_PROFILE_HAS_CONNECTIVITY="
         f"{1 if 'connectivity' in resolved['profile']['modules'] else 0}"
+    )
+    build_flags.append(
+        "  -D HMI_PROFILE_HAS_STORAGE="
+        f"{1 if 'storage' in resolved['profile']['modules'] else 0}"
     )
     environment = f"hmi-{resolved['profile']['id']}"
     return (

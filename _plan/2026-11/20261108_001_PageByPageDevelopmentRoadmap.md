@@ -39,10 +39,11 @@ S04는 공통 STA 상태·Windows fixture·HMI adapter와 Wi-Fi 설정 UI, 지�
 검색 spinner, 터치 보정, 인증 실패 재입력과 연결 AP 강조까지 구현했다. 2026-11-09 사용자가
 Wi-Fi를 완료 처리하고 다음 개발 시작을 승인했으므로 S04를 `complete`로 닫았다.
 
-현재 실행 대상은 S05 M0다. 202609의 Storage facade·exclusive lease·raw-sector MSC driver와
-audio-lab 전환 흐름을 선별 이식하되, PC가 SD를 소유하는 동안 sample-suite 전체를 잠근다.
-명시적 `HMI로 돌아가기`, PC 안전 제거, USB cable unplug 뒤 재마운트에 성공하면 앱 사용을
-자동 복구하고, 재마운트 실패 때만 복구 화면을 유지한다.
+현재 실행 대상은 S05 M6 실기기 수용이다. M0~M5에서 202609의 Storage facade·exclusive
+lease·raw-sector MSC driver를 선별 이식하고 SD page, sample-suite 전체 잠금, 명시적
+`HMI로 돌아가기`, PC 안전 제거, USB cable unplug 자동 복구와 remount retry를 구현했다.
+Windows/HMI compile·test는 완료했으며 실제 PC·SD·connector 확인과 사용자 승인 전까지
+S05는 `in_progress`를 유지한다.
 
 ## 3. 202609 재사용 판정
 
@@ -91,7 +92,7 @@ audio-lab 전환 흐름을 선별 이식하되, PC가 SD를 소유하는 동안 
 - 지원한다고 표시한 실제 기능만 실기기에서 확인한다.
 - 설명 전용 기능은 화면에 `기반 제공`, `구현 안 됨`을 명확히 구분한다.
 - `python tools/project.py check --scope isolation`이 통과한다.
-- 관련 사용법과 제한이 `START_HERE.md`에 반영된다.
+- 관련 사용법과 제한이 `README.md`에 반영된다.
 
 ## Automated Verification Checklist
 

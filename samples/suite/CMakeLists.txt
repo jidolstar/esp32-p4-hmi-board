@@ -18,6 +18,28 @@ if(BUILD_TESTING)
     tests/navigation_test.cpp
     hmi_sample_suite_navigation)
   hmi_add_sample_suite_test(
+    hmi_board_storage_access_guard_test
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/storage_access_guard_test.cpp"
+    hmi_board_storage_access_guard)
+  hmi_add_sample_suite_test(
+    hmi_board_msc_sector_transfer_test
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/msc_sector_transfer_test.cpp"
+    hmi_board_msc_sector_transfer)
+  hmi_add_sample_suite_test(
+    hmi_board_usb_msc_event_state_test
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/usb_msc_event_state_test.cpp"
+    hmi_board_usb_msc_event_state)
+  hmi_add_sample_suite_test(
+    hmi_board_storage_msc_transition_test
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/storage_msc_transition_test.cpp"
+    hmi_board_storage_msc_transition)
+  hmi_add_sample_suite_test(
+    hmi_storage_access_controller_test
+    "${CMAKE_SOURCE_DIR}/modules/storage/tests/storage_access_controller_test.cpp"
+    hmi_storage_access_controller)
+  target_sources(hmi_storage_access_controller_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/platform/windows/storage/virtual_storage_access.cpp")
+  hmi_add_sample_suite_test(
     hmi_sample_suite_state_test
     tests/state_test.cpp
     hmi_sample_suite_state)
@@ -116,6 +138,14 @@ if(BUILD_TESTING)
     hmi_sample_suite_wifi_settings_interaction_test
     pages/wifi/tests/wifi_settings_interaction_test.cpp
     hmi_sample_suite_wifi_settings_interaction)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_sd_storage_state_test
+    pages/sd_storage/tests/sd_storage_state_test.cpp
+    hmi_sample_suite_sd_storage_state)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_sd_storage_interaction_test
+    pages/sd_storage/tests/sd_storage_interaction_test.cpp
+    hmi_sample_suite_sd_storage_interaction)
   set_tests_properties(
     hmi_sample_suite_wifi_settings_state
     hmi_sample_suite_wifi_settings_interaction

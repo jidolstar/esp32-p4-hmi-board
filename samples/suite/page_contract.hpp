@@ -45,11 +45,13 @@ struct PageSnapshot {
 struct PageContext {
   void (*request_dashboard)(void *user_data) noexcept = nullptr;
   void (*request_theme_toggle)(void *user_data) noexcept = nullptr;
+  void (*refresh_storage_lock)(void *user_data) noexcept = nullptr;
   bool (*set_locale)(void *user_data, hmi::i18n::Locale locale) noexcept = nullptr;
   hmi::i18n::Locale locale = hmi::i18n::Locale::ko_kr;
   hmi::profiles::BinaryFontPort fonts{};
   const hmi::settings::LevelSettingsPort* level_settings = nullptr;
   hmi::connectivity::WifiStaRegistration* wifi_registration = nullptr;
+  hmi::storage::StorageAccessController* storage_access = nullptr;
   hmi::ui::UiTheme *theme = nullptr;
   void *user_data = nullptr;
 };
