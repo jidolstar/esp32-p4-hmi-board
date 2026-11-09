@@ -1,0 +1,4 @@
+interface:
+  display_name: "Board Boundary Guard"
+  short_description: "Keep Board as a hardware/LVGL-port facade, not a UI owner."
+  default_prompt: "Review or implement changes while preserving the Board responsibility boundary in this HMI project."

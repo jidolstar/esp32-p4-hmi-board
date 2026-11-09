@@ -1,0 +1,732 @@
+{
+  "content_hash": "2bb4e13363aa6b8538639a5d495473bca47610c7dcd882c0e78e2583d99f6240",
+  "cpp_namespace": "hmi::samples::suite::generated",
+  "entries": [
+    {
+      "key": "common.back",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "common.open",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "dashboard.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "dashboard.eyebrow",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "dashboard.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "display_audio.action.decrease",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "display_audio.action.increase",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "display_audio.action.play",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "display_audio.brightness.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "display_audio.brightness.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "display_audio.brightness.value",
+      "placeholders": [
+        {
+          "name": "level",
+          "type": "u32"
+        }
+      ],
+      "role": "page_title"
+    },
+    {
+      "key": "display_audio.status.apply_failed",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "display_audio.status.preview_unavailable",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "display_audio.status.ready",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "display_audio.status.save_failed",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "display_audio.status.saved",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "display_audio.status.unavailable",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "display_audio.volume.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "display_audio.volume.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "display_audio.volume.value",
+      "placeholders": [
+        {
+          "name": "level",
+          "type": "u32"
+        }
+      ],
+      "role": "page_title"
+    },
+    {
+      "key": "locale.en",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "locale.ko",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "locale.label",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "page.display_audio.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.display_audio.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "page.text_input.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.text_input.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "page.ui_basics.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.ui_basics.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "page.wifi.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.wifi.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "text_input.action.clear",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "text_input.error.byte_limit",
+      "placeholders": [
+        {
+          "name": "max",
+          "type": "u32"
+        }
+      ],
+      "role": "error"
+    },
+    {
+      "key": "text_input.error.character_limit",
+      "placeholders": [
+        {
+          "name": "max",
+          "type": "u32"
+        }
+      ],
+      "role": "error"
+    },
+    {
+      "key": "text_input.field.memo",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "text_input.field.memo_placeholder",
+      "placeholders": [],
+      "role": "placeholder"
+    },
+    {
+      "key": "text_input.field.name",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "text_input.field.name_placeholder",
+      "placeholders": [],
+      "role": "placeholder"
+    },
+    {
+      "key": "text_input.field.value",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "text_input.field.value_placeholder",
+      "placeholders": [],
+      "role": "placeholder"
+    },
+    {
+      "key": "text_input.keyboard.backspace",
+      "placeholders": [],
+      "role": "key_action"
+    },
+    {
+      "key": "text_input.keyboard.done",
+      "placeholders": [],
+      "role": "key_action"
+    },
+    {
+      "key": "text_input.keyboard.language_toggle",
+      "placeholders": [],
+      "role": "key_action"
+    },
+    {
+      "key": "text_input.keyboard.next",
+      "placeholders": [],
+      "role": "key_action"
+    },
+    {
+      "key": "text_input.keyboard.shift",
+      "placeholders": [],
+      "role": "key_action"
+    },
+    {
+      "key": "text_input.keyboard.space",
+      "placeholders": [],
+      "role": "key_action"
+    },
+    {
+      "key": "text_input.keyboard.symbol",
+      "placeholders": [],
+      "role": "key_action"
+    },
+    {
+      "key": "text_input.review.confirm",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "text_input.review.edit",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "text_input.review.empty",
+      "placeholders": [],
+      "role": "placeholder"
+    },
+    {
+      "key": "text_input.review.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "text_input.status.composing",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "text_input.status.confirmed",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "text_input.status.length",
+      "placeholders": [
+        {
+          "name": "bytes",
+          "type": "u32"
+        },
+        {
+          "name": "count",
+          "type": "u32"
+        },
+        {
+          "name": "max",
+          "type": "u32"
+        }
+      ],
+      "role": "status"
+    },
+    {
+      "key": "theme.dark",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "theme.light",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "ui_basics.action.hold",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "ui_basics.action.open_dialog",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "ui_basics.action.press",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "ui_basics.action.show_toast",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "ui_basics.badge",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.controls.instruction",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.controls.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "ui_basics.dialog.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.dialog.cancel",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "ui_basics.dialog.confirm",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "ui_basics.dialog.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "ui_basics.list.count",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.list.item.alpha",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.bravo",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.charlie",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.delta",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.echo",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.foxtrot",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.golf",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.hotel",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.india",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.item.juliett",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "ui_basics.list.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "ui_basics.status.dialog_cancelled",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.dialog_confirmed",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.dialog_opened",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.long_press",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.ready",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.short_press",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.summary",
+      "placeholders": [
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "long",
+          "type": "u32"
+        },
+        {
+          "name": "press",
+          "type": "u32"
+        }
+      ],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.toast_expired",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.status.toast_shown",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "ui_basics.toast.success",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi.action.cancel",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi.action.connect",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi.action.disconnect",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi.action.manual_entry",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi.action.retry_save",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi.connection.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wifi.detail.connected",
+      "placeholders": [
+        {
+          "name": "ssid",
+          "type": "string"
+        }
+      ],
+      "role": "status"
+    },
+    {
+      "key": "wifi.detail.selected",
+      "placeholders": [
+        {
+          "name": "ssid",
+          "type": "string"
+        }
+      ],
+      "role": "status"
+    },
+    {
+      "key": "wifi.editor.manual_title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wifi.editor.selected_title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wifi.error.authentication",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.busy",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.driver",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.invalid_credential",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.no_access_point",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.restore",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.stale_selection",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.storage",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.timeout",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.error.unsupported_security",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.field.password",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi.field.ssid",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi.scan.connected",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.scan.empty",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi.scan.meta_open",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.scan.meta_secured",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.scan.meta_unsupported",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.scan.refresh",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi.scan.selected",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.scan.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wifi.status.cancelled",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.connected",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.connected_not_saved",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.status.connecting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.failed",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi.status.forgotten",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.idle",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.manual",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.ready",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.restoring",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.scanning",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi.status.selected",
+      "placeholders": [],
+      "role": "status"
+    }
+  ],
+  "generator_version": 2,
+  "locales": [
+    "ko-KR",
+    "en-US"
+  ],
+  "owner_id": "sample-suite",
+  "schema_version": 1,
+  "sources": {
+    "i18n/catalog.json": "e6b7aec4af6fb6f1a603a8858ee77742031952718c9aa6a0f7b3eaa6b0972ae3",
+    "i18n/en.yaml": "ca5798a795e5b0c9b8cf6f134f2721eedd811fefa9bd641ad5fbe2bb901ccd3a",
+    "i18n/ko.yaml": "75b1045165dc792487f1656d432f3e737ad25b332c147bd505a59603f3203281",
+    "i18n/typography.yaml": "8b442e56a8966efa5dcbb6e77771615334b94af043465ebd79389a4dab01ea24"
+  },
+  "symbol_prefix": "hmi_sample_suite",
+  "text_count": 131
+}

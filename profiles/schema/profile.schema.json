@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hmi-starter.local/schema/profile.schema.json",
+  "title": "HMI build profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "kind",
+    "description",
+    "entry",
+    "sources",
+    "include_dirs",
+    "modules",
+    "hosts",
+    "assets",
+    "config",
+    "data",
+    "verification"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "$ref": "#/$defs/profile_id"
+    },
+    "kind": {
+      "enum": [
+        "application",
+        "sample"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "header",
+        "type"
+      ],
+      "properties": {
+        "header": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "type": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*(::[A-Za-z_][A-Za-z0-9_]*)+$"
+        }
+      }
+    },
+    "sources": {
+      "$ref": "#/$defs/host_paths"
+    },
+    "include_dirs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relative_path"
+      },
+      "uniqueItems": true
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{0,31}$"
+      },
+      "uniqueItems": true
+    },
+    "hosts": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "windows": {
+          "$ref": "#/$defs/windows_host"
+        },
+        "hmi": {
+          "$ref": "#/$defs/hmi_host"
+        }
+      }
+    },
+    "assets": {
+      "$ref": "#/$defs/path_array"
+    },
+    "config": {
+      "$ref": "#/$defs/path_array"
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "windows_root",
+        "hmi_sd_root",
+        "nvs_namespace"
+      ],
+      "properties": {
+        "windows_root": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "hmi_sd_root": {
+          "$ref": "#/$defs/relative_path"
+        },
+        "nvs_namespace": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 15,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tests"
+      ],
+      "properties": {
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,31}$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path_array": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relative_path"
+      },
+      "uniqueItems": true
+    },
+    "host_paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "common",
+        "windows",
+        "hmi"
+      ],
+      "properties": {
+        "common": {
+          "$ref": "#/$defs/path_array"
+        },
+        "windows": {
+          "$ref": "#/$defs/path_array"
+        },
+        "hmi": {
+          "$ref": "#/$defs/path_array"
+        }
+      }
+    },
+    "windows_host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "hmi_host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "board"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "board": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,31}$"
+        }
+      }
+    }
+  }
+}

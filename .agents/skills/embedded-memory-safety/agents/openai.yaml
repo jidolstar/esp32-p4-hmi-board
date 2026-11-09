@@ -1,0 +1,4 @@
+interface:
+  display_name: "임베디드 메모리 안전"
+  short_description: "Prevent embedded stack and model memory regressions"
+  default_prompt: "Use $embedded-memory-safety to review this embedded C++ change for stack and model memory risks."

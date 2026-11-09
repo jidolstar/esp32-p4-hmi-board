@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hmi-starter.local/schema/page_registry.schema.json",
+  "title": "Sample Suite page registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "pages"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/page" }
+    }
+  },
+  "$defs": {
+    "relative_path": { "type": "string", "minLength": 1 },
+    "path_array": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relative_path" }
+    },
+    "host_paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["common", "windows", "hmi"],
+      "properties": {
+        "common": { "$ref": "#/$defs/path_array" },
+        "windows": { "$ref": "#/$defs/path_array" },
+        "hmi": { "$ref": "#/$defs/path_array" }
+      }
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "title", "description", "order", "entry", "sources",
+        "capabilities", "verification", "data_key"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "order": { "type": "integer", "minimum": 0 },
+        "entry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["header", "type"],
+          "properties": {
+            "header": { "$ref": "#/$defs/relative_path" },
+            "type": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*(::[A-Za-z_][A-Za-z0-9_]*)+$"
+            }
+          }
+        },
+        "sources": { "$ref": "#/$defs/host_paths" },
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" }
+        },
+        "verification": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$" }
+        },
+        "data_key": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,31}$" }
+      }
+    }
+  }
+}

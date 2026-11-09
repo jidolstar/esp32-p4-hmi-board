@@ -1,0 +1,4 @@
+interface:
+  display_name: "C/C++ Korean Comments"
+  short_description: "Korean C/C++ comment guidance"
+  default_prompt: "Use $c-cpp-korean-comments to add clear Korean comments to C/C++ code."

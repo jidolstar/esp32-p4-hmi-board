@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "id": "sample-suite",
+  "kind": "sample",
+  "description": "One dashboard for reusable HMI feature samples.",
+  "entry": {
+    "header": "app.hpp",
+    "type": "hmi::samples::suite::SampleSuiteApp"
+  },
+  "sources": {
+    "common": [
+      "app.cpp",
+      "dashboard/dashboard_page.cpp",
+      "generated/fonts/fixed/title_32_bold.c",
+      "generated/fonts/fixed/body_18_regular.c",
+      "generated/fonts/fixed/control_18_bold.c",
+      "generated/fonts/fixed/status_16_regular.c",
+      "generated/fonts/fixed/error_16_bold.c"
+    ],
+    "windows": [],
+    "hmi": []
+  },
+  "include_dirs": ["."],
+  "modules": ["connectivity", "i18n", "settings", "text", "ui"],
+  "hosts": {
+    "windows": { "enabled": true },
+    "hmi": { "enabled": true, "board": "jc1060p470c" }
+  },
+  "assets": [
+    "assets/fonts",
+    "assets/sounds"
+  ],
+  "config": [
+    "page_registry.json",
+    "i18n/catalog.json",
+    "i18n/ko.yaml",
+    "i18n/en.yaml",
+    "i18n/typography.yaml",
+    "i18n/fonts.json",
+    "generated/catalog_manifest.json",
+    "generated/fixed_font_manifest.json",
+    "generated/user_font_manifest.json"
+  ],
+  "data": {
+    "windows_root": "sample-suite",
+    "hmi_sd_root": "hmi/sample-suite",
+    "nvs_namespace": "hmi_samples"
+  },
+  "verification": {
+    "tests": [
+      "hmi_sample_suite_windows_smoke",
+      "hmi_sample_suite_navigation",
+      "hmi_sample_suite_state",
+      "hmi_sample_suite_interaction",
+      "hmi_sample_suite_i18n_catalog",
+      "hmi_text_utf8",
+      "hmi_text_editor",
+      "hmi_text_hangul",
+      "hmi_text_input_model",
+      "hmi_text_keyboard_layout",
+      "hmi_ui_asset_update_overlay",
+      "hmi_ui_font_repository",
+      "hmi_ui_user_text_label",
+      "hmi_ui_user_text_input_line",
+      "hmi_ui_virtual_keyboard",
+      "hmi_sample_suite_font_render",
+      "hmi_i18n_format",
+      "hmi_settings_level",
+      "hmi_connectivity_wifi_sta",
+      "hmi_sample_suite_display_audio_state",
+      "hmi_sample_suite_display_audio_interaction",
+      "hmi_sample_suite_wifi_settings_state",
+      "hmi_sample_suite_wifi_settings_interaction",
+      "hmi_sample_suite_text_input_state",
+      "hmi_sample_suite_text_input_interaction",
+      "hmi_windows_sdl_keyboard"
+    ]
+  }
+}

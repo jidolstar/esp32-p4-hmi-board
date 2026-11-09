@@ -1,0 +1,4 @@
+interface:
+  display_name: "Development Plan Writer"
+  short_description: "Write concrete repo planning docs with verification checklists."
+  default_prompt: "Create a concrete development plan document in the repository plan directory, following existing filename conventions and separating automated and manual verification checks."

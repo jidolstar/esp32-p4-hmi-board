@@ -1,0 +1,79 @@
+{
+  "schema_version": 2,
+  "pages": [
+    {
+      "id": "ui-basics",
+      "title_key": "page.ui_basics.title",
+      "description_key": "page.ui_basics.description",
+      "order": 10,
+      "entry": {
+        "header": "pages/ui_basics/ui_basics_page.hpp",
+        "type": "hmi::samples::suite::UiBasicsPage"
+      },
+      "sources": {
+        "common": ["pages/ui_basics/ui_basics_page.cpp"],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": [],
+      "verification": ["ui_basics_state", "ui_basics_interaction"],
+      "data_key": "ui_basics"
+    },
+    {
+      "id": "text-input",
+      "title_key": "page.text_input.title",
+      "description_key": "page.text_input.description",
+      "order": 20,
+      "entry": {
+        "header": "pages/text_input/text_input_page.hpp",
+        "type": "hmi::samples::suite::TextInputPage"
+      },
+      "sources": {
+        "common": [
+          "pages/text_input/text_input_page.cpp"
+        ],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["i18n", "text-input"],
+      "verification": ["text_input_state", "text_input_interaction"],
+      "data_key": "text_input"
+    },
+    {
+      "id": "display-audio",
+      "title_key": "page.display_audio.title",
+      "description_key": "page.display_audio.description",
+      "order": 30,
+      "entry": {
+        "header": "pages/display_audio/display_audio_page.hpp",
+        "type": "hmi::samples::suite::DisplayAudioPage"
+      },
+      "sources": {
+        "common": ["pages/display_audio/display_audio_page.cpp"],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["settings"],
+      "verification": ["display_audio_state", "display_audio_interaction"],
+      "data_key": "display_audio"
+    },
+    {
+      "id": "wifi",
+      "title_key": "page.wifi.title",
+      "description_key": "page.wifi.description",
+      "order": 40,
+      "entry": {
+        "header": "pages/wifi/wifi_settings_page.hpp",
+        "type": "hmi::samples::suite::WifiSettingsPage"
+      },
+      "sources": {
+        "common": ["pages/wifi/wifi_settings_page.cpp"],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["connectivity", "i18n", "text-input"],
+      "verification": ["wifi_settings_state", "wifi_settings_interaction"],
+      "data_key": "wifi"
+    }
+  ]
+}

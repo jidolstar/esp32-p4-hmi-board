@@ -1,0 +1,4 @@
+interface:
+  display_name: "Phase-gated Development"
+  short_description: "Verify each phase before moving forward"
+  default_prompt: "Use $phase-gated-development to create and execute a development plan with strict phase completion gates."

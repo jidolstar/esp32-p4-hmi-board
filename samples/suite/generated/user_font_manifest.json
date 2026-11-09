@@ -1,0 +1,2316 @@
+{
+  "assets": [
+    {
+      "bytes": 6192,
+      "crc32": "0xAA01629D",
+      "id": "common",
+      "path": "assets/fonts/user_24_common.bin",
+      "ranges": [
+        {
+          "first": "0x0020",
+          "last": "0x007E"
+        },
+        {
+          "first": "0x25A1",
+          "last": "0x25A1"
+        },
+        {
+          "first": "0x3131",
+          "last": "0x3163"
+        }
+      ],
+      "sha256": "70b929580fa5fc80646432218504d993d51968126fd99e6be0d655a58d83c802"
+    },
+    {
+      "bytes": 5412,
+      "crc32": "0x981AA6DD",
+      "id": "hangul_ac00",
+      "path": "assets/fonts/user_24_hangul_ac00.bin",
+      "ranges": [
+        {
+          "first": "0xAC00",
+          "last": "0xAC3F"
+        }
+      ],
+      "sha256": "e3b3b67d0ccf2b46badb1ce2fa11ee977041c9bb069e31b49cf9d110425c047f"
+    },
+    {
+      "bytes": 5436,
+      "crc32": "0x233AB62F",
+      "id": "hangul_ac40",
+      "path": "assets/fonts/user_24_hangul_ac40.bin",
+      "ranges": [
+        {
+          "first": "0xAC40",
+          "last": "0xAC7F"
+        }
+      ],
+      "sha256": "ee1d7ba8132d39bed3bf81cf24f39c008c6c11b79d29d9d9c3bcd75e73545565"
+    },
+    {
+      "bytes": 5252,
+      "crc32": "0x2B6E1AF3",
+      "id": "hangul_ac80",
+      "path": "assets/fonts/user_24_hangul_ac80.bin",
+      "ranges": [
+        {
+          "first": "0xAC80",
+          "last": "0xACBF"
+        }
+      ],
+      "sha256": "3a3002892d7f9fd171f9af6552e28145f99a3f23edabb13265d2e69421f95efa"
+    },
+    {
+      "bytes": 4980,
+      "crc32": "0xC8F8F03A",
+      "id": "hangul_acc0",
+      "path": "assets/fonts/user_24_hangul_acc0.bin",
+      "ranges": [
+        {
+          "first": "0xACC0",
+          "last": "0xACFF"
+        }
+      ],
+      "sha256": "7cad673b39ef5089ebf2a9b4688398de4611a74241794a1726b076260c24acb1"
+    },
+    {
+      "bytes": 5192,
+      "crc32": "0xFE6B911D",
+      "id": "hangul_ad00",
+      "path": "assets/fonts/user_24_hangul_ad00.bin",
+      "ranges": [
+        {
+          "first": "0xAD00",
+          "last": "0xAD3F"
+        }
+      ],
+      "sha256": "1a0d63f11b70af9562ad731acd4a5950b6d0ca017da57e3dd9f664f49224d9d4"
+    },
+    {
+      "bytes": 4752,
+      "crc32": "0xDFA0AE71",
+      "id": "hangul_ad40",
+      "path": "assets/fonts/user_24_hangul_ad40.bin",
+      "ranges": [
+        {
+          "first": "0xAD40",
+          "last": "0xAD7F"
+        }
+      ],
+      "sha256": "8a7bc0718b666563c36c2a1d6d24b1b7856d6dc2dfe891b70819f57a71d1fb1f"
+    },
+    {
+      "bytes": 4924,
+      "crc32": "0xD61D3F10",
+      "id": "hangul_ad80",
+      "path": "assets/fonts/user_24_hangul_ad80.bin",
+      "ranges": [
+        {
+          "first": "0xAD80",
+          "last": "0xADBF"
+        }
+      ],
+      "sha256": "fc2aa4e4b9a7f877db6b0a52eba63bc35dd17986d567513ba550c2c3c9a64a19"
+    },
+    {
+      "bytes": 4476,
+      "crc32": "0x3C95B0AA",
+      "id": "hangul_adc0",
+      "path": "assets/fonts/user_24_hangul_adc0.bin",
+      "ranges": [
+        {
+          "first": "0xADC0",
+          "last": "0xADFF"
+        }
+      ],
+      "sha256": "00368951dc4353a8f7dd6430538bed5c081ec1e1168e3bfcb7ff818380eff7f6"
+    },
+    {
+      "bytes": 4600,
+      "crc32": "0x80523CA5",
+      "id": "hangul_ae00",
+      "path": "assets/fonts/user_24_hangul_ae00.bin",
+      "ranges": [
+        {
+          "first": "0xAE00",
+          "last": "0xAE3F"
+        }
+      ],
+      "sha256": "df5fae8250f7ccf768fc5caaf9d9a4c475bf1c80b38765861f3c9fe702a0fdc7"
+    },
+    {
+      "bytes": 5684,
+      "crc32": "0x3E7FDA60",
+      "id": "hangul_ae40",
+      "path": "assets/fonts/user_24_hangul_ae40.bin",
+      "ranges": [
+        {
+          "first": "0xAE40",
+          "last": "0xAE7F"
+        }
+      ],
+      "sha256": "ceecf306897ed2fccdc0e2f4b81c8330ab25ec7bca0361b7e9d6bfc3d28ebd5b"
+    },
+    {
+      "bytes": 5856,
+      "crc32": "0x174D2944",
+      "id": "hangul_ae80",
+      "path": "assets/fonts/user_24_hangul_ae80.bin",
+      "ranges": [
+        {
+          "first": "0xAE80",
+          "last": "0xAEBF"
+        }
+      ],
+      "sha256": "81e8b25beeb7fe5550d2c1c2f046faab9f5dd2aa8782248d4109d9819c72249f"
+    },
+    {
+      "bytes": 5608,
+      "crc32": "0x4975D3ED",
+      "id": "hangul_aec0",
+      "path": "assets/fonts/user_24_hangul_aec0.bin",
+      "ranges": [
+        {
+          "first": "0xAEC0",
+          "last": "0xAEFF"
+        }
+      ],
+      "sha256": "ae13e3b16e603a1fd61316f071e94b5f2a66090d0fa5e1d1d5eebc31927caa9b"
+    },
+    {
+      "bytes": 5444,
+      "crc32": "0x9D79D6E7",
+      "id": "hangul_af00",
+      "path": "assets/fonts/user_24_hangul_af00.bin",
+      "ranges": [
+        {
+          "first": "0xAF00",
+          "last": "0xAF3F"
+        }
+      ],
+      "sha256": "5a55b0c5492ee5d7f8105dd81e3a9df9c32f9bc4dcbccd92293879dab3acfc80"
+    },
+    {
+      "bytes": 5524,
+      "crc32": "0xBED66431",
+      "id": "hangul_af40",
+      "path": "assets/fonts/user_24_hangul_af40.bin",
+      "ranges": [
+        {
+          "first": "0xAF40",
+          "last": "0xAF7F"
+        }
+      ],
+      "sha256": "248aacb1af5aa239fdfd8ccfae622389000e951b4e6cff71cc595054347b8e9f"
+    },
+    {
+      "bytes": 5124,
+      "crc32": "0x463DEEB8",
+      "id": "hangul_af80",
+      "path": "assets/fonts/user_24_hangul_af80.bin",
+      "ranges": [
+        {
+          "first": "0xAF80",
+          "last": "0xAFBF"
+        }
+      ],
+      "sha256": "c088f682af76d564ad1796376c540388efb694bd3d74a0858a150ca0b00f306a"
+    },
+    {
+      "bytes": 5156,
+      "crc32": "0x42837EDC",
+      "id": "hangul_afc0",
+      "path": "assets/fonts/user_24_hangul_afc0.bin",
+      "ranges": [
+        {
+          "first": "0xAFC0",
+          "last": "0xAFFF"
+        }
+      ],
+      "sha256": "b3327da3bd8fa619022e3ef824af335c13e534ef5db4cc4aad1bb1038fe42679"
+    },
+    {
+      "bytes": 5004,
+      "crc32": "0xF584FF1F",
+      "id": "hangul_b000",
+      "path": "assets/fonts/user_24_hangul_b000.bin",
+      "ranges": [
+        {
+          "first": "0xB000",
+          "last": "0xB03F"
+        }
+      ],
+      "sha256": "c07e7878767d908ae674bde6bd19f28df729c8998c4ccf9e12170284a9622a3e"
+    },
+    {
+      "bytes": 4768,
+      "crc32": "0xBDCCEF4E",
+      "id": "hangul_b040",
+      "path": "assets/fonts/user_24_hangul_b040.bin",
+      "ranges": [
+        {
+          "first": "0xB040",
+          "last": "0xB07F"
+        }
+      ],
+      "sha256": "b7593657084a281f27c32af7f762e2886fda5c6f69dfab359a9acf4a5622048f"
+    },
+    {
+      "bytes": 4740,
+      "crc32": "0x6684B83B",
+      "id": "hangul_b080",
+      "path": "assets/fonts/user_24_hangul_b080.bin",
+      "ranges": [
+        {
+          "first": "0xB080",
+          "last": "0xB0BF"
+        }
+      ],
+      "sha256": "2aa0eb3cde61072c20769a389e8759d7d542c3edbc0c8c847818eb26e289792f"
+    },
+    {
+      "bytes": 4796,
+      "crc32": "0xF08F5C9D",
+      "id": "hangul_b0c0",
+      "path": "assets/fonts/user_24_hangul_b0c0.bin",
+      "ranges": [
+        {
+          "first": "0xB0C0",
+          "last": "0xB0FF"
+        }
+      ],
+      "sha256": "7a4408e22cfbed74f3e40a8ed2237f7bcce4d1a274689daebb70c6274dca8b74"
+    },
+    {
+      "bytes": 4584,
+      "crc32": "0x3058679E",
+      "id": "hangul_b100",
+      "path": "assets/fonts/user_24_hangul_b100.bin",
+      "ranges": [
+        {
+          "first": "0xB100",
+          "last": "0xB13F"
+        }
+      ],
+      "sha256": "e3c240ad7b0f7784f0ea7f67c09aff1aaa12da0ae17642d83fb46e91e912f168"
+    },
+    {
+      "bytes": 4828,
+      "crc32": "0x9DD7A311",
+      "id": "hangul_b140",
+      "path": "assets/fonts/user_24_hangul_b140.bin",
+      "ranges": [
+        {
+          "first": "0xB140",
+          "last": "0xB17F"
+        }
+      ],
+      "sha256": "0d1f8a6932ded48ceda146332b751c532e7e6505df0f7d45df3ca7865a5ef38e"
+    },
+    {
+      "bytes": 4848,
+      "crc32": "0x809B3435",
+      "id": "hangul_b180",
+      "path": "assets/fonts/user_24_hangul_b180.bin",
+      "ranges": [
+        {
+          "first": "0xB180",
+          "last": "0xB1BF"
+        }
+      ],
+      "sha256": "221e9a33057f05e1c3701e43a78d64ecfedc1bb8ae892af6265cc87013eafc77"
+    },
+    {
+      "bytes": 4644,
+      "crc32": "0x4BFC7794",
+      "id": "hangul_b1c0",
+      "path": "assets/fonts/user_24_hangul_b1c0.bin",
+      "ranges": [
+        {
+          "first": "0xB1C0",
+          "last": "0xB1FF"
+        }
+      ],
+      "sha256": "7f80dc141a3e68f02407fe2328cef750172873358efd192bff1c92697b9510f4"
+    },
+    {
+      "bytes": 4612,
+      "crc32": "0x3D9C44FA",
+      "id": "hangul_b200",
+      "path": "assets/fonts/user_24_hangul_b200.bin",
+      "ranges": [
+        {
+          "first": "0xB200",
+          "last": "0xB23F"
+        }
+      ],
+      "sha256": "9c6b2affa1b5d7e1219e43a72f01f6aef6103a933cce4212f68243c2845e026f"
+    },
+    {
+      "bytes": 4712,
+      "crc32": "0xEA87AF4A",
+      "id": "hangul_b240",
+      "path": "assets/fonts/user_24_hangul_b240.bin",
+      "ranges": [
+        {
+          "first": "0xB240",
+          "last": "0xB27F"
+        }
+      ],
+      "sha256": "85025e460ffc7cda985d3e7c018b35eba7c187b792f3be7fb619840380948b4b"
+    },
+    {
+      "bytes": 4436,
+      "crc32": "0x47B1A585",
+      "id": "hangul_b280",
+      "path": "assets/fonts/user_24_hangul_b280.bin",
+      "ranges": [
+        {
+          "first": "0xB280",
+          "last": "0xB2BF"
+        }
+      ],
+      "sha256": "de4120e71de0b32d2c610bcbb8cfcb25b6bc924d63d1737fb939aadf241b01e1"
+    },
+    {
+      "bytes": 4340,
+      "crc32": "0xC4611980",
+      "id": "hangul_b2c0",
+      "path": "assets/fonts/user_24_hangul_b2c0.bin",
+      "ranges": [
+        {
+          "first": "0xB2C0",
+          "last": "0xB2FF"
+        }
+      ],
+      "sha256": "5f02af3d53b988e97e1deac97fe9c2e0bffa82857daf9e274d47cc7c9c6e8248"
+    },
+    {
+      "bytes": 4924,
+      "crc32": "0x607778C6",
+      "id": "hangul_b300",
+      "path": "assets/fonts/user_24_hangul_b300.bin",
+      "ranges": [
+        {
+          "first": "0xB300",
+          "last": "0xB33F"
+        }
+      ],
+      "sha256": "a3e8ec9d2b84af77d57ce9df5696a1769ee8ebb9b9d6f87efa4c84078a158b4a"
+    },
+    {
+      "bytes": 4804,
+      "crc32": "0xA2FB8106",
+      "id": "hangul_b340",
+      "path": "assets/fonts/user_24_hangul_b340.bin",
+      "ranges": [
+        {
+          "first": "0xB340",
+          "last": "0xB37F"
+        }
+      ],
+      "sha256": "761190fd28ecc1d66899ea28813709a011115cb7a1ed34b93e9bd7f22c545c0b"
+    },
+    {
+      "bytes": 5020,
+      "crc32": "0x43710467",
+      "id": "hangul_b380",
+      "path": "assets/fonts/user_24_hangul_b380.bin",
+      "ranges": [
+        {
+          "first": "0xB380",
+          "last": "0xB3BF"
+        }
+      ],
+      "sha256": "9412a369e2d985be00ecd1380405419ce4b2a9463376e20a2d08e3a5b3d5ae26"
+    },
+    {
+      "bytes": 5072,
+      "crc32": "0x57D90B1D",
+      "id": "hangul_b3c0",
+      "path": "assets/fonts/user_24_hangul_b3c0.bin",
+      "ranges": [
+        {
+          "first": "0xB3C0",
+          "last": "0xB3FF"
+        }
+      ],
+      "sha256": "7a3ace9f15f3cf5241cf3ee47b02995c2647cf4506b11056d9cf91a8ebc3e554"
+    },
+    {
+      "bytes": 4964,
+      "crc32": "0xA2FE5F0D",
+      "id": "hangul_b400",
+      "path": "assets/fonts/user_24_hangul_b400.bin",
+      "ranges": [
+        {
+          "first": "0xB400",
+          "last": "0xB43F"
+        }
+      ],
+      "sha256": "460bc521a43cccb2068b3eee7ca54df8e4e7f3a02e7b874c1016efac7ea9318b"
+    },
+    {
+      "bytes": 4968,
+      "crc32": "0xAAD62BD8",
+      "id": "hangul_b440",
+      "path": "assets/fonts/user_24_hangul_b440.bin",
+      "ranges": [
+        {
+          "first": "0xB440",
+          "last": "0xB47F"
+        }
+      ],
+      "sha256": "e228070df51ad5780d7de3b2b8a1eab7e37fa8523fc4a60d13efacef9791a6f6"
+    },
+    {
+      "bytes": 5112,
+      "crc32": "0x4E17ECE7",
+      "id": "hangul_b480",
+      "path": "assets/fonts/user_24_hangul_b480.bin",
+      "ranges": [
+        {
+          "first": "0xB480",
+          "last": "0xB4BF"
+        }
+      ],
+      "sha256": "82bb44538c6a925b36de6fef853c721c8763cd6ca5b52b3f2d4cbd9a46971fac"
+    },
+    {
+      "bytes": 4740,
+      "crc32": "0x46092596",
+      "id": "hangul_b4c0",
+      "path": "assets/fonts/user_24_hangul_b4c0.bin",
+      "ranges": [
+        {
+          "first": "0xB4C0",
+          "last": "0xB4FF"
+        }
+      ],
+      "sha256": "1463edd095f8320d8f887416d7898a1e1f33db9be90b084dfba806a6f7e52f2d"
+    },
+    {
+      "bytes": 4552,
+      "crc32": "0x55C18C13",
+      "id": "hangul_b500",
+      "path": "assets/fonts/user_24_hangul_b500.bin",
+      "ranges": [
+        {
+          "first": "0xB500",
+          "last": "0xB53F"
+        }
+      ],
+      "sha256": "765259c32480b352bc9a18fff77f7894493a57f453ba8b5b7fcc4a5688280835"
+    },
+    {
+      "bytes": 5108,
+      "crc32": "0x216DD3A7",
+      "id": "hangul_b540",
+      "path": "assets/fonts/user_24_hangul_b540.bin",
+      "ranges": [
+        {
+          "first": "0xB540",
+          "last": "0xB57F"
+        }
+      ],
+      "sha256": "5ab7141fe1d86325f81a8a4c58f31f8ff6b1e40e04f6595aed4f0536431e188e"
+    },
+    {
+      "bytes": 5072,
+      "crc32": "0x51D03D25",
+      "id": "hangul_b580",
+      "path": "assets/fonts/user_24_hangul_b580.bin",
+      "ranges": [
+        {
+          "first": "0xB580",
+          "last": "0xB5BF"
+        }
+      ],
+      "sha256": "3577852c0cf5d5a07a6ce1646369d0ef082a015f9df40348f278ba860fcece09"
+    },
+    {
+      "bytes": 5136,
+      "crc32": "0x006281CC",
+      "id": "hangul_b5c0",
+      "path": "assets/fonts/user_24_hangul_b5c0.bin",
+      "ranges": [
+        {
+          "first": "0xB5C0",
+          "last": "0xB5FF"
+        }
+      ],
+      "sha256": "6c0f25580005ddd2ecc4ba101f9bd63f4408dcf8e6c1572c2a03380bc05d39e5"
+    },
+    {
+      "bytes": 5236,
+      "crc32": "0x7145EF13",
+      "id": "hangul_b600",
+      "path": "assets/fonts/user_24_hangul_b600.bin",
+      "ranges": [
+        {
+          "first": "0xB600",
+          "last": "0xB63F"
+        }
+      ],
+      "sha256": "7e7254daaabb1fb5880da2f34bb6084b6d5124690583f928c15170961512ff7d"
+    },
+    {
+      "bytes": 5368,
+      "crc32": "0xE7BB0948",
+      "id": "hangul_b640",
+      "path": "assets/fonts/user_24_hangul_b640.bin",
+      "ranges": [
+        {
+          "first": "0xB640",
+          "last": "0xB67F"
+        }
+      ],
+      "sha256": "77bdfcfaaf147aa7533ecb1d98caf93c839276185cbf05966433b1610e8fca67"
+    },
+    {
+      "bytes": 5024,
+      "crc32": "0x68841139",
+      "id": "hangul_b680",
+      "path": "assets/fonts/user_24_hangul_b680.bin",
+      "ranges": [
+        {
+          "first": "0xB680",
+          "last": "0xB6BF"
+        }
+      ],
+      "sha256": "b786f09041001fe3b6520a9be29662269926c1120e2e4d5d8a2159e15a4ad443"
+    },
+    {
+      "bytes": 5528,
+      "crc32": "0x0D8862A5",
+      "id": "hangul_b6c0",
+      "path": "assets/fonts/user_24_hangul_b6c0.bin",
+      "ranges": [
+        {
+          "first": "0xB6C0",
+          "last": "0xB6FF"
+        }
+      ],
+      "sha256": "6a7c3171a6ead49f590424787e3b900227ad2e90ace3660555ba33f8a3c9db6f"
+    },
+    {
+      "bytes": 5032,
+      "crc32": "0x7EF9CEAB",
+      "id": "hangul_b700",
+      "path": "assets/fonts/user_24_hangul_b700.bin",
+      "ranges": [
+        {
+          "first": "0xB700",
+          "last": "0xB73F"
+        }
+      ],
+      "sha256": "511c7884d3dfc15aa3b332f35d05ea6a333c92d329d7b5e7a129ea390b6c0d9d"
+    },
+    {
+      "bytes": 4740,
+      "crc32": "0x660CF227",
+      "id": "hangul_b740",
+      "path": "assets/fonts/user_24_hangul_b740.bin",
+      "ranges": [
+        {
+          "first": "0xB740",
+          "last": "0xB77F"
+        }
+      ],
+      "sha256": "fb8d9e34c32df8a587094d20e120cf1bbdf400850389a7cdc1a86021ae4b5139"
+    },
+    {
+      "bytes": 5056,
+      "crc32": "0x6EB83251",
+      "id": "hangul_b780",
+      "path": "assets/fonts/user_24_hangul_b780.bin",
+      "ranges": [
+        {
+          "first": "0xB780",
+          "last": "0xB7BF"
+        }
+      ],
+      "sha256": "1e743d4d7627052c1b8b1b821f8a9f7431055e3d0df2bf46630d935de17b6364"
+    },
+    {
+      "bytes": 5152,
+      "crc32": "0xAB2C8EEC",
+      "id": "hangul_b7c0",
+      "path": "assets/fonts/user_24_hangul_b7c0.bin",
+      "ranges": [
+        {
+          "first": "0xB7C0",
+          "last": "0xB7FF"
+        }
+      ],
+      "sha256": "0010bf5c72713000c318f52ba449cd9776e90d878892373915bf5ec58291ebcc"
+    },
+    {
+      "bytes": 5012,
+      "crc32": "0x59799E6F",
+      "id": "hangul_b800",
+      "path": "assets/fonts/user_24_hangul_b800.bin",
+      "ranges": [
+        {
+          "first": "0xB800",
+          "last": "0xB83F"
+        }
+      ],
+      "sha256": "59dc438d83853571ffbeb80bad5b6705e1cb7b1234570950598192ba0b1d5d21"
+    },
+    {
+      "bytes": 5316,
+      "crc32": "0x538B0DC9",
+      "id": "hangul_b840",
+      "path": "assets/fonts/user_24_hangul_b840.bin",
+      "ranges": [
+        {
+          "first": "0xB840",
+          "last": "0xB87F"
+        }
+      ],
+      "sha256": "82d90ac0c18132802b89a072ecd6e69b0beb50e529113f06ec71627930bd5401"
+    },
+    {
+      "bytes": 5576,
+      "crc32": "0xB1DD318C",
+      "id": "hangul_b880",
+      "path": "assets/fonts/user_24_hangul_b880.bin",
+      "ranges": [
+        {
+          "first": "0xB880",
+          "last": "0xB8BF"
+        }
+      ],
+      "sha256": "85cd1e2502d8358297d1f6927c4e988a84f8f42ac30fdbced140b79e2af3fe52"
+    },
+    {
+      "bytes": 5352,
+      "crc32": "0x4A21AB51",
+      "id": "hangul_b8c0",
+      "path": "assets/fonts/user_24_hangul_b8c0.bin",
+      "ranges": [
+        {
+          "first": "0xB8C0",
+          "last": "0xB8FF"
+        }
+      ],
+      "sha256": "0954c9e6f031d6a9c3d8e4f80e82fa9b5f1df950ed7116c6791ae477e08a05e9"
+    },
+    {
+      "bytes": 5512,
+      "crc32": "0xAFA565D7",
+      "id": "hangul_b900",
+      "path": "assets/fonts/user_24_hangul_b900.bin",
+      "ranges": [
+        {
+          "first": "0xB900",
+          "last": "0xB93F"
+        }
+      ],
+      "sha256": "4cff9809f0ac543c19617cc53b7562829206f6d4a27397fd6c6403e8f8adca59"
+    },
+    {
+      "bytes": 5268,
+      "crc32": "0xD96360E5",
+      "id": "hangul_b940",
+      "path": "assets/fonts/user_24_hangul_b940.bin",
+      "ranges": [
+        {
+          "first": "0xB940",
+          "last": "0xB97F"
+        }
+      ],
+      "sha256": "383b34e208a40d5881fd01d53c77b824a63287f62c5e76a9166ee7edf257418b"
+    },
+    {
+      "bytes": 4948,
+      "crc32": "0xA52DAEF6",
+      "id": "hangul_b980",
+      "path": "assets/fonts/user_24_hangul_b980.bin",
+      "ranges": [
+        {
+          "first": "0xB980",
+          "last": "0xB9BF"
+        }
+      ],
+      "sha256": "b92a73fdc38460432440680e3aab22c39dde458134935289944656be198b98a5"
+    },
+    {
+      "bytes": 4804,
+      "crc32": "0x83102867",
+      "id": "hangul_b9c0",
+      "path": "assets/fonts/user_24_hangul_b9c0.bin",
+      "ranges": [
+        {
+          "first": "0xB9C0",
+          "last": "0xB9FF"
+        }
+      ],
+      "sha256": "26155a7f1b5d0474d5e8bce2ec096b7860922cdec6fcda9a2dff250109196498"
+    },
+    {
+      "bytes": 4828,
+      "crc32": "0x091610FC",
+      "id": "hangul_ba00",
+      "path": "assets/fonts/user_24_hangul_ba00.bin",
+      "ranges": [
+        {
+          "first": "0xBA00",
+          "last": "0xBA3F"
+        }
+      ],
+      "sha256": "cb2166c66c6a7c430aa66e9e3de680716399f50dfc8123d93960f1c7e9e21213"
+    },
+    {
+      "bytes": 4848,
+      "crc32": "0xD5848CBF",
+      "id": "hangul_ba40",
+      "path": "assets/fonts/user_24_hangul_ba40.bin",
+      "ranges": [
+        {
+          "first": "0xBA40",
+          "last": "0xBA7F"
+        }
+      ],
+      "sha256": "ce0b48ffa8796b637d8b368de74453a2d636b1abedf9071fd836940cdc52ca87"
+    },
+    {
+      "bytes": 4880,
+      "crc32": "0x359AF34B",
+      "id": "hangul_ba80",
+      "path": "assets/fonts/user_24_hangul_ba80.bin",
+      "ranges": [
+        {
+          "first": "0xBA80",
+          "last": "0xBABF"
+        }
+      ],
+      "sha256": "b5b218d0b197947a38e21195b09f1b925ea1696a52e3340fc30f96f123cee1bb"
+    },
+    {
+      "bytes": 5200,
+      "crc32": "0x8FABAD9F",
+      "id": "hangul_bac0",
+      "path": "assets/fonts/user_24_hangul_bac0.bin",
+      "ranges": [
+        {
+          "first": "0xBAC0",
+          "last": "0xBAFF"
+        }
+      ],
+      "sha256": "493968acb808e32a9d86ade53630894af8b91a314755e9e3dd3164fd5dcad168"
+    },
+    {
+      "bytes": 4876,
+      "crc32": "0x506CCF9B",
+      "id": "hangul_bb00",
+      "path": "assets/fonts/user_24_hangul_bb00.bin",
+      "ranges": [
+        {
+          "first": "0xBB00",
+          "last": "0xBB3F"
+        }
+      ],
+      "sha256": "1bf688bb299706bb44d55d6fe55a38c7900eaf6d39a888fb2286b291f90771a8"
+    },
+    {
+      "bytes": 5220,
+      "crc32": "0x2396D397",
+      "id": "hangul_bb40",
+      "path": "assets/fonts/user_24_hangul_bb40.bin",
+      "ranges": [
+        {
+          "first": "0xBB40",
+          "last": "0xBB7F"
+        }
+      ],
+      "sha256": "43d582bbf7560893a2e41cbd5602de01d1f784ac47526619ec24bf680fdd28bb"
+    },
+    {
+      "bytes": 4904,
+      "crc32": "0x4E2F71F7",
+      "id": "hangul_bb80",
+      "path": "assets/fonts/user_24_hangul_bb80.bin",
+      "ranges": [
+        {
+          "first": "0xBB80",
+          "last": "0xBBBF"
+        }
+      ],
+      "sha256": "8829fc7823223203dea92124f3b4c0bb3f65fce2530094e5e009b2eb6a27d473"
+    },
+    {
+      "bytes": 4544,
+      "crc32": "0x4A00DB45",
+      "id": "hangul_bbc0",
+      "path": "assets/fonts/user_24_hangul_bbc0.bin",
+      "ranges": [
+        {
+          "first": "0xBBC0",
+          "last": "0xBBFF"
+        }
+      ],
+      "sha256": "f86cb0acd2fbf8fd5ec0a4670dea7518f0c7dc3423f49f66e48da40caf53315b"
+    },
+    {
+      "bytes": 4696,
+      "crc32": "0x32DE64CF",
+      "id": "hangul_bc00",
+      "path": "assets/fonts/user_24_hangul_bc00.bin",
+      "ranges": [
+        {
+          "first": "0xBC00",
+          "last": "0xBC3F"
+        }
+      ],
+      "sha256": "ca93494929abf465fac0f51ee2b4a5b9ea40b46c00e6a3f9db815e176e530177"
+    },
+    {
+      "bytes": 5032,
+      "crc32": "0x4BA64DE1",
+      "id": "hangul_bc40",
+      "path": "assets/fonts/user_24_hangul_bc40.bin",
+      "ranges": [
+        {
+          "first": "0xBC40",
+          "last": "0xBC7F"
+        }
+      ],
+      "sha256": "9a0b640e5baaae8528bc91f75179b6eb9045995b1e3bfe9e5a2913d71e8a38c2"
+    },
+    {
+      "bytes": 4772,
+      "crc32": "0x6ABC8196",
+      "id": "hangul_bc80",
+      "path": "assets/fonts/user_24_hangul_bc80.bin",
+      "ranges": [
+        {
+          "first": "0xBC80",
+          "last": "0xBCBF"
+        }
+      ],
+      "sha256": "1fe4e628bcb310cb554c15f2a9eb8634cbdc92e0acf5a45f9c95e9ed16a04317"
+    },
+    {
+      "bytes": 4984,
+      "crc32": "0xFD7FF710",
+      "id": "hangul_bcc0",
+      "path": "assets/fonts/user_24_hangul_bcc0.bin",
+      "ranges": [
+        {
+          "first": "0xBCC0",
+          "last": "0xBCFF"
+        }
+      ],
+      "sha256": "8e4ed83ed7232785e9c529550e2a1abe3b7e841b1b38cddc88c3d0652ad5f6ee"
+    },
+    {
+      "bytes": 5488,
+      "crc32": "0xA5B55446",
+      "id": "hangul_bd00",
+      "path": "assets/fonts/user_24_hangul_bd00.bin",
+      "ranges": [
+        {
+          "first": "0xBD00",
+          "last": "0xBD3F"
+        }
+      ],
+      "sha256": "d804ae7f0f8614dc5ee7eb96d4469dedaf616f6fe921301c059c581a5073d608"
+    },
+    {
+      "bytes": 5296,
+      "crc32": "0x0FA4A852",
+      "id": "hangul_bd40",
+      "path": "assets/fonts/user_24_hangul_bd40.bin",
+      "ranges": [
+        {
+          "first": "0xBD40",
+          "last": "0xBD7F"
+        }
+      ],
+      "sha256": "e14e77813b96c68aa17a2ed613b83b4c468b2e816413f697b6448fed2ec7eebe"
+    },
+    {
+      "bytes": 5328,
+      "crc32": "0x901613C0",
+      "id": "hangul_bd80",
+      "path": "assets/fonts/user_24_hangul_bd80.bin",
+      "ranges": [
+        {
+          "first": "0xBD80",
+          "last": "0xBDBF"
+        }
+      ],
+      "sha256": "d90c00ce3c924b7308636d02f070aaa5172d8f53b008ac9c312e969fc46ba0d9"
+    },
+    {
+      "bytes": 5364,
+      "crc32": "0xCFF30570",
+      "id": "hangul_bdc0",
+      "path": "assets/fonts/user_24_hangul_bdc0.bin",
+      "ranges": [
+        {
+          "first": "0xBDC0",
+          "last": "0xBDFF"
+        }
+      ],
+      "sha256": "ebb86d8ac5bb01c776886ec43983488f6dc854951ada6cd54dfa76356043972d"
+    },
+    {
+      "bytes": 5084,
+      "crc32": "0xB0728D6D",
+      "id": "hangul_be00",
+      "path": "assets/fonts/user_24_hangul_be00.bin",
+      "ranges": [
+        {
+          "first": "0xBE00",
+          "last": "0xBE3F"
+        }
+      ],
+      "sha256": "b734767ae84a6d58b8f257a4bef811c098e792643d9fc0add2859b4019ae1945"
+    },
+    {
+      "bytes": 4856,
+      "crc32": "0x2BD27B2B",
+      "id": "hangul_be40",
+      "path": "assets/fonts/user_24_hangul_be40.bin",
+      "ranges": [
+        {
+          "first": "0xBE40",
+          "last": "0xBE7F"
+        }
+      ],
+      "sha256": "2744f9cdeea97bd1d63a7e4926fa277c8c79a80970e955e852092ae073c19d5c"
+    },
+    {
+      "bytes": 5340,
+      "crc32": "0x1960DD51",
+      "id": "hangul_be80",
+      "path": "assets/fonts/user_24_hangul_be80.bin",
+      "ranges": [
+        {
+          "first": "0xBE80",
+          "last": "0xBEBF"
+        }
+      ],
+      "sha256": "b0dfd16f97711792dd6d3b5de54418c5712ab2a1e70866f3b32c7a5027298f25"
+    },
+    {
+      "bytes": 5208,
+      "crc32": "0x096128B1",
+      "id": "hangul_bec0",
+      "path": "assets/fonts/user_24_hangul_bec0.bin",
+      "ranges": [
+        {
+          "first": "0xBEC0",
+          "last": "0xBEFF"
+        }
+      ],
+      "sha256": "9442c9aef00b9e6c04941aff0cfd769ebd94135c984a165a85cd042766d03bb1"
+    },
+    {
+      "bytes": 5384,
+      "crc32": "0x1E391D5E",
+      "id": "hangul_bf00",
+      "path": "assets/fonts/user_24_hangul_bf00.bin",
+      "ranges": [
+        {
+          "first": "0xBF00",
+          "last": "0xBF3F"
+        }
+      ],
+      "sha256": "4d932943242c0fc04b675a039a6a6b74d5d19f274512377c9dfa09a66e65c5aa"
+    },
+    {
+      "bytes": 5680,
+      "crc32": "0xC98CBA02",
+      "id": "hangul_bf40",
+      "path": "assets/fonts/user_24_hangul_bf40.bin",
+      "ranges": [
+        {
+          "first": "0xBF40",
+          "last": "0xBF7F"
+        }
+      ],
+      "sha256": "bf1cc156da7ee3a9e5987112f99b257bc754dc79e3b0d2e58abc25df31fd8306"
+    },
+    {
+      "bytes": 5564,
+      "crc32": "0x67342D5F",
+      "id": "hangul_bf80",
+      "path": "assets/fonts/user_24_hangul_bf80.bin",
+      "ranges": [
+        {
+          "first": "0xBF80",
+          "last": "0xBFBF"
+        }
+      ],
+      "sha256": "d9b0a11160085da86bb3cdb32d1f3c82e5d256316820c557ddb0a1841b91d42a"
+    },
+    {
+      "bytes": 5612,
+      "crc32": "0xC1AD4706",
+      "id": "hangul_bfc0",
+      "path": "assets/fonts/user_24_hangul_bfc0.bin",
+      "ranges": [
+        {
+          "first": "0xBFC0",
+          "last": "0xBFFF"
+        }
+      ],
+      "sha256": "a964bb43275431a50e39c3e787b7c73e51330cc835765076611260a1d16ca23b"
+    },
+    {
+      "bytes": 5636,
+      "crc32": "0x348D655E",
+      "id": "hangul_c000",
+      "path": "assets/fonts/user_24_hangul_c000.bin",
+      "ranges": [
+        {
+          "first": "0xC000",
+          "last": "0xC03F"
+        }
+      ],
+      "sha256": "15de4a409f7e75930293b9af5c47123beceb0b15023fd299ea788402323a130b"
+    },
+    {
+      "bytes": 5424,
+      "crc32": "0x30248BFF",
+      "id": "hangul_c040",
+      "path": "assets/fonts/user_24_hangul_c040.bin",
+      "ranges": [
+        {
+          "first": "0xC040",
+          "last": "0xC07F"
+        }
+      ],
+      "sha256": "a1d7dc9b33e46f36c09be4cdf8c6ab176963112ee8a24dd5e2f6b54b95d9303f"
+    },
+    {
+      "bytes": 5100,
+      "crc32": "0x88D5B425",
+      "id": "hangul_c080",
+      "path": "assets/fonts/user_24_hangul_c080.bin",
+      "ranges": [
+        {
+          "first": "0xC080",
+          "last": "0xC0BF"
+        }
+      ],
+      "sha256": "eab4b01a2c1848e2c6e126f705bfaba080a01959ee5a23e443d15fd16450760b"
+    },
+    {
+      "bytes": 5292,
+      "crc32": "0xB7D4D2EE",
+      "id": "hangul_c0c0",
+      "path": "assets/fonts/user_24_hangul_c0c0.bin",
+      "ranges": [
+        {
+          "first": "0xC0C0",
+          "last": "0xC0FF"
+        }
+      ],
+      "sha256": "f8f276c3e2e46942f15f84249b962911889d858a4bfc6b7005feac64af9971bc"
+    },
+    {
+      "bytes": 5172,
+      "crc32": "0x5E9760B6",
+      "id": "hangul_c100",
+      "path": "assets/fonts/user_24_hangul_c100.bin",
+      "ranges": [
+        {
+          "first": "0xC100",
+          "last": "0xC13F"
+        }
+      ],
+      "sha256": "008e34285d3fba6c342201192762d8f7d43c1ea6c8d57647b3fab5fd346ebfb0"
+    },
+    {
+      "bytes": 5340,
+      "crc32": "0xF26C4502",
+      "id": "hangul_c140",
+      "path": "assets/fonts/user_24_hangul_c140.bin",
+      "ranges": [
+        {
+          "first": "0xC140",
+          "last": "0xC17F"
+        }
+      ],
+      "sha256": "2cd6444436025423e2de996d12564fe23f5b2353a6971e910a1370d8152e8f81"
+    },
+    {
+      "bytes": 5624,
+      "crc32": "0xBE3C6894",
+      "id": "hangul_c180",
+      "path": "assets/fonts/user_24_hangul_c180.bin",
+      "ranges": [
+        {
+          "first": "0xC180",
+          "last": "0xC1BF"
+        }
+      ],
+      "sha256": "ff39597bd40a160ad5c223d2079b59c441d5427537419e5e1a9aec66772ab014"
+    },
+    {
+      "bytes": 5500,
+      "crc32": "0x0D874097",
+      "id": "hangul_c1c0",
+      "path": "assets/fonts/user_24_hangul_c1c0.bin",
+      "ranges": [
+        {
+          "first": "0xC1C0",
+          "last": "0xC1FF"
+        }
+      ],
+      "sha256": "a445c3aef44ea0ecf2613efb8628d5e2acc887df588981d1c38f34b252a0f2b0"
+    },
+    {
+      "bytes": 5536,
+      "crc32": "0x28E045FA",
+      "id": "hangul_c200",
+      "path": "assets/fonts/user_24_hangul_c200.bin",
+      "ranges": [
+        {
+          "first": "0xC200",
+          "last": "0xC23F"
+        }
+      ],
+      "sha256": "ff2fcd71d42876cf57f8329864d5e0b55e3ecc29fffc2bac894b4e1839ac1e39"
+    },
+    {
+      "bytes": 5536,
+      "crc32": "0xE74A7F40",
+      "id": "hangul_c240",
+      "path": "assets/fonts/user_24_hangul_c240.bin",
+      "ranges": [
+        {
+          "first": "0xC240",
+          "last": "0xC27F"
+        }
+      ],
+      "sha256": "45658ce9fc3b8bad6b2ac8eed2d375331a3eecddaa27bc371eede4ea3b55ede3"
+    },
+    {
+      "bytes": 5464,
+      "crc32": "0xD7129AAC",
+      "id": "hangul_c280",
+      "path": "assets/fonts/user_24_hangul_c280.bin",
+      "ranges": [
+        {
+          "first": "0xC280",
+          "last": "0xC2BF"
+        }
+      ],
+      "sha256": "61e7cbcd3047825b33e46c499681f22f4f09676e9a708979fadd7bfbdbe97f8a"
+    },
+    {
+      "bytes": 5084,
+      "crc32": "0x9343FE29",
+      "id": "hangul_c2c0",
+      "path": "assets/fonts/user_24_hangul_c2c0.bin",
+      "ranges": [
+        {
+          "first": "0xC2C0",
+          "last": "0xC2FF"
+        }
+      ],
+      "sha256": "2d36bcd283a30a94a928c417419c08714122031d21845975b91ffb780f6c1522"
+    },
+    {
+      "bytes": 5640,
+      "crc32": "0x1CB4D4B6",
+      "id": "hangul_c300",
+      "path": "assets/fonts/user_24_hangul_c300.bin",
+      "ranges": [
+        {
+          "first": "0xC300",
+          "last": "0xC33F"
+        }
+      ],
+      "sha256": "2cda187d1cc6da27fa2fa47283cae36771b9cde0db997e40a1ac5b9811c629f3"
+    },
+    {
+      "bytes": 5668,
+      "crc32": "0xE0B58458",
+      "id": "hangul_c340",
+      "path": "assets/fonts/user_24_hangul_c340.bin",
+      "ranges": [
+        {
+          "first": "0xC340",
+          "last": "0xC37F"
+        }
+      ],
+      "sha256": "791579870d8b61b2c90e726a5139e1f90a0eb98e5604511bb9e6e22cf8a3e4d8"
+    },
+    {
+      "bytes": 5520,
+      "crc32": "0x83A40E68",
+      "id": "hangul_c380",
+      "path": "assets/fonts/user_24_hangul_c380.bin",
+      "ranges": [
+        {
+          "first": "0xC380",
+          "last": "0xC3BF"
+        }
+      ],
+      "sha256": "1e91d67f67d46b6e0258b9a5afc5a20063fcfe113368f3d15e27c0e465c01301"
+    },
+    {
+      "bytes": 5720,
+      "crc32": "0x6BE16600",
+      "id": "hangul_c3c0",
+      "path": "assets/fonts/user_24_hangul_c3c0.bin",
+      "ranges": [
+        {
+          "first": "0xC3C0",
+          "last": "0xC3FF"
+        }
+      ],
+      "sha256": "235e3b2b6eca19ecdee8afc9e4f4765df0d331fd5e907921a184d41054eba4e6"
+    },
+    {
+      "bytes": 5732,
+      "crc32": "0x656F9299",
+      "id": "hangul_c400",
+      "path": "assets/fonts/user_24_hangul_c400.bin",
+      "ranges": [
+        {
+          "first": "0xC400",
+          "last": "0xC43F"
+        }
+      ],
+      "sha256": "da549d6fd2667ecfdd0834d16a74d2b7414dac5dfa6cfb2ffe7fc4295b26b2d7"
+    },
+    {
+      "bytes": 5696,
+      "crc32": "0x32B18152",
+      "id": "hangul_c440",
+      "path": "assets/fonts/user_24_hangul_c440.bin",
+      "ranges": [
+        {
+          "first": "0xC440",
+          "last": "0xC47F"
+        }
+      ],
+      "sha256": "5756cd311e355e19fdafd3a2cb03384a025a3d1a8dec754298b9331b4c981dbb"
+    },
+    {
+      "bytes": 5664,
+      "crc32": "0x72853F45",
+      "id": "hangul_c480",
+      "path": "assets/fonts/user_24_hangul_c480.bin",
+      "ranges": [
+        {
+          "first": "0xC480",
+          "last": "0xC4BF"
+        }
+      ],
+      "sha256": "aaa2276c9bfb24356366fc9ec84301a20c75e954d765d9d993bb4674fb69df52"
+    },
+    {
+      "bytes": 5648,
+      "crc32": "0x7DD0BEA9",
+      "id": "hangul_c4c0",
+      "path": "assets/fonts/user_24_hangul_c4c0.bin",
+      "ranges": [
+        {
+          "first": "0xC4C0",
+          "last": "0xC4FF"
+        }
+      ],
+      "sha256": "e2ca5ae63fcdb401827971ae3cb66e8f119924893a7f8c0440305f8faff2f570"
+    },
+    {
+      "bytes": 5384,
+      "crc32": "0xF4305607",
+      "id": "hangul_c500",
+      "path": "assets/fonts/user_24_hangul_c500.bin",
+      "ranges": [
+        {
+          "first": "0xC500",
+          "last": "0xC53F"
+        }
+      ],
+      "sha256": "5174043d45f05f68e53a8e31e3543687229dd857e4b5ca840c0aa523cc019a51"
+    },
+    {
+      "bytes": 5456,
+      "crc32": "0x8A006B9B",
+      "id": "hangul_c540",
+      "path": "assets/fonts/user_24_hangul_c540.bin",
+      "ranges": [
+        {
+          "first": "0xC540",
+          "last": "0xC57F"
+        }
+      ],
+      "sha256": "a51c14de0e802d0b2ce7e7c050653a55a5a63b7afc3bdf4bb3e3344657e96236"
+    },
+    {
+      "bytes": 5536,
+      "crc32": "0xE4C0608F",
+      "id": "hangul_c580",
+      "path": "assets/fonts/user_24_hangul_c580.bin",
+      "ranges": [
+        {
+          "first": "0xC580",
+          "last": "0xC5BF"
+        }
+      ],
+      "sha256": "bc5b0f3c455b1793eac1ac6d8b7b36dee3755d119c0ad6f72b5d4991ca1a9c88"
+    },
+    {
+      "bytes": 5388,
+      "crc32": "0xC1F788CD",
+      "id": "hangul_c5c0",
+      "path": "assets/fonts/user_24_hangul_c5c0.bin",
+      "ranges": [
+        {
+          "first": "0xC5C0",
+          "last": "0xC5FF"
+        }
+      ],
+      "sha256": "2c5dd0683edb059645ca85d846b7d23ffde6e10644b735a9757c3400c649a7ac"
+    },
+    {
+      "bytes": 5468,
+      "crc32": "0x9ECB5AC1",
+      "id": "hangul_c600",
+      "path": "assets/fonts/user_24_hangul_c600.bin",
+      "ranges": [
+        {
+          "first": "0xC600",
+          "last": "0xC63F"
+        }
+      ],
+      "sha256": "e50897d5a76c982b7cde6ad3059a0c92b262949fcc98afb177607e4e4cc0d4f6"
+    },
+    {
+      "bytes": 5832,
+      "crc32": "0xF7222016",
+      "id": "hangul_c640",
+      "path": "assets/fonts/user_24_hangul_c640.bin",
+      "ranges": [
+        {
+          "first": "0xC640",
+          "last": "0xC67F"
+        }
+      ],
+      "sha256": "7c4bb30197ce63c242aa1fdad1ffa323f6c5b63151be1b45cf57cf7fb6245542"
+    },
+    {
+      "bytes": 5580,
+      "crc32": "0x6235B7F0",
+      "id": "hangul_c680",
+      "path": "assets/fonts/user_24_hangul_c680.bin",
+      "ranges": [
+        {
+          "first": "0xC680",
+          "last": "0xC6BF"
+        }
+      ],
+      "sha256": "6a3fced258456430968de2a2f97cb5f22028cc29e7c50e674503774e4ac39266"
+    },
+    {
+      "bytes": 5728,
+      "crc32": "0xB47BCD1B",
+      "id": "hangul_c6c0",
+      "path": "assets/fonts/user_24_hangul_c6c0.bin",
+      "ranges": [
+        {
+          "first": "0xC6C0",
+          "last": "0xC6FF"
+        }
+      ],
+      "sha256": "c9da18e537be33437eb4cc82548817ad69c4f2e260f8516dc20b04dc46878146"
+    },
+    {
+      "bytes": 5544,
+      "crc32": "0x811B6169",
+      "id": "hangul_c700",
+      "path": "assets/fonts/user_24_hangul_c700.bin",
+      "ranges": [
+        {
+          "first": "0xC700",
+          "last": "0xC73F"
+        }
+      ],
+      "sha256": "152c779ad51a3b0b26301ced09b6c927894164857ff4eb26ff71d8764200d5a8"
+    },
+    {
+      "bytes": 5384,
+      "crc32": "0x743F60FE",
+      "id": "hangul_c740",
+      "path": "assets/fonts/user_24_hangul_c740.bin",
+      "ranges": [
+        {
+          "first": "0xC740",
+          "last": "0xC77F"
+        }
+      ],
+      "sha256": "684b4b06ef369ca6ce619e90fdee9fb02b2a78a859be9fa3aa5f46fc1d29fff9"
+    },
+    {
+      "bytes": 5424,
+      "crc32": "0x9BB22D93",
+      "id": "hangul_c780",
+      "path": "assets/fonts/user_24_hangul_c780.bin",
+      "ranges": [
+        {
+          "first": "0xC780",
+          "last": "0xC7BF"
+        }
+      ],
+      "sha256": "aefe276952f38bdf5ddc3cb305b175ebaad73c7a371f6339ff0a3b1f490f0d69"
+    },
+    {
+      "bytes": 5716,
+      "crc32": "0x5D93BF94",
+      "id": "hangul_c7c0",
+      "path": "assets/fonts/user_24_hangul_c7c0.bin",
+      "ranges": [
+        {
+          "first": "0xC7C0",
+          "last": "0xC7FF"
+        }
+      ],
+      "sha256": "9643e1df6074c4696877932615770b541a1c62069105750484f898e5b4d73d93"
+    },
+    {
+      "bytes": 5388,
+      "crc32": "0xDE7386DD",
+      "id": "hangul_c800",
+      "path": "assets/fonts/user_24_hangul_c800.bin",
+      "ranges": [
+        {
+          "first": "0xC800",
+          "last": "0xC83F"
+        }
+      ],
+      "sha256": "b80e51366af0615dc3f3f7519bfa4d7bb7294977b8e1c86de2b31463117f2038"
+    },
+    {
+      "bytes": 5556,
+      "crc32": "0xF9A9C77F",
+      "id": "hangul_c840",
+      "path": "assets/fonts/user_24_hangul_c840.bin",
+      "ranges": [
+        {
+          "first": "0xC840",
+          "last": "0xC87F"
+        }
+      ],
+      "sha256": "cb40b14ae0e961d215df9321de85a67ff9e9c0571525fb5b10874f07906e6630"
+    },
+    {
+      "bytes": 5884,
+      "crc32": "0x5F7D089C",
+      "id": "hangul_c880",
+      "path": "assets/fonts/user_24_hangul_c880.bin",
+      "ranges": [
+        {
+          "first": "0xC880",
+          "last": "0xC8BF"
+        }
+      ],
+      "sha256": "68bf34e69dad8162c5730cf681ebcb53ea2adecd6f965f4cec38693ca83481d6"
+    },
+    {
+      "bytes": 5532,
+      "crc32": "0xD7C66EF9",
+      "id": "hangul_c8c0",
+      "path": "assets/fonts/user_24_hangul_c8c0.bin",
+      "ranges": [
+        {
+          "first": "0xC8C0",
+          "last": "0xC8FF"
+        }
+      ],
+      "sha256": "5412aa25989fbffe1f371e9c8512a68410247065b32be8be1fd3ce990501b040"
+    },
+    {
+      "bytes": 5668,
+      "crc32": "0xDD2BB2B6",
+      "id": "hangul_c900",
+      "path": "assets/fonts/user_24_hangul_c900.bin",
+      "ranges": [
+        {
+          "first": "0xC900",
+          "last": "0xC93F"
+        }
+      ],
+      "sha256": "ef4e1b10f108ec8b124f37789c46866c94f3408462a43afb2f4f78c69abd290d"
+    },
+    {
+      "bytes": 5628,
+      "crc32": "0x352C819B",
+      "id": "hangul_c940",
+      "path": "assets/fonts/user_24_hangul_c940.bin",
+      "ranges": [
+        {
+          "first": "0xC940",
+          "last": "0xC97F"
+        }
+      ],
+      "sha256": "30825ee0d17ef33b24bc5ab590c5c5bbd5dc8346e401c3e3314372c1eaaa358c"
+    },
+    {
+      "bytes": 5500,
+      "crc32": "0xD3C0911F",
+      "id": "hangul_c980",
+      "path": "assets/fonts/user_24_hangul_c980.bin",
+      "ranges": [
+        {
+          "first": "0xC980",
+          "last": "0xC9BF"
+        }
+      ],
+      "sha256": "4e0985be6089d387c88b91262b0fd56a0455457a35da67eab068bca043f9ad76"
+    },
+    {
+      "bytes": 5432,
+      "crc32": "0x95F0CFAC",
+      "id": "hangul_c9c0",
+      "path": "assets/fonts/user_24_hangul_c9c0.bin",
+      "ranges": [
+        {
+          "first": "0xC9C0",
+          "last": "0xC9FF"
+        }
+      ],
+      "sha256": "30f66e1fb7653b1e57b54a4c92a5558a5f43d99508188cec9df9ecb5298daf35"
+    },
+    {
+      "bytes": 5840,
+      "crc32": "0x20F3E6CF",
+      "id": "hangul_ca00",
+      "path": "assets/fonts/user_24_hangul_ca00.bin",
+      "ranges": [
+        {
+          "first": "0xCA00",
+          "last": "0xCA3F"
+        }
+      ],
+      "sha256": "759d337926f16a3f8696a805ce8ce60ad0734f54decb4d66750343d363635ee2"
+    },
+    {
+      "bytes": 5728,
+      "crc32": "0xE7D58477",
+      "id": "hangul_ca40",
+      "path": "assets/fonts/user_24_hangul_ca40.bin",
+      "ranges": [
+        {
+          "first": "0xCA40",
+          "last": "0xCA7F"
+        }
+      ],
+      "sha256": "1a40e7b96b3f35842ecbb68d511db6ecde571b47bae25aa03593940420063e54"
+    },
+    {
+      "bytes": 5728,
+      "crc32": "0xEE418B6C",
+      "id": "hangul_ca80",
+      "path": "assets/fonts/user_24_hangul_ca80.bin",
+      "ranges": [
+        {
+          "first": "0xCA80",
+          "last": "0xCABF"
+        }
+      ],
+      "sha256": "674d517bce0a0a619f907d47331bcd6fbeba2c109b560dec743ff1789b4c22fb"
+    },
+    {
+      "bytes": 6004,
+      "crc32": "0xB0F0B7B1",
+      "id": "hangul_cac0",
+      "path": "assets/fonts/user_24_hangul_cac0.bin",
+      "ranges": [
+        {
+          "first": "0xCAC0",
+          "last": "0xCAFF"
+        }
+      ],
+      "sha256": "e7ca846f39f8b33e5521a334935f828d0e808517fe55d3023ccb526dea900bd8"
+    },
+    {
+      "bytes": 5876,
+      "crc32": "0x1AA52D4D",
+      "id": "hangul_cb00",
+      "path": "assets/fonts/user_24_hangul_cb00.bin",
+      "ranges": [
+        {
+          "first": "0xCB00",
+          "last": "0xCB3F"
+        }
+      ],
+      "sha256": "00be2651fe86a8df824f7dbe1d26370388e0b6bb0bb4f41217ecca0dd468628f"
+    },
+    {
+      "bytes": 5888,
+      "crc32": "0xC057BEC2",
+      "id": "hangul_cb40",
+      "path": "assets/fonts/user_24_hangul_cb40.bin",
+      "ranges": [
+        {
+          "first": "0xCB40",
+          "last": "0xCB7F"
+        }
+      ],
+      "sha256": "5e8472d15367b1661cec3ebe6bcd809b4c594a0c4490bc6c0f00d0065500353b"
+    },
+    {
+      "bytes": 5848,
+      "crc32": "0xF1C2164A",
+      "id": "hangul_cb80",
+      "path": "assets/fonts/user_24_hangul_cb80.bin",
+      "ranges": [
+        {
+          "first": "0xCB80",
+          "last": "0xCBBF"
+        }
+      ],
+      "sha256": "b91cc96a95dee6dc21a10099f45698c58a733ec91dc6eb40f074adfda0426a56"
+    },
+    {
+      "bytes": 5808,
+      "crc32": "0x956D5FC0",
+      "id": "hangul_cbc0",
+      "path": "assets/fonts/user_24_hangul_cbc0.bin",
+      "ranges": [
+        {
+          "first": "0xCBC0",
+          "last": "0xCBFF"
+        }
+      ],
+      "sha256": "d3fff3a5802377cff5b70c21f2ceab8fbb943216c7724568dbe6572d3c406d16"
+    },
+    {
+      "bytes": 5616,
+      "crc32": "0x3B3CD565",
+      "id": "hangul_cc00",
+      "path": "assets/fonts/user_24_hangul_cc00.bin",
+      "ranges": [
+        {
+          "first": "0xCC00",
+          "last": "0xCC3F"
+        }
+      ],
+      "sha256": "deced996cabc8dd8383a7c8c9b68f3f61b2c4f139c9e7fd0e7252e57085ea509"
+    },
+    {
+      "bytes": 5584,
+      "crc32": "0xD0B30894",
+      "id": "hangul_cc40",
+      "path": "assets/fonts/user_24_hangul_cc40.bin",
+      "ranges": [
+        {
+          "first": "0xCC40",
+          "last": "0xCC7F"
+        }
+      ],
+      "sha256": "ef19e0ee28c3850cfbc8f7fdf88bcf0e6fd981010d5af45603cb16a3f56a071f"
+    },
+    {
+      "bytes": 5508,
+      "crc32": "0x17B4D340",
+      "id": "hangul_cc80",
+      "path": "assets/fonts/user_24_hangul_cc80.bin",
+      "ranges": [
+        {
+          "first": "0xCC80",
+          "last": "0xCCBF"
+        }
+      ],
+      "sha256": "556f3270d10d45ced58c4f71a44edd65bbfc2fedb83dc516acda1cbc6a260292"
+    },
+    {
+      "bytes": 5596,
+      "crc32": "0x6D486DAA",
+      "id": "hangul_ccc0",
+      "path": "assets/fonts/user_24_hangul_ccc0.bin",
+      "ranges": [
+        {
+          "first": "0xCCC0",
+          "last": "0xCCFF"
+        }
+      ],
+      "sha256": "26b1914a291ea9118a8a6823205e52a23f9d7ffd6c06ed168b66c4f23eb8c51e"
+    },
+    {
+      "bytes": 5840,
+      "crc32": "0x6C7F5915",
+      "id": "hangul_cd00",
+      "path": "assets/fonts/user_24_hangul_cd00.bin",
+      "ranges": [
+        {
+          "first": "0xCD00",
+          "last": "0xCD3F"
+        }
+      ],
+      "sha256": "4455cdaf3b6b9b93692d2d7cdfbc57f26fabae8537d9da76b96b3146b7f45246"
+    },
+    {
+      "bytes": 5744,
+      "crc32": "0x617493C1",
+      "id": "hangul_cd40",
+      "path": "assets/fonts/user_24_hangul_cd40.bin",
+      "ranges": [
+        {
+          "first": "0xCD40",
+          "last": "0xCD7F"
+        }
+      ],
+      "sha256": "0d783a92ee703e3fef297bc437f6bd77481ec2763007e8e6cb9c2c7033ef6ea1"
+    },
+    {
+      "bytes": 5700,
+      "crc32": "0x9F10E1C2",
+      "id": "hangul_cd80",
+      "path": "assets/fonts/user_24_hangul_cd80.bin",
+      "ranges": [
+        {
+          "first": "0xCD80",
+          "last": "0xCDBF"
+        }
+      ],
+      "sha256": "f1f9baafa133545dd25d33f45714c81a5c25867602e4b33f8e32c48be5035b7c"
+    },
+    {
+      "bytes": 5784,
+      "crc32": "0x2BE25CB5",
+      "id": "hangul_cdc0",
+      "path": "assets/fonts/user_24_hangul_cdc0.bin",
+      "ranges": [
+        {
+          "first": "0xCDC0",
+          "last": "0xCDFF"
+        }
+      ],
+      "sha256": "2ecb43d492d008acb64ed67f5827b79d078a3cde48183a1ea96a73476d440405"
+    },
+    {
+      "bytes": 5576,
+      "crc32": "0x2D6AD320",
+      "id": "hangul_ce00",
+      "path": "assets/fonts/user_24_hangul_ce00.bin",
+      "ranges": [
+        {
+          "first": "0xCE00",
+          "last": "0xCE3F"
+        }
+      ],
+      "sha256": "67fb6d066cbecf52855a0fd64517c5052b6dbfc706c8d52764de2923614bfcae"
+    },
+    {
+      "bytes": 5520,
+      "crc32": "0xD04FB21A",
+      "id": "hangul_ce40",
+      "path": "assets/fonts/user_24_hangul_ce40.bin",
+      "ranges": [
+        {
+          "first": "0xCE40",
+          "last": "0xCE7F"
+        }
+      ],
+      "sha256": "13478af9d161f7eca978d862fdec72c72d72b8404a27768ae812a426e4c45177"
+    },
+    {
+      "bytes": 5600,
+      "crc32": "0xB184C654",
+      "id": "hangul_ce80",
+      "path": "assets/fonts/user_24_hangul_ce80.bin",
+      "ranges": [
+        {
+          "first": "0xCE80",
+          "last": "0xCEBF"
+        }
+      ],
+      "sha256": "ae5a65761534184dc3035e6456d4e593255b31d3d2b1448d7b633f6e7707e594"
+    },
+    {
+      "bytes": 5468,
+      "crc32": "0x7DF95E43",
+      "id": "hangul_cec0",
+      "path": "assets/fonts/user_24_hangul_cec0.bin",
+      "ranges": [
+        {
+          "first": "0xCEC0",
+          "last": "0xCEFF"
+        }
+      ],
+      "sha256": "b7d0c8673cbfcfd66bf47a7275168d5ac58093e7f0d6fcf0e5c96b7291dd94ad"
+    },
+    {
+      "bytes": 5312,
+      "crc32": "0x6CCD6349",
+      "id": "hangul_cf00",
+      "path": "assets/fonts/user_24_hangul_cf00.bin",
+      "ranges": [
+        {
+          "first": "0xCF00",
+          "last": "0xCF3F"
+        }
+      ],
+      "sha256": "ef3bcf3c0be96a4e013e5e1adb4bc655edaa9fd6277a5ab2c4bb1df1006080af"
+    },
+    {
+      "bytes": 5492,
+      "crc32": "0x3B5C9C86",
+      "id": "hangul_cf40",
+      "path": "assets/fonts/user_24_hangul_cf40.bin",
+      "ranges": [
+        {
+          "first": "0xCF40",
+          "last": "0xCF7F"
+        }
+      ],
+      "sha256": "7b2457fc12406b340e8aab4ad35297caff962ea43b685713f5f259c231fc9c93"
+    },
+    {
+      "bytes": 5548,
+      "crc32": "0x17EAB290",
+      "id": "hangul_cf80",
+      "path": "assets/fonts/user_24_hangul_cf80.bin",
+      "ranges": [
+        {
+          "first": "0xCF80",
+          "last": "0xCFBF"
+        }
+      ],
+      "sha256": "8a74ab637c431d675b15d603d3c1578e145f0282ad70ef027a781e2a7f595121"
+    },
+    {
+      "bytes": 5220,
+      "crc32": "0xFDED88EF",
+      "id": "hangul_cfc0",
+      "path": "assets/fonts/user_24_hangul_cfc0.bin",
+      "ranges": [
+        {
+          "first": "0xCFC0",
+          "last": "0xCFFF"
+        }
+      ],
+      "sha256": "da8557844cfd51f00421270206e09473df7fd42244ebe51417b78db238c0f45a"
+    },
+    {
+      "bytes": 5476,
+      "crc32": "0xEE2EEB1E",
+      "id": "hangul_d000",
+      "path": "assets/fonts/user_24_hangul_d000.bin",
+      "ranges": [
+        {
+          "first": "0xD000",
+          "last": "0xD03F"
+        }
+      ],
+      "sha256": "83fc8c9d33c3d6e48713bed7ab2530bc85e9cc18b1b348e7ee2efe136e4c4784"
+    },
+    {
+      "bytes": 5108,
+      "crc32": "0x3351B2EA",
+      "id": "hangul_d040",
+      "path": "assets/fonts/user_24_hangul_d040.bin",
+      "ranges": [
+        {
+          "first": "0xD040",
+          "last": "0xD07F"
+        }
+      ],
+      "sha256": "c59425f7b108c15e6406e8affc9459e7a57a537e660e774fbf23799ff760e24e"
+    },
+    {
+      "bytes": 5084,
+      "crc32": "0x54DCE3B8",
+      "id": "hangul_d080",
+      "path": "assets/fonts/user_24_hangul_d080.bin",
+      "ranges": [
+        {
+          "first": "0xD080",
+          "last": "0xD0BF"
+        }
+      ],
+      "sha256": "ee0432d05cf24fe5319cf9c75ac59486e352ec0c3acd9de29b37a0127ded1373"
+    },
+    {
+      "bytes": 5092,
+      "crc32": "0xB39C60EC",
+      "id": "hangul_d0c0",
+      "path": "assets/fonts/user_24_hangul_d0c0.bin",
+      "ranges": [
+        {
+          "first": "0xD0C0",
+          "last": "0xD0FF"
+        }
+      ],
+      "sha256": "9f4e9a0ab9213e602986430e01d9df44c457429e8f4f6a7bd1d70c6328f5058d"
+    },
+    {
+      "bytes": 5312,
+      "crc32": "0x62CFBAC2",
+      "id": "hangul_d100",
+      "path": "assets/fonts/user_24_hangul_d100.bin",
+      "ranges": [
+        {
+          "first": "0xD100",
+          "last": "0xD13F"
+        }
+      ],
+      "sha256": "565b23db811176f4a2f6ac9e6feeb33aacf57847d3563ae99727cc2065ab9dd2"
+    },
+    {
+      "bytes": 5000,
+      "crc32": "0xC6D09410",
+      "id": "hangul_d140",
+      "path": "assets/fonts/user_24_hangul_d140.bin",
+      "ranges": [
+        {
+          "first": "0xD140",
+          "last": "0xD17F"
+        }
+      ],
+      "sha256": "84752a01342c7aee0219471241cece067669bc36383822901d680786b4646733"
+    },
+    {
+      "bytes": 5248,
+      "crc32": "0xFE7A77C7",
+      "id": "hangul_d180",
+      "path": "assets/fonts/user_24_hangul_d180.bin",
+      "ranges": [
+        {
+          "first": "0xD180",
+          "last": "0xD1BF"
+        }
+      ],
+      "sha256": "5c3e225d033483f3178c23a2c28e54dc3132cf730b3c58dba3fe23da0692264a"
+    },
+    {
+      "bytes": 5624,
+      "crc32": "0x847D83BF",
+      "id": "hangul_d1c0",
+      "path": "assets/fonts/user_24_hangul_d1c0.bin",
+      "ranges": [
+        {
+          "first": "0xD1C0",
+          "last": "0xD1FF"
+        }
+      ],
+      "sha256": "b47c2bb5e99a1ebd55ebf8b49df3443f60ee817cf7cddc7133f30c3ab9c2a6c9"
+    },
+    {
+      "bytes": 5340,
+      "crc32": "0x28B6EAA2",
+      "id": "hangul_d200",
+      "path": "assets/fonts/user_24_hangul_d200.bin",
+      "ranges": [
+        {
+          "first": "0xD200",
+          "last": "0xD23F"
+        }
+      ],
+      "sha256": "2dc5de0127d1a64937d36a60590b29773cb9d1b38f4d3c0b807dc5eee1aec038"
+    },
+    {
+      "bytes": 5532,
+      "crc32": "0x134E4125",
+      "id": "hangul_d240",
+      "path": "assets/fonts/user_24_hangul_d240.bin",
+      "ranges": [
+        {
+          "first": "0xD240",
+          "last": "0xD27F"
+        }
+      ],
+      "sha256": "240f1b09729bac0c999717b36f6534e51b18c4de75862dcd6aa3274b47a267c4"
+    },
+    {
+      "bytes": 5256,
+      "crc32": "0x474CEB19",
+      "id": "hangul_d280",
+      "path": "assets/fonts/user_24_hangul_d280.bin",
+      "ranges": [
+        {
+          "first": "0xD280",
+          "last": "0xD2BF"
+        }
+      ],
+      "sha256": "1ca83b82450794b787d6a4768566be85c041c7379af8f22be97e6f98b2585937"
+    },
+    {
+      "bytes": 4944,
+      "crc32": "0x1A225AB3",
+      "id": "hangul_d2c0",
+      "path": "assets/fonts/user_24_hangul_d2c0.bin",
+      "ranges": [
+        {
+          "first": "0xD2C0",
+          "last": "0xD2FF"
+        }
+      ],
+      "sha256": "81c265416578e0454f01f903bd6b974cbee80e19a4c5b07a405392b70ea34a82"
+    },
+    {
+      "bytes": 5064,
+      "crc32": "0x6962625A",
+      "id": "hangul_d300",
+      "path": "assets/fonts/user_24_hangul_d300.bin",
+      "ranges": [
+        {
+          "first": "0xD300",
+          "last": "0xD33F"
+        }
+      ],
+      "sha256": "5626bda2f424db6e3f5846336a44c9d954a6e295feeff95ee83101ad386b2f86"
+    },
+    {
+      "bytes": 5200,
+      "crc32": "0xAB96F9F2",
+      "id": "hangul_d340",
+      "path": "assets/fonts/user_24_hangul_d340.bin",
+      "ranges": [
+        {
+          "first": "0xD340",
+          "last": "0xD37F"
+        }
+      ],
+      "sha256": "da8264cafbc1eb71da013d510b7c734bf27409e09fabd944072effc260bd0aee"
+    },
+    {
+      "bytes": 5100,
+      "crc32": "0xFD5D6E3F",
+      "id": "hangul_d380",
+      "path": "assets/fonts/user_24_hangul_d380.bin",
+      "ranges": [
+        {
+          "first": "0xD380",
+          "last": "0xD3BF"
+        }
+      ],
+      "sha256": "a661be46b357614a5cddf42a7cdeedf360c236ac8f1e384df0fa8b34c80a4b6d"
+    },
+    {
+      "bytes": 5200,
+      "crc32": "0xDC4ECBD8",
+      "id": "hangul_d3c0",
+      "path": "assets/fonts/user_24_hangul_d3c0.bin",
+      "ranges": [
+        {
+          "first": "0xD3C0",
+          "last": "0xD3FF"
+        }
+      ],
+      "sha256": "105f449617b52fe9b5ac893975c502feeeb1049756f81e41449d9010abfa3584"
+    },
+    {
+      "bytes": 5364,
+      "crc32": "0x06507248",
+      "id": "hangul_d400",
+      "path": "assets/fonts/user_24_hangul_d400.bin",
+      "ranges": [
+        {
+          "first": "0xD400",
+          "last": "0xD43F"
+        }
+      ],
+      "sha256": "3d87d26737879bed95bff9e76ab5aeac21502c4a4b3e1a4c5982b00436cda0d9"
+    },
+    {
+      "bytes": 5056,
+      "crc32": "0x18CC1F26",
+      "id": "hangul_d440",
+      "path": "assets/fonts/user_24_hangul_d440.bin",
+      "ranges": [
+        {
+          "first": "0xD440",
+          "last": "0xD47F"
+        }
+      ],
+      "sha256": "7db41d5a54aee595cefc8409921aec5a9da45c8a66f4784009db3c3e839a8e92"
+    },
+    {
+      "bytes": 5292,
+      "crc32": "0xAEA8619F",
+      "id": "hangul_d480",
+      "path": "assets/fonts/user_24_hangul_d480.bin",
+      "ranges": [
+        {
+          "first": "0xD480",
+          "last": "0xD4BF"
+        }
+      ],
+      "sha256": "936434abdc0bebaed639f67bb73bae5894ecb63adf2adfc8eda8f48fc3a3a1fa"
+    },
+    {
+      "bytes": 5160,
+      "crc32": "0x1E0DDF26",
+      "id": "hangul_d4c0",
+      "path": "assets/fonts/user_24_hangul_d4c0.bin",
+      "ranges": [
+        {
+          "first": "0xD4C0",
+          "last": "0xD4FF"
+        }
+      ],
+      "sha256": "7816e4c4e7e31584a953cf7a7ac5b6683ef4783525f92270a5b1b26596488f90"
+    },
+    {
+      "bytes": 4852,
+      "crc32": "0xC84C4372",
+      "id": "hangul_d500",
+      "path": "assets/fonts/user_24_hangul_d500.bin",
+      "ranges": [
+        {
+          "first": "0xD500",
+          "last": "0xD53F"
+        }
+      ],
+      "sha256": "36701c9ae97861532b0f86ee72b0fcfadfe7f65381a119dfd2f24739d5bb515a"
+    },
+    {
+      "bytes": 5388,
+      "crc32": "0x694D9100",
+      "id": "hangul_d540",
+      "path": "assets/fonts/user_24_hangul_d540.bin",
+      "ranges": [
+        {
+          "first": "0xD540",
+          "last": "0xD57F"
+        }
+      ],
+      "sha256": "75243436195a847a872aa54bc16f5a3634b18dc8f3b0bf7b63d03870ec3089e4"
+    },
+    {
+      "bytes": 6000,
+      "crc32": "0x995C82C0",
+      "id": "hangul_d580",
+      "path": "assets/fonts/user_24_hangul_d580.bin",
+      "ranges": [
+        {
+          "first": "0xD580",
+          "last": "0xD5BF"
+        }
+      ],
+      "sha256": "4b77cdc69bf9b7878d203f7f02159410a549ea8d2b8c38197eaa1c43fef0ef4f"
+    },
+    {
+      "bytes": 5808,
+      "crc32": "0x6D7879A3",
+      "id": "hangul_d5c0",
+      "path": "assets/fonts/user_24_hangul_d5c0.bin",
+      "ranges": [
+        {
+          "first": "0xD5C0",
+          "last": "0xD5FF"
+        }
+      ],
+      "sha256": "9a109f66a3163d0f165cbe8396d51934988e7d41bb1c8ac5d34d6f364d8f2c28"
+    },
+    {
+      "bytes": 5704,
+      "crc32": "0xFDFB09F0",
+      "id": "hangul_d600",
+      "path": "assets/fonts/user_24_hangul_d600.bin",
+      "ranges": [
+        {
+          "first": "0xD600",
+          "last": "0xD63F"
+        }
+      ],
+      "sha256": "0acfcb30a396a88fbc1f1c22b77a62693575f0466fdbbae10b60f338ecfaf069"
+    },
+    {
+      "bytes": 6008,
+      "crc32": "0x4D4ACD8E",
+      "id": "hangul_d640",
+      "path": "assets/fonts/user_24_hangul_d640.bin",
+      "ranges": [
+        {
+          "first": "0xD640",
+          "last": "0xD67F"
+        }
+      ],
+      "sha256": "c106d661c46bf8a525dac811d3ecf524100f948c17425517fb5cf241114f54f7"
+    },
+    {
+      "bytes": 5780,
+      "crc32": "0x470BECB7",
+      "id": "hangul_d680",
+      "path": "assets/fonts/user_24_hangul_d680.bin",
+      "ranges": [
+        {
+          "first": "0xD680",
+          "last": "0xD6BF"
+        }
+      ],
+      "sha256": "05dd6a14e12126a37152447a5a67b41db2be2f113e815a2d7f4195e3c875b51f"
+    },
+    {
+      "bytes": 5724,
+      "crc32": "0x39753581",
+      "id": "hangul_d6c0",
+      "path": "assets/fonts/user_24_hangul_d6c0.bin",
+      "ranges": [
+        {
+          "first": "0xD6C0",
+          "last": "0xD6FF"
+        }
+      ],
+      "sha256": "d578b99500dc517739f4db607b4b1999cb5fe57f178690c3752b105213f056fa"
+    },
+    {
+      "bytes": 5764,
+      "crc32": "0xFD97F15B",
+      "id": "hangul_d700",
+      "path": "assets/fonts/user_24_hangul_d700.bin",
+      "ranges": [
+        {
+          "first": "0xD700",
+          "last": "0xD73F"
+        }
+      ],
+      "sha256": "dc8b07a5d020b8d76a9c530f268b75ea4e5f99d6dd5d241536de77c981640174"
+    },
+    {
+      "bytes": 5688,
+      "crc32": "0xA2FAFDFD",
+      "id": "hangul_d740",
+      "path": "assets/fonts/user_24_hangul_d740.bin",
+      "ranges": [
+        {
+          "first": "0xD740",
+          "last": "0xD77F"
+        }
+      ],
+      "sha256": "3eca969a4908fd75083c478d143f30f4cbfd47e2762640aa600304810eb67795"
+    },
+    {
+      "bytes": 3136,
+      "crc32": "0xE38B4709",
+      "id": "hangul_d780",
+      "path": "assets/fonts/user_24_hangul_d780.bin",
+      "ranges": [
+        {
+          "first": "0xD780",
+          "last": "0xD7A3"
+        }
+      ],
+      "sha256": "ccd7eeb5a52da7fa93bd761f179c1562f8c1f8414dc3a628911a67057b02d9b9"
+    }
+  ],
+  "bpp": 2,
+  "cache_capacity": 176,
+  "content_hash": "3b38fa280f4f6bdc064f86bbf96a55a1794383b7b09f72865832a48cd8ed4d02",
+  "generator": "tools/assets/typography/generate_user.py",
+  "header": {
+    "bytes": 17508,
+    "path": "user_font_manifest.hpp",
+    "sha256": "e11a24eb60bd232ab474ba15914f82366e8d77e46209946d4b23261cd3084f03"
+  },
+  "replacement_codepoint": "0x25A1",
+  "schema_version": 1,
+  "size": 24,
+  "source": {
+    "path": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Regular.ttf",
+    "sha256": "2f2a6c4c02a7e83feef8c192c337da955932352ef2ccbb963c33677bbd1fcefb"
+  }
+}

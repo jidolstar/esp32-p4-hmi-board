@@ -1,0 +1,4 @@
+interface:
+  display_name: "LVGL Image Bundler"
+  short_description: "Bundle images into verified LVGL firmware C-arrays"
+  default_prompt: "Use $lvgl-image-bundler to convert an uploaded image or image URL into a verified LVGL firmware asset."

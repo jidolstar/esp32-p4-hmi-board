@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "owner_id": "sample-suite",
+  "cpp_namespace": "hmi::samples::suite::generated",
+  "symbol_prefix": "hmi_sample_suite",
+  "paths": {
+    "owner_root": "..",
+    "catalogs": {
+      "ko-KR": "ko.yaml",
+      "en-US": "en.yaml"
+    },
+    "typography": "typography.yaml",
+    "fonts": "fonts.json",
+    "generated_output": "../generated",
+    "user_output": "../assets/fonts",
+    "user_asset_prefix": "assets/fonts"
+  }
+}

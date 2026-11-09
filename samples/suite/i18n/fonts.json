@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "regular": {
+      "path": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Regular.ttf",
+      "sha256": "2f2a6c4c02a7e83feef8c192c337da955932352ef2ccbb963c33677bbd1fcefb"
+    },
+    "bold": {
+      "path": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Bold.ttf",
+      "sha256": "55b261c3c81c9b84f50ef58a8e076bfc6dc88c163305f1a7ea2807939ebc4624"
+    }
+  },
+  "fixed": {
+    "bpp": 4,
+    "styles": [
+      {
+        "id": "title_32_bold",
+        "size": 32,
+        "weight": "bold",
+        "roles": ["page_title"],
+        "extra_characters": "0123456789"
+      },
+      {
+        "id": "body_18_regular",
+        "size": 18,
+        "weight": "regular",
+        "roles": ["body", "placeholder"],
+        "extra_characters": ""
+      },
+      {
+        "id": "control_18_bold",
+        "size": 18,
+        "weight": "bold",
+        "roles": ["field_label", "control", "key_action"],
+        "extra_characters": ""
+      },
+      {
+        "id": "status_16_regular",
+        "size": 16,
+        "weight": "regular",
+        "roles": ["status"],
+        "extra_characters": "0123456789"
+      },
+      {
+        "id": "error_16_bold",
+        "size": 16,
+        "weight": "bold",
+        "roles": ["error"],
+        "extra_characters": "0123456789"
+      }
+    ]
+  },
+  "user": {
+    "size": 24,
+    "bpp": 2,
+    "cache_capacity": 176,
+    "replacement_codepoint": "0x25A1",
+    "assets": [
+      {
+        "id": "common",
+        "ranges": ["0x20-0x7E", "0x25A1", "0x3131-0x3163"]
+      },
+      {
+        "id": "hangul",
+        "ranges": ["0xAC00-0xD7A3"],
+        "block_size": 64
+      }
+    ]
+  }
+}

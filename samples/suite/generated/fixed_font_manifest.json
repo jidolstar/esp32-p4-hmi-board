@@ -1,0 +1,85 @@
+{
+  "content_hash": "897adf01b02d787ba2de8bc1dbf0ae44995e25c93ce0d36313d8c916d2f5284e",
+  "generator": "tools/assets/typography/generate.py",
+  "header": {
+    "bytes": 1211,
+    "path": "fixed_fonts.hpp",
+    "sha256": "ac5c6372dfde3d67562e1de7fab1827d4d22e176a9130c1a23c8b57a19c830a1"
+  },
+  "schema_version": 1,
+  "styles": [
+    {
+      "bpp": 4,
+      "bytes": 94261,
+      "glyph_count": 99,
+      "id": "title_32_bold",
+      "output": "fonts/fixed/title_32_bold.c",
+      "roles": [
+        "page_title"
+      ],
+      "sha256": "9d5113bdeb8570ac3b03a8f318ade5017a4293fbead4b7e23fe7d1f92fa2be75",
+      "size": 32,
+      "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Bold.ttf",
+      "weight": "bold"
+    },
+    {
+      "bpp": 4,
+      "bytes": 101247,
+      "glyph_count": 183,
+      "id": "body_18_regular",
+      "output": "fonts/fixed/body_18_regular.c",
+      "roles": [
+        "body",
+        "placeholder"
+      ],
+      "sha256": "73cd26bbe72b099809223f69a179882666362aefc1de6f25923f883b9bf5c4f1",
+      "size": 18,
+      "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Regular.ttf",
+      "weight": "regular"
+    },
+    {
+      "bpp": 4,
+      "bytes": 67024,
+      "glyph_count": 120,
+      "id": "control_18_bold",
+      "output": "fonts/fixed/control_18_bold.c",
+      "roles": [
+        "field_label",
+        "control",
+        "key_action"
+      ],
+      "sha256": "38a689df7184acfbf582be2eb67f0e53c6aac81af4229384e616acf4919cf919",
+      "size": 18,
+      "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Bold.ttf",
+      "weight": "bold"
+    },
+    {
+      "bpp": 4,
+      "bytes": 83137,
+      "glyph_count": 170,
+      "id": "status_16_regular",
+      "output": "fonts/fixed/status_16_regular.c",
+      "roles": [
+        "status"
+      ],
+      "sha256": "b269ef0ae852c74883d51b8624135d6cefa9bebae48bd2862b2dbb6141dce5f4",
+      "size": 16,
+      "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Regular.ttf",
+      "weight": "regular"
+    },
+    {
+      "bpp": 4,
+      "bytes": 80161,
+      "glyph_count": 151,
+      "id": "error_16_bold",
+      "output": "fonts/fixed/error_16_bold.c",
+      "roles": [
+        "error"
+      ],
+      "sha256": "bc17c099c1836bbda02a8d3f47fd5045eff2c4528293e62b74455b56feb403cf",
+      "size": 16,
+      "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Bold.ttf",
+      "weight": "bold"
+    }
+  ]
+}

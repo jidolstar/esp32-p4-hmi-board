@@ -1,0 +1,30 @@
+# CMake / Ninja
+/build/
+/CMakeUserPresets.json
+
+# PlatformIO
+/.pio/
+
+# Generated profile wiring and local runtime data
+/.generated/
+/.local/
+/dist/
+
+# Generated runtime fonts (recreated from each owner's i18n catalog config)
+**/assets/fonts/user_*.bin
+
+# Editors and operating systems
+/.vs/
+/.vscode/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Node.js
+node_modules/

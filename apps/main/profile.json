@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "main",
+  "kind": "application",
+  "description": "Minimal asset-free starter application.",
+  "entry": {
+    "header": "app.hpp",
+    "type": "hmi::apps::main::MainApp"
+  },
+  "sources": {
+    "common": [
+      "app.cpp"
+    ],
+    "windows": [],
+    "hmi": []
+  },
+  "include_dirs": [
+    "."
+  ],
+  "modules": [],
+  "hosts": {
+    "windows": {
+      "enabled": true
+    },
+    "hmi": {
+      "enabled": true,
+      "board": "jc1060p470c"
+    }
+  },
+  "assets": [],
+  "config": [],
+  "data": {
+    "windows_root": "main",
+    "hmi_sd_root": "hmi/main",
+    "nvs_namespace": "hmi_main"
+  },
+  "verification": {
+    "tests": [
+      "hmi_main_windows_smoke",
+      "hmi_main_app_input"
+    ]
+  }
+}
