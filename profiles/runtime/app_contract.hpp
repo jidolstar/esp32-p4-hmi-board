@@ -5,7 +5,12 @@
 
 #include "hmi/settings/level_settings_port.hpp"
 
+namespace hmi::audio {
+struct AudioPlaybackPort;
+}
+
 namespace hmi::connectivity {
+class WifiApWebController;
 class WifiStaRegistration;
 }
 
@@ -44,6 +49,8 @@ struct AppContext {
   const char *host_name = nullptr;
   BinaryFontPort fonts{};
   hmi::settings::LevelSettingsPort level_settings{};
+  hmi::audio::AudioPlaybackPort* audio_playback = nullptr;
+  hmi::connectivity::WifiApWebController* ap_control = nullptr;
   hmi::connectivity::WifiStaRegistration* wifi_registration = nullptr;
   hmi::storage::StorageAccessController* storage_access = nullptr;
 };

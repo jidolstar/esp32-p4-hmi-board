@@ -14,7 +14,7 @@ SCHEMA_VERSION = 1
 SUPPORTED_HOSTS = ("windows", "hmi")
 SUPPORTED_KINDS = ("application", "sample")
 SUPPORTED_MODULES = frozenset(
-    {"connectivity", "i18n", "settings", "storage", "text", "ui"}
+    {"audio", "connectivity", "i18n", "settings", "storage", "text", "ui"}
 )
 
 REGISTRY_REQUIRED_KEYS = frozenset(

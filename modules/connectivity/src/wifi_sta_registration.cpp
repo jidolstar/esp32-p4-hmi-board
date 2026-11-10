@@ -64,13 +64,17 @@ bool WifiStaRegistration::begin(
 }
 
 bool WifiStaRegistration::busy() const noexcept {
-  return scan_.busy() || scan_.snapshot().draining ||
+  if (ap_suspended_) {
+    return false;
+  }
+  return scan_.busy() || scan_.snapshot().draining || signal_pending_ ||
+         port_.signal_sample_running() ||
          snapshot_.state == WifiRegistrationState::connecting ||
          snapshot_.state == WifiRegistrationState::restoring;
 }
 
 bool WifiStaRegistration::request_scan() noexcept {
-  if (!initialized_ || busy() ||
+  if (!initialized_ || ap_suspended_ || busy() ||
       snapshot_.state == WifiRegistrationState::connected_not_saved) {
     return false;
   }
@@ -89,7 +93,7 @@ bool WifiStaRegistration::connect_bytes(
     const std::uint8_t* password, const std::size_t password_length,
     const WifiSecurity security,
     const CredentialInputSource source) noexcept {
-  if (!initialized_ || busy() ||
+  if (!initialized_ || ap_suspended_ || busy() ||
       snapshot_.state == WifiRegistrationState::connected_not_saved) {
     return false;
   }
@@ -235,7 +239,8 @@ void WifiStaRegistration::cancel() noexcept {
 }
 
 bool WifiStaRegistration::retry_save() noexcept {
-  if (snapshot_.state != WifiRegistrationState::connected_not_saved ||
+  if (ap_suspended_ ||
+      snapshot_.state != WifiRegistrationState::connected_not_saved ||
       port_.link_state() != WifiLinkState::connected || !port_.has_ip()) {
     return false;
   }
@@ -251,7 +256,7 @@ bool WifiStaRegistration::retry_save() noexcept {
 }
 
 bool WifiStaRegistration::forget() noexcept {
-  if (!initialized_ || busy()) {
+  if (!initialized_ || ap_suspended_ || busy()) {
     return false;
   }
   if (!store_.erase()) {
@@ -270,8 +275,46 @@ bool WifiStaRegistration::forget() noexcept {
   return true;
 }
 
+bool WifiStaRegistration::suspend_for_ap() noexcept {
+  if (!initialized_ || ap_suspended_ || busy()) {
+    return false;
+  }
+  state_before_ap_ = snapshot_.state;
+  reconnect_after_ap_ = snapshot_.has_ip && current_.ssid_length != 0U;
+  port_.disconnect();
+  ++signal_generation_;
+  signal_connected_ = false;
+  signal_attempted_ = false;
+  signal_pending_ = false;
+  snapshot_.signal_level = 0U;
+  snapshot_.link_connected = false;
+  snapshot_.has_ip = false;
+  snapshot_.ipv4[0] = '\0';
+  ap_suspended_ = true;
+  return true;
+}
+
+bool WifiStaRegistration::resume_after_ap(
+    const std::uint32_t now_ms) noexcept {
+  if (!initialized_ || !ap_suspended_) {
+    return false;
+  }
+  ap_suspended_ = false;
+  if (reconnect_after_ap_) {
+    reconnect_after_ap_ = false;
+    start_connection(now_ms, false);
+  } else {
+    snapshot_.state = state_before_ap_;
+    snapshot_.error = WifiRegistrationError::none;
+  }
+  return true;
+}
+
 void WifiStaRegistration::tick(const std::uint32_t now_ms) noexcept {
   last_now_ms_ = now_ms;
+  if (ap_suspended_) {
+    return;
+  }
   port_.poll();
   if (!initialized_) {
     return;

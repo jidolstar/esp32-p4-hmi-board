@@ -46,7 +46,7 @@ class TypographyGenerationTest(unittest.TestCase):
         inputs = load_inputs(self.owner.catalogs, self.owner.typography)
         self.assertEqual(set(inputs.catalogs["ko-KR"]), set(inputs.catalogs["en-US"]))
         self.assertEqual(set(inputs.catalogs["ko-KR"]), set(inputs.roles))
-        self.assertEqual(184, len(inputs.roles))
+        self.assertEqual(283, len(inputs.roles))
 
     def test_same_input_renders_identical_bytes(self) -> None:
         self.assertEqual(render_outputs(self.owner), render_outputs(self.owner))
@@ -73,7 +73,7 @@ class TypographyGenerationTest(unittest.TestCase):
 
     def test_generated_header_keeps_catalogs_non_owning_and_typed(self) -> None:
         header = render_outputs(self.owner)["text_catalog.hpp"]
-        self.assertIn("enum class TextId : std::uint8_t", header)
+        self.assertIn("enum class TextId : std::uint16_t", header)
         self.assertIn("hmi::i18n::CatalogView", header)
         self.assertIn("TypographyRole::key_action", header)
         self.assertIn("TextId text_id(std::string_view key)", header)

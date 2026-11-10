@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "owner_root": "samples/suite",
+  "generated_header": "samples/suite/generated/wav_catalog.hpp",
+  "max_entries": 8,
+  "entries": [
+    {
+      "id": "start_notice",
+      "asset_path": "assets/sounds/cook_start.wav",
+      "title_key": "wav_sounds.item.start.title",
+      "description_key": "wav_sounds.item.start.description",
+      "source_path": "../dev_202609_hmi/assets/sounds/cook_start.wav",
+      "source_authorization": "user-approved-reuse-2026-11-10",
+      "file_bytes": 212046,
+      "sha256": "1e883e7dc78cd60fd04530b107a3e5ed5b9873fbbaa36d9d9c38ba6476b194e6",
+      "format": {
+        "encoding": "pcm",
+        "channels": 1,
+        "sample_rate_hz": 48000,
+        "bits_per_sample": 16,
+        "duration_ms": 2208
+      }
+    },
+    {
+      "id": "complete_notice",
+      "asset_path": "assets/sounds/cook_end.wav",
+      "title_key": "wav_sounds.item.complete.title",
+      "description_key": "wav_sounds.item.complete.description",
+      "source_path": "../dev_202609_hmi/assets/sounds/cook_end.wav",
+      "source_authorization": "user-approved-reuse-2026-11-10",
+      "file_bytes": 237390,
+      "sha256": "0c2cff072b11a22a5cc7fc38a0f7ff0a13452b7fa048bc58849b044cfef15fcd",
+      "format": {
+        "encoding": "pcm",
+        "channels": 1,
+        "sample_rate_hz": 48000,
+        "bits_per_sample": 16,
+        "duration_ms": 2472
+      }
+    },
+    {
+      "id": "open_notice",
+      "asset_path": "assets/sounds/lid_open.wav",
+      "title_key": "wav_sounds.item.open.title",
+      "description_key": "wav_sounds.item.open.description",
+      "source_path": "../dev_202609_hmi/assets/sounds/lid_open.wav",
+      "source_authorization": "user-approved-reuse-2026-11-10",
+      "file_bytes": 195918,
+      "sha256": "86ea1dad0b280c70d1fb9582d5656a446936a14c4e8942bcc956cee800b826d3",
+      "format": {
+        "encoding": "pcm",
+        "channels": 1,
+        "sample_rate_hz": 48000,
+        "bits_per_sample": 16,
+        "duration_ms": 2040
+      }
+    },
+    {
+      "id": "close_notice",
+      "asset_path": "assets/sounds/lid_close.wav",
+      "title_key": "wav_sounds.item.close.title",
+      "description_key": "wav_sounds.item.close.description",
+      "source_path": "../dev_202609_hmi/assets/sounds/lid_close.wav",
+      "source_authorization": "user-approved-reuse-2026-11-10",
+      "file_bytes": 207438,
+      "sha256": "39dc1fd1c350d148a5fe35815a3af2bed0442eb6b7954ceb7d6dd971d52f3543",
+      "format": {
+        "encoding": "pcm",
+        "channels": 1,
+        "sample_rate_hz": 48000,
+        "bits_per_sample": 16,
+        "duration_ms": 2160
+      }
+    },
+    {
+      "id": "highlight_notice",
+      "asset_path": "assets/sounds/cooktech_start.wav",
+      "title_key": "wav_sounds.item.highlight.title",
+      "description_key": "wav_sounds.item.highlight.description",
+      "source_path": "../dev_202609_hmi/assets/sounds/cooktech_start.wav",
+      "source_authorization": "user-approved-reuse-2026-11-10",
+      "file_bytes": 341070,
+      "sha256": "65b222dead400e2303d2fa46b37d2582685a205c2967c60a053f84ffa7a6096e",
+      "format": {
+        "encoding": "pcm",
+        "channels": 1,
+        "sample_rate_hz": 48000,
+        "bits_per_sample": 16,
+        "duration_ms": 3552
+      }
+    }
+  ]
+}
+

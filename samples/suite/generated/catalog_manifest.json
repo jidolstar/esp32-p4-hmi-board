@@ -1,5 +1,5 @@
 {
-  "content_hash": "71ba1a40ad9d2796cb94a03fd39fd8a29ad673d0c3b90fb5c1f2d6ae771215f0",
+  "content_hash": "2301db53464307a4eb2466062563947b310dc183294607f259eaa358b00c3a28",
   "cpp_namespace": "hmi::samples::suite::generated",
   "entries": [
     {
@@ -168,12 +168,32 @@
       "role": "page_title"
     },
     {
+      "key": "page.wav_sounds.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.wav_sounds.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
       "key": "page.wifi.description",
       "placeholders": [],
       "role": "body"
     },
     {
       "key": "page.wifi.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "page.wifi_ap_web.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.wifi_ap_web.title",
       "placeholders": [],
       "role": "page_title"
     },
@@ -759,6 +779,235 @@
       "role": "body"
     },
     {
+      "key": "wav_sounds.action.pause",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wav_sounds.action.play",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wav_sounds.action.replay",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wav_sounds.action.resume",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wav_sounds.action.stop",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wav_sounds.format.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wav_sounds.format.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.item.close.description",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.item.close.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.item.complete.description",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.item.complete.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.item.highlight.description",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.item.highlight.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.item.open.description",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.item.open.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.item.start.description",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.item.start.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.list.count",
+      "placeholders": [
+        {
+          "name": "count",
+          "type": "u32"
+        }
+      ],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.list.hint",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.list.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wav_sounds.player.empty_body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wav_sounds.player.empty_title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wav_sounds.player.format",
+      "placeholders": [
+        {
+          "name": "bits",
+          "type": "u32"
+        },
+        {
+          "name": "rate",
+          "type": "u32"
+        }
+      ],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.player.now_playing",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.row.error",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.status.busy",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.status.completed",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.file",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.status.output",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.status.paused",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.pausing",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.playing",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.read",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.status.ready",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.resuming",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.starting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.stopped",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wav_sounds.status.truncated",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.status.unavailable",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.status.unsupported",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wav_sounds.time.elapsed",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.time.remaining",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wav_sounds.time.total",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
       "key": "wifi.action.cancel",
       "placeholders": [],
       "role": "control"
@@ -977,6 +1226,266 @@
       "key": "wifi.status.selected",
       "placeholders": [],
       "role": "status"
+    },
+    {
+      "key": "wifi_ap.action.cancel",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.action.confirm_stop",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.action.retry",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.action.show_web",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.action.show_wifi",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.action.start",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.action.stop",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.dialog.stop.body",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.dialog.stop.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wifi_ap.error.invalid",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi_ap.error.radio_busy",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi_ap.error.restore",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi_ap.error.start",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi_ap.error.timeout",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "wifi_ap.label.clients",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi_ap.label.endpoint",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi_ap.label.ipv4",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi_ap.label.password",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi_ap.label.ssid",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi_ap.label.sta_ipv4",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi_ap.message.control",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.message.failed",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.message.no_internet",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.message.off",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.message.ready",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.message.reconnecting",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.message.web",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.message.working",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.probe.badge",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "wifi_ap.probe.details",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "wifi_ap.probe.note",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "wifi_ap.probe.value.endpoint",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.probe.value.ipv4",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.probe.value.password",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.probe.value.ssid",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.connected",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.off",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.preparing",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.ready",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.reconnecting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.restoring",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.starting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.stopping",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.waiting_web",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.status.waiting_wifi",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.switch.four",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.switch.off",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.switch.on",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "wifi_ap.switch.one",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.switch.three",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.switch.two",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "wifi_ap.value.unavailable",
+      "placeholders": [],
+      "role": "status"
     }
   ],
   "generator_version": 2,
@@ -988,10 +1497,10 @@
   "schema_version": 1,
   "sources": {
     "i18n/catalog.json": "e6b7aec4af6fb6f1a603a8858ee77742031952718c9aa6a0f7b3eaa6b0972ae3",
-    "i18n/en.yaml": "f6682cf085d7d437bc1050f29a7a55f065c236d96cb27e1e067473d569b3f8b3",
-    "i18n/ko.yaml": "8a3914da017cfab061c463f1185a22379a613e5a7df36bbfd01f75525740499b",
-    "i18n/typography.yaml": "f61a259020975851ffa4c6c6ff548bfc96a35283af6bd700b13f04094eefe7e5"
+    "i18n/en.yaml": "9cb21a933444a3eb06bebfaf444d27b40ff21b71ef5b181a5acaa3e53da1cfbd",
+    "i18n/ko.yaml": "a95a49d6bb24f15d16ddecb4a8b86f389d19a6d502c9cdb510f933cc8d78fd93",
+    "i18n/typography.yaml": "83b13df4faae28d46650c6296d0d5535f73c859e7ad0d87974d3d036fce5a4a8"
   },
   "symbol_prefix": "hmi_sample_suite",
-  "text_count": 184
+  "text_count": 283
 }

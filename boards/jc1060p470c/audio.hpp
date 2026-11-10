@@ -7,7 +7,17 @@ namespace internal {
 class AudioService;
 }
 
-enum class AudioState : std::uint8_t { idle, starting, playing, error };
+enum class AudioState : std::uint8_t {
+  idle,
+  starting,
+  playing,
+  pausing,
+  paused,
+  resuming,
+  completed,
+  stopped,
+  error,
+};
 enum class AudioError : std::uint8_t {
   none,
   unavailable,
@@ -22,11 +32,32 @@ enum class AudioError : std::uint8_t {
 struct AudioStatus {
   AudioState state = AudioState::idle;
   AudioError error = AudioError::none;
+  std::uint32_t position_ms = 0U;
+  std::uint32_t duration_ms = 0U;
+  std::uint32_t revision = 0U;
   std::uint8_t volume = 100U;
 };
 
+enum class AudioProbeResult : std::uint8_t {
+  ok,
+  unavailable,
+  file,
+  invalid,
+  truncated,
+  unsupported,
+};
+
+struct AudioFileInfo {
+  std::uint64_t file_bytes = 0U;
+  std::uint32_t sample_rate = 0U;
+  std::uint32_t duration_ms = 0U;
+  std::uint16_t channels = 0U;
+  std::uint16_t bits_per_sample = 0U;
+};
+
 /**
- * Board가 소유한 WAV worker에 재생·정지·음량 요청을 전달하는 비소유 facade다.
+ * Board가 소유한 WAV worker에 재생·일시정지·이어 재생·정지·음량 요청을
+ * 전달하는 비소유 facade다.
  *
  * 실제 SD stream, ES8311, I2S와 task lifetime은 internal::AudioService가 숨긴다.
  * 호출자는 Board보다 이 facade를 오래 보관하면 안 된다.
@@ -37,9 +68,13 @@ class Audio {
   Audio& operator=(const Audio&) = delete;
 
   bool play(const char* path);
+  bool pause();
+  bool resume();
   bool stop();
   bool set_volume(std::uint8_t volume);
   [[nodiscard]] AudioStatus status() const noexcept;
+  [[nodiscard]] AudioProbeResult probe(const char* path,
+                                       AudioFileInfo& output) const;
 
  private:
   friend class Board;

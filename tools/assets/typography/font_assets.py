@@ -401,11 +401,24 @@ def build_fixed_outputs(
                 temporary_output,
             )
             text = temporary_output.read_text(encoding="utf-8")
-            normalized_lines = [
-                f" * Generated deterministically from owner config input {config.path.name}"
-                if line.startswith(" * Opts:") else line
-                for line in text.splitlines()
-            ]
+            normalized_lines: list[str] = []
+            inside_converter_options = False
+            for line in text.splitlines():
+                if line.startswith(" * Opts:"):
+                    normalized_lines.append(
+                        " * Generated deterministically from owner config input "
+                        f"{config.path.name}"
+                    )
+                    inside_converter_options = True
+                    continue
+                if inside_converter_options:
+                    # 최신 converter는 긴 --symbols/--output 인자를 여러 줄로
+                    # 감싼다. 임시 output 경로까지 모두 버려야 byte가 재현된다.
+                    if line.endswith("******/"):
+                        normalized_lines.append(line)
+                        inside_converter_options = False
+                    continue
+                normalized_lines.append(line)
             content = ("\n".join(normalized_lines) + "\n").encode("utf-8")
             relative = f"fonts/fixed/{style.id}.c"
             outputs[relative] = content

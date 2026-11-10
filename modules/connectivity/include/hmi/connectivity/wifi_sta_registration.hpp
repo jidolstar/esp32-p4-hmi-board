@@ -84,6 +84,11 @@ class WifiStaRegistration {
   void cancel() noexcept;
   bool retry_save() noexcept;
   bool forget() noexcept;
+  bool suspend_for_ap() noexcept;
+  bool resume_after_ap(std::uint32_t now_ms) noexcept;
+  [[nodiscard]] bool suspended_for_ap() const noexcept {
+    return ap_suspended_;
+  }
 
   [[nodiscard]] WifiRegistrationSnapshot snapshot() const noexcept {
     return snapshot_;
@@ -126,6 +131,9 @@ class WifiStaRegistration {
   bool signal_attempted_ = false;
   bool signal_pending_ = false;
   bool signal_connected_ = false;
+  WifiRegistrationState state_before_ap_ = WifiRegistrationState::idle;
+  bool ap_suspended_ = false;
+  bool reconnect_after_ap_ = false;
 };
 
 static_assert(sizeof(WifiRegistrationSnapshot) <= 64U,

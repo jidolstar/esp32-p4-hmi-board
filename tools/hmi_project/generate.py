@@ -11,11 +11,18 @@ from pathlib import Path
 from .manifest import Profile, ProfileRegistry, SUPPORTED_HOSTS
 from .pages import check_page_source_isolation, load_page_registry
 
-GENERATOR_VERSION = 18
+GENERATOR_VERSION = 21
 
 MODULE_INPUTS = {
+    "audio": {
+        "sources": ("modules/audio/src/playback.cpp",),
+        "include_dirs": ("modules/audio/include",),
+    },
     "connectivity": {
         "sources": (
+            "modules/connectivity/src/wifi_ap_runtime.cpp",
+            "modules/connectivity/src/wifi_ap_web_controller.cpp",
+            "modules/connectivity/src/wifi_ap_web_protocol.cpp",
             "modules/connectivity/src/wifi_scan_service.cpp",
             "modules/connectivity/src/wifi_sta_registration.cpp",
             "modules/connectivity/src/wifi_station_settings.cpp",
@@ -193,12 +200,16 @@ def resolve_profile_inputs(
     host_include_dirs = list(host_input["include_dirs"])
     if "connectivity" in profile.data["modules"]:
         if host == "windows":
-            module_sources.append(
-                "platform/windows/connectivity/virtual_wifi_sta.cpp"
+            module_sources.extend(
+                (
+                    "platform/windows/connectivity/virtual_wifi_ap.cpp",
+                    "platform/windows/connectivity/virtual_wifi_sta.cpp",
+                )
             )
         else:
             host_sources.extend(
                 (
+                    "platform/hmi/connectivity/esp_hosted_wifi_ap.cpp",
                     "platform/hmi/connectivity/esp_hosted_wifi_sta.cpp",
                     "platform/hmi/connectivity/preferences_wifi_station_settings_store.cpp",
                 )
@@ -207,6 +218,11 @@ def resolve_profile_inputs(
         module_sources.append(
             "platform/windows/storage/virtual_storage_access.cpp"
         )
+    if "audio" in profile.data["modules"]:
+        if host == "windows":
+            host_sources.append("platform/windows/audio/sdl_wav_playback.cpp")
+        else:
+            host_sources.append("platform/hmi/audio/board_wav_playback.cpp")
     board_sources: list[str] = []
     board_include_dirs: list[str] = []
     if host == "hmi":
@@ -220,6 +236,7 @@ def resolve_profile_inputs(
             host_sources.append(
                 "platform/hmi/settings/preferences_level_settings.cpp"
             )
+        if "settings" in profile.data["modules"] or "audio" in profile.data["modules"]:
             board_sources.extend(
                 (
                     "boards/jc1060p470c/audio.cpp",
@@ -360,6 +377,8 @@ def _selected_header(resolved: dict) -> str:
         f'inline constexpr char kSelectedNvsNamespace[] = "{resolved["profile"]["data"]["nvs_namespace"]}";\n'
         f"inline constexpr bool kSelectedHasSettings = "
         f"{str('settings' in resolved['profile']['modules']).lower()};\n\n"
+        f"inline constexpr bool kSelectedHasAudio = "
+        f"{str('audio' in resolved['profile']['modules']).lower()};\n\n"
         "}  // namespace hmi::profiles::generated\n"
     )
 
@@ -389,6 +408,9 @@ def _cmake_input(resolved: dict) -> str:
             'get_filename_component(HMI_REPOSITORY_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)',
             f'set(HMI_PROFILE_ID "{resolved["profile"]["id"]}")',
             f'set(HMI_PROFILE_ROOT "${{HMI_REPOSITORY_ROOT}}/{profile_root}")',
+            "set(HMI_PROFILE_HAS_AUDIO "
+            + ("1" if "audio" in resolved["profile"]["modules"] else "0")
+            + ")",
             "set(HMI_PROFILE_TEST_IDS\n"
             + "\n".join(f'  "{test_id}"' for test_id in test_ids)
             + "\n)",
@@ -421,6 +443,10 @@ def _platformio_profile_input(
     build_flags.append(
         "  -D HMI_PROFILE_HAS_SETTINGS="
         f"{1 if 'settings' in resolved['profile']['modules'] else 0}"
+    )
+    build_flags.append(
+        "  -D HMI_PROFILE_HAS_AUDIO="
+        f"{1 if 'audio' in resolved['profile']['modules'] else 0}"
     )
     build_flags.append(
         "  -D HMI_PROFILE_HAS_CONNECTIVITY="

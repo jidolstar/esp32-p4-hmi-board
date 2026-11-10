@@ -87,6 +87,51 @@ roles:
   display_audio.status.save_failed: error
   display_audio.status.preview_unavailable: error
   display_audio.status.unavailable: error
+  page.wav_sounds.title: page_title
+  page.wav_sounds.description: body
+  wav_sounds.list.title: page_title
+  wav_sounds.list.count: status
+  wav_sounds.list.hint: status
+  wav_sounds.item.start.title: field_label
+  wav_sounds.item.start.description: status
+  wav_sounds.item.complete.title: field_label
+  wav_sounds.item.complete.description: status
+  wav_sounds.item.open.title: field_label
+  wav_sounds.item.open.description: status
+  wav_sounds.item.close.title: field_label
+  wav_sounds.item.close.description: status
+  wav_sounds.item.highlight.title: field_label
+  wav_sounds.item.highlight.description: status
+  wav_sounds.player.now_playing: status
+  wav_sounds.player.empty_title: page_title
+  wav_sounds.player.empty_body: body
+  wav_sounds.player.format: status
+  wav_sounds.time.elapsed: field_label
+  wav_sounds.time.total: field_label
+  wav_sounds.time.remaining: field_label
+  wav_sounds.action.play: control
+  wav_sounds.action.pause: control
+  wav_sounds.action.resume: control
+  wav_sounds.action.replay: control
+  wav_sounds.action.stop: control
+  wav_sounds.status.ready: status
+  wav_sounds.status.starting: status
+  wav_sounds.status.playing: status
+  wav_sounds.status.pausing: status
+  wav_sounds.status.paused: status
+  wav_sounds.status.resuming: status
+  wav_sounds.status.completed: status
+  wav_sounds.status.stopped: status
+  wav_sounds.status.unavailable: error
+  wav_sounds.status.file: error
+  wav_sounds.status.unsupported: error
+  wav_sounds.status.truncated: error
+  wav_sounds.status.busy: error
+  wav_sounds.status.output: error
+  wav_sounds.status.read: error
+  wav_sounds.row.error: error
+  wav_sounds.format.title: field_label
+  wav_sounds.format.body: body
   page.wifi.title: page_title
   page.wifi.description: body
   wifi.scan.title: page_title
@@ -184,3 +229,57 @@ roles:
   storage.lock.status.suspended: status
   storage.lock.status.failed: error
   storage.lock.error.drain: error
+  page.wifi_ap_web.title: page_title
+  page.wifi_ap_web.description: body
+  wifi_ap.probe.badge: field_label
+  wifi_ap.probe.details: page_title
+  wifi_ap.probe.note: body
+  wifi_ap.label.ssid: field_label
+  wifi_ap.label.password: field_label
+  wifi_ap.label.ipv4: field_label
+  wifi_ap.label.sta_ipv4: field_label
+  wifi_ap.label.endpoint: field_label
+  wifi_ap.label.clients: field_label
+  wifi_ap.action.start: control
+  wifi_ap.action.stop: control
+  wifi_ap.action.retry: control
+  wifi_ap.action.show_wifi: control
+  wifi_ap.action.show_web: control
+  wifi_ap.action.cancel: control
+  wifi_ap.action.confirm_stop: control
+  wifi_ap.status.off: status
+  wifi_ap.status.preparing: status
+  wifi_ap.status.starting: status
+  wifi_ap.status.ready: status
+  wifi_ap.status.waiting_wifi: status
+  wifi_ap.status.waiting_web: status
+  wifi_ap.status.connected: status
+  wifi_ap.status.reconnecting: status
+  wifi_ap.status.stopping: status
+  wifi_ap.status.restoring: status
+  wifi_ap.message.off: body
+  wifi_ap.message.working: body
+  wifi_ap.message.ready: body
+  wifi_ap.message.failed: body
+  wifi_ap.message.web: body
+  wifi_ap.message.control: body
+  wifi_ap.message.reconnecting: body
+  wifi_ap.message.no_internet: body
+  wifi_ap.dialog.stop.title: page_title
+  wifi_ap.dialog.stop.body: body
+  wifi_ap.switch.one: control
+  wifi_ap.switch.two: control
+  wifi_ap.switch.three: control
+  wifi_ap.switch.four: control
+  wifi_ap.switch.on: status
+  wifi_ap.switch.off: status
+  wifi_ap.error.invalid: error
+  wifi_ap.error.radio_busy: error
+  wifi_ap.error.start: error
+  wifi_ap.error.timeout: error
+  wifi_ap.error.restore: error
+  wifi_ap.value.unavailable: status
+  wifi_ap.probe.value.ssid: status
+  wifi_ap.probe.value.password: status
+  wifi_ap.probe.value.ipv4: status
+  wifi_ap.probe.value.endpoint: status

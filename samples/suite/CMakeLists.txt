@@ -22,6 +22,14 @@ if(BUILD_TESTING)
     "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/storage_access_guard_test.cpp"
     hmi_board_storage_access_guard)
   hmi_add_sample_suite_test(
+    hmi_board_wav_reader_test
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/wav_reader_test.cpp"
+    hmi_board_wav_reader)
+  target_sources(hmi_board_wav_reader_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/internal/wav_reader.cpp")
+  target_include_directories(hmi_board_wav_reader_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c")
+  hmi_add_sample_suite_test(
     hmi_board_msc_sector_transfer_test
     "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/msc_sector_transfer_test.cpp"
     hmi_board_msc_sector_transfer)
@@ -116,9 +124,32 @@ if(BUILD_TESTING)
     "${CMAKE_SOURCE_DIR}/modules/settings/tests/level_settings_test.cpp"
     hmi_settings_level)
   hmi_add_sample_suite_test(
+    hmi_audio_playback_test
+    "${CMAKE_SOURCE_DIR}/modules/audio/tests/playback_test.cpp"
+    hmi_audio_playback)
+  hmi_add_sample_suite_test(
+    hmi_windows_sdl_wav_playback_test
+    "${CMAKE_SOURCE_DIR}/platform/windows/audio/tests/sdl_wav_playback_test.cpp"
+    hmi_windows_sdl_wav_playback)
+  set_tests_properties(hmi_windows_sdl_wav_playback PROPERTIES
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    ENVIRONMENT "SDL_VIDEODRIVER=dummy;SDL_AUDIODRIVER=dummy")
+  hmi_add_sample_suite_test(
     hmi_connectivity_wifi_sta_test
     "${CMAKE_SOURCE_DIR}/modules/connectivity/tests/wifi_sta_registration_test.cpp"
     hmi_connectivity_wifi_sta)
+  hmi_add_sample_suite_test(
+    hmi_connectivity_wifi_ap_runtime_test
+    "${CMAKE_SOURCE_DIR}/modules/connectivity/tests/wifi_ap_runtime_test.cpp"
+    hmi_connectivity_wifi_ap_runtime)
+  hmi_add_sample_suite_test(
+    hmi_connectivity_wifi_ap_web_controller_test
+    "${CMAKE_SOURCE_DIR}/modules/connectivity/tests/wifi_ap_web_controller_test.cpp"
+    hmi_connectivity_wifi_ap_web_controller)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_wifi_ap_web_qr_test
+    pages/wifi_ap_web/tests/wifi_ap_web_qr_test.cpp
+    hmi_sample_suite_wifi_ap_web_qr)
   hmi_add_sample_suite_test(
     hmi_sample_suite_display_audio_state_test
     pages/display_audio/tests/display_audio_state_test.cpp
@@ -131,6 +162,25 @@ if(BUILD_TESTING)
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     ENVIRONMENT "SDL_VIDEODRIVER=dummy;SDL_AUDIODRIVER=dummy")
   hmi_add_sample_suite_test(
+    hmi_sample_suite_wav_sounds_state_test
+    pages/wav_sounds/tests/wav_sounds_state_test.cpp
+    hmi_sample_suite_wav_sounds_state)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_wav_sounds_interaction_test
+    pages/wav_sounds/tests/wav_sounds_interaction_test.cpp
+    hmi_sample_suite_wav_sounds_interaction)
+  target_link_libraries(hmi_sample_suite_wav_sounds_interaction_test PRIVATE
+    hmi_windows_pointer_test_driver)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_wav_sounds_integration_test
+    pages/wav_sounds/tests/wav_sounds_integration_test.cpp
+    hmi_sample_suite_wav_sounds_integration)
+  set_tests_properties(
+    hmi_sample_suite_wav_sounds_state
+    hmi_sample_suite_wav_sounds_interaction
+    hmi_sample_suite_wav_sounds_integration
+    PROPERTIES ENVIRONMENT "SDL_VIDEODRIVER=dummy;SDL_AUDIODRIVER=dummy")
+  hmi_add_sample_suite_test(
     hmi_sample_suite_wifi_settings_state_test
     pages/wifi/tests/wifi_settings_state_test.cpp
     hmi_sample_suite_wifi_settings_state)
@@ -138,6 +188,12 @@ if(BUILD_TESTING)
     hmi_sample_suite_wifi_settings_interaction_test
     pages/wifi/tests/wifi_settings_interaction_test.cpp
     hmi_sample_suite_wifi_settings_interaction)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_wifi_ap_web_interaction_test
+    pages/wifi_ap_web/tests/wifi_ap_web_interaction_test.cpp
+    hmi_sample_suite_wifi_ap_web_interaction)
+  set_tests_properties(hmi_sample_suite_wifi_ap_web_interaction PROPERTIES
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
   hmi_add_sample_suite_test(
     hmi_sample_suite_sd_storage_state_test
     pages/sd_storage/tests/sd_storage_state_test.cpp

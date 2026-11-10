@@ -24,6 +24,9 @@
 #define LV_FONT_DEFAULT &lv_font_montserrat_16
 #define LV_USE_FONT_COMPRESSED 1
 
+/* S07의 Wi-Fi/URL QR은 LVGL에 포함된 bounded QR widget을 사용한다. */
+#define LV_USE_QRCODE 1
+
 /* Windows font fixture가 binary font를 읽는 표준 파일 드라이버다.
  * HMI의 SD driver 등록과 asset root 연결은 L5 host 통합에서 담당한다. */
 #define LV_USE_FS_STDIO 1

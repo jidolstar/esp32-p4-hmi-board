@@ -92,6 +92,50 @@
       "capabilities": ["storage", "i18n"],
       "verification": ["sd_storage_state", "sd_storage_interaction"],
       "data_key": "sd_storage"
+    },
+    {
+      "id": "wav-sounds",
+      "title_key": "page.wav_sounds.title",
+      "description_key": "page.wav_sounds.description",
+      "order": 60,
+      "entry": {
+        "header": "pages/wav_sounds/wav_sounds_page.hpp",
+        "type": "hmi::samples::suite::WavSoundsPage"
+      },
+      "sources": {
+        "common": ["pages/wav_sounds/wav_sounds_page.cpp"],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["audio", "i18n"],
+      "verification": ["wav_sounds_state", "wav_sounds_interaction"],
+      "data_key": "wav_sounds"
+    },
+    {
+      "id": "wifi-ap-web",
+      "title_key": "page.wifi_ap_web.title",
+      "description_key": "page.wifi_ap_web.description",
+      "order": 70,
+      "entry": {
+        "header": "pages/wifi_ap_web/wifi_ap_web_page.hpp",
+        "type": "hmi::samples::suite::WifiApWebPage"
+      },
+      "sources": {
+        "common": [
+          "pages/wifi_ap_web/wifi_ap_web_page.cpp",
+          "pages/wifi_ap_web/wifi_ap_web_qr.cpp"
+        ],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["connectivity", "i18n"],
+      "verification": [
+        "wifi_ap_runtime",
+        "wifi_ap_web_controller",
+        "wifi_ap_web_qr",
+        "wifi_ap_web_interaction"
+      ],
+      "data_key": "wifi_ap_web"
     }
   ]
 }

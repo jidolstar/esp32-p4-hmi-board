@@ -26,7 +26,7 @@ void verify_generated_catalog() {
   static_assert(sizeof(Locale) == 1U, "Locale must remain a one-byte value");
   static_assert(sizeof(hmi::i18n::CatalogView) <= sizeof(void*) * 2U,
                 "CatalogView must not own catalog strings");
-  static_assert(catalog::kTextCount == 184U, "Unexpected text catalog size");
+  static_assert(catalog::kTextCount == 283U, "Unexpected text catalog size");
 
   const auto korean = catalog::catalog(Locale::ko_kr);
   const auto english = catalog::catalog(Locale::en_us);
@@ -55,6 +55,11 @@ void verify_generated_catalog() {
   assert(catalog::text(Locale::en_us,
                        catalog::TextId::wifi_editor_selected_title) ==
          "Selected network");
+  assert(catalog::text(Locale::ko_kr,
+                       catalog::TextId::page_wav_sounds_title) == "등록 WAV");
+  assert(catalog::text(Locale::en_us,
+                       catalog::TextId::wav_sounds_action_replay) ==
+         "Play again");
   assert(catalog::placeholder_contract(
              catalog::TextId::text_input_status_length) ==
          "bytes:u32,count:u32,max:u32");

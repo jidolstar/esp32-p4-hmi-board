@@ -16,6 +16,8 @@
 #include <cstring>
 #include <new>
 
+#include "connectivity/esp_hosted_wifi_common.hpp"
+
 namespace hmi::platform::connectivity {
 namespace {
 
@@ -26,44 +28,9 @@ using hmi::connectivity::WifiSecurity;
 using hmi::connectivity::WifiSignalSample;
 using hmi::connectivity::WifiStationCredential;
 
-constexpr std::int8_t kClock = 18;
-constexpr std::int8_t kCommand = 19;
-constexpr std::int8_t kD0 = 14;
-constexpr std::int8_t kD1 = 15;
-constexpr std::int8_t kD2 = 16;
-constexpr std::int8_t kD3 = 17;
-constexpr std::int8_t kReset = 54;
-
-static_assert(ESP_HOSTED_VERSION_MAJOR_1 == 2 &&
-                  ESP_HOSTED_VERSION_MINOR_1 == 12 &&
-                  ESP_HOSTED_VERSION_PATCH_1 == 8,
-              "Review C6 companion firmware before changing ESP-Hosted");
-static_assert(ESP_WIFI_REMOTE_VERSION == ESP_WIFI_REMOTE_VERSION_VAL(1, 6, 0),
-              "Review Wi-Fi remote API before changing its version");
-#if defined(CONFIG_ESP_HOSTED_SDIO_PIN_CLK) && \
-    defined(CONFIG_ESP_HOSTED_SDIO_PIN_CMD) && \
-    defined(CONFIG_ESP_HOSTED_SDIO_PIN_D0) && \
-    defined(CONFIG_ESP_HOSTED_SDIO_PIN_D1) && \
-    defined(CONFIG_ESP_HOSTED_SDIO_PIN_D2) && \
-    defined(CONFIG_ESP_HOSTED_SDIO_PIN_D3) && \
-    defined(CONFIG_ESP_HOSTED_SDIO_GPIO_RESET_SLAVE)
-static_assert(CONFIG_ESP_HOSTED_SDIO_PIN_CLK == kClock &&
-                  CONFIG_ESP_HOSTED_SDIO_PIN_CMD == kCommand &&
-                  CONFIG_ESP_HOSTED_SDIO_PIN_D0 == kD0 &&
-                  CONFIG_ESP_HOSTED_SDIO_PIN_D1 == kD1 &&
-                  CONFIG_ESP_HOSTED_SDIO_PIN_D2 == kD2 &&
-                  CONFIG_ESP_HOSTED_SDIO_PIN_D3 == kD3 &&
-                  CONFIG_ESP_HOSTED_SDIO_GPIO_RESET_SLAVE == kReset,
-              "ESP-Hosted SDIO pins must match the JC1060P470C wiring");
-#endif
-
 bool ensure_station() {
-  static bool pins_ready = false;
-  if (!pins_ready) {
-    if (!WiFi.setPins(kClock, kCommand, kD0, kD1, kD2, kD3, kReset)) {
-      return false;
-    }
-    pins_ready = true;
+  if (!detail::ensure_esp_hosted_pins()) {
+    return false;
   }
   if (!WiFi.mode(WIFI_STA)) {
     return false;

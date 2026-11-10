@@ -3,11 +3,12 @@
 #include <cstring>
 #include <new>
 
+#include "hmi/audio/playback_port.hpp"
 #include "page_registry.hpp"
 
 namespace hmi::samples::suite {
 
-static_assert(sizeof(SampleSuiteApp) <= 2304U,
+static_assert(sizeof(SampleSuiteApp) <= 2320U,
               "SampleSuiteApp must remain a small one-page composition root");
 
 bool SampleSuiteApp::create(const hmi::profiles::AppContext &context) {
@@ -20,6 +21,8 @@ bool SampleSuiteApp::create(const hmi::profiles::AppContext &context) {
   }
   fonts_ = context.fonts;
   level_settings_ = context.level_settings;
+  audio_playback_ = context.audio_playback;
+  ap_control_ = context.ap_control;
   wifi_registration_ = context.wifi_registration;
   storage_access_ = context.storage_access;
   screen_ = lv_obj_create(nullptr);
@@ -260,6 +263,8 @@ PageContext SampleSuiteApp::make_page_context() noexcept {
   page_context.locale = locale_;
   page_context.fonts = fonts_;
   page_context.level_settings = &level_settings_;
+  page_context.audio_playback = audio_playback_;
+  page_context.ap_control = ap_control_;
   page_context.wifi_registration = wifi_registration_;
   page_context.storage_access = storage_access_;
   page_context.theme = &theme_;
@@ -288,7 +293,16 @@ void SampleSuiteApp::refresh_storage_access_lock() noexcept {
   if (storage_access_ == nullptr) {
     return;
   }
-  if (storage_access_->snapshot().lock_required) {
+  const bool locked = storage_access_->snapshot().lock_required;
+  if (locked && !storage_audio_stopped_ && audio_playback_ != nullptr &&
+      audio_playback_->context != nullptr && audio_playback_->stop != nullptr) {
+    // SD raw owner 전환 전에 공유 output을 멈춰 audio file lease가 해제되게 한다.
+    audio_playback_->stop(audio_playback_->context);
+    storage_audio_stopped_ = true;
+  } else if (!locked) {
+    storage_audio_stopped_ = false;
+  }
+  if (locked) {
     if (transition_scheduled_) {
       lv_async_call_cancel(&SampleSuiteApp::process_transition_async, this);
       transition_scheduled_ = false;
@@ -408,6 +422,9 @@ void SampleSuiteApp::destroy() noexcept {
   view_ = SuiteView::kNotCreated;
   fonts_ = {};
   level_settings_ = {};
+  audio_playback_ = nullptr;
+  ap_control_ = nullptr;
+  storage_audio_stopped_ = false;
   wifi_registration_ = nullptr;
   storage_access_ = nullptr;
 }

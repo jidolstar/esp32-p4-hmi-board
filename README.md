@@ -5,13 +5,13 @@
 | Profile | 목적 | 현재 화면 |
 | --- | --- | --- |
 | `main` | 새 응용 기능을 시작하는 최소 앱 | 외부 자산 없는 실행·입력 진단 화면 |
-| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage page |
+| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage·등록 WAV·Wi-Fi AP/Web page |
 
 `sample-suite`의 Dashboard는 생성된 page descriptor만 사용한다. 현재 활성 page 하나만 만들며 page 구현끼리 참조하지 않는다. 한·영 i18n과 키보드 입력의 기반은 `_plan/2026-11/20261107_004_BilingualI18nAndTextInput.md`, 완성된 입력 UX와 검증 기준은 `_plan/2026-11/20261108_010_TextInputUxCompletion.md`에 기록돼 있다.
 
-`wifi`(STA 설정)와 `sd-storage`(PC USB MSC 접근)까지 구현돼 있다. 다음 개발 순서는
-`wav-sounds`(등록 음원 재생) →
-`camera-gallery`(촬영·저장·보기·삭제) → `wifi-ap-web`(QR·웹 4-switch) →
+`wifi`(STA 설정), `sd-storage`(PC USB MSC 접근), `wav-sounds`(등록 음원 재생),
+`wifi-ap-web`(QR·웹 4-switch)까지 구현돼 있다. 남은 page는
+`camera-gallery`(촬영·저장·보기·삭제)와
 `interfaces-info`(RS485·I/O·USB command 안내)다. 독립 `assets` page는 만들지 않으며
 asset pipeline은 폰트와 WAV를 배포하는 내부 기반으로만 사용한다. 상세 상태는
 `_plan/2026-11/20261108_001_PageByPageDevelopmentRoadmap.md`에서 관리한다.
@@ -105,8 +105,43 @@ Dashboard의 `화면과 음량` card에서는 다음을 확인한다.
 3. 음량 0은 mute이며 `미리 듣기`는 등록된 WAV asset을 재생한다.
 4. page를 나가면 재생 중인 preview가 멈추고, 다시 들어오면 저장값을 복원한다.
 
+Dashboard의 `등록 WAV` card에서는 다음을 확인한다.
+
+1. `조리 시작`, `조리 완료`, `뚜껑 열림`, `뚜껑 닫힘`, `핵심 단계 시작` 다섯 행이 표시된다.
+2. 목록 행을 누르면 즉시 해당 음원이 재생되고 선택 border와 상태 문구가 함께 바뀐다.
+3. 진행 막대와 경과·전체·남은 시간이 갱신되며 완료 시 `다시 재생`으로 바뀐다.
+4. 재생 중 primary button은 `일시정지`로 바뀌며, `계속 재생`을 누르면 멈춘 위치부터 이어진다.
+5. `중지`는 즉시 재생을 끝내고 위치를 처음으로 되돌리며 idle 상태에서는 비활성화된다.
+6. 지원 범위는 RIFF/WAVE 정수 PCM, mono/stereo, 8/16/24-bit,
+   8/16/22.05/32/44.1/48 kHz다. 압축 WAV, IEEE float와 24 kHz는 지원하지 않는다.
+7. page 이탈과 locale/theme 재구성, SD의 PC 연결 시작은 진행 중인 재생을 먼저 중지한다.
+
+WAV는 파일 전체를 RAM에 올리지 않고 SD에서 bounded chunk로 읽는다. 등록 목록과 source
+metadata는 `samples/suite/pages/wav_sounds/wav_catalog.json`, 원본은
+`samples/suite/assets/sounds/`가 소유한다. firmware와 SD 자산은 별도이므로 아래 5절의
+asset bundle을 SD에 설치해야 실제 HMI에서 재생된다. 구현·실기기 수용 근거는
+`_plan/2026-11/20261108_016_RegisteredWavPage.md`에 기록돼 있다.
+
 Dashboard의 `Wi-Fi 설정` card에서는 주변 AP 검색, 보안 AP 선택·비밀번호 입력,
 연결·저장·연결 해제와 한국어/영어 상태 문구를 확인한다.
+
+Dashboard의 `Wi-Fi AP 웹 제어` card에서는 다음 흐름으로 진단 AP와 로컬 웹을 사용한다.
+
+1. `AP 시작`을 누르면 기존 STA 연결과 IPv4를 유지한 채 WPA2 진단 AP를 시작한다.
+2. 첫 QR로 휴대폰을 AP에 연결한다. SSID와 임시 암호도 화면에서 직접 확인할 수 있다.
+3. 휴대폰 연결이 감지되면 같은 자리에 로컬 웹 URL QR이 표시된다. 필요하면
+   `Wi-Fi QR 다시 보기`로 이전 단계로 돌아간다.
+4. URL을 열면 HMI와 휴대폰에 동일한 네 switch가 나타난다. 어느 쪽에서 바꿔도 controller의
+   단일 state와 revision을 통해 다른 쪽에 반영되며, 재연결 뒤에는 전체 snapshot으로 수렴한다.
+5. `AP 종료`나 Back은 종료 확인을 거친다. 종료하면 AP client, HTTP/WebSocket session과
+   임시 credential을 정리하지만 기존 STA 연결은 유지한다.
+
+이 AP는 인터넷을 공유하거나 captive portal을 보장하지 않는다. 로컬 HTTP/WebSocket은
+TLS가 없는 근거리 진단 기능이며 최대 client는 2개다. session마다 새 임시 암호와 128-bit
+token을 사용하고 URL token은 fragment에만 두며 일반 snapshot과 log에는 포함하지 않는다.
+허용 endpoint는 `/`, `/favicon.ico`, `/healthz`, `/ws`로 제한되고 외부 CDN이나 인터넷
+자산을 사용하지 않는다. 구현·검증 근거는
+`_plan/2026-11/20261108_018_WifiApWebControlPage.md`에 기록돼 있다.
 
 Dashboard의 `SD 저장소` card에서는 mount 상태, HMI/PC owner, FAT 여부와
 전체·사용·여유 용량을 확인한다. `PC에 연결`을 누르는 순간 전체 화면 잠금이 표시되고
@@ -173,8 +208,8 @@ pio run -e hmi-sample-suite
 - `.pio/build/hmi/main/hmi-main/firmware.bin`
 - `.pio/build/hmi/sample-suite/hmi-sample-suite/firmware.bin`
 
-`Text Input`의 동적 font와 `Display & Audio`의 preview WAV는 sample 전역 SD 카드
-자산이다. 다음 명령으로 SHA-256 manifest와 SD tree를 만든다.
+`Text Input`의 동적 font, `Display & Audio`의 preview WAV와 `등록 WAV`의 다섯 효과음은
+sample 전역 SD 카드 자산이다. 다음 명령으로 SHA-256 manifest와 SD tree를 만든다.
 전역 catalog·fixed font와 user font manifest를 다시 생성하거나 stale 여부만
 확인하려면 다음 owner config 기반 명령을 사용한다.
 
@@ -201,8 +236,10 @@ python tools/project.py bundle-assets --profile sample-suite
 
 `dist/sd/` 아래의 `hmi/` 폴더 전체를 FAT32 SD 카드 root에 복사한다. 최종 font 경로는
 `hmi/sample-suite/assets/fonts/`, preview 음원은
-`hmi/sample-suite/assets/sounds/volume_preview.wav`다. firmware와 SD asset은 서로
-별도이며 firmware upload만으로 font나 preview 음원이 설치되지는 않는다.
+`hmi/sample-suite/assets/sounds/volume_preview.wav`다. 등록 음원은 같은 sounds 폴더의
+`cook_start.wav`, `cook_end.wav`, `lid_open.wav`, `lid_close.wav`,
+`cooktech_start.wav`다. firmware와 SD asset은 서로 별도이며 firmware upload만으로
+font나 WAV가 설치되지는 않는다.
 
 실행 중인 HMI가 firmware upload용 USB CDC로 PC에 연결돼 있으면 SD 카드를
 분리하지 않고 같은 묶음을 전송할 수 있다. 먼저 사용 가능한 COM port를 확인하고,
@@ -276,13 +313,26 @@ VS Code PlatformIO를 사용하는 경우에도 `hmi-sample-suite` 환경을 선
 14. `화면과 음량`에서 밝기 1·10, 음량 0·10, `미리 듣기`와 page 이탈 중지를 확인한다.
 15. 재부팅 후 마지막 밝기·음량이 복원되는지 확인한다.
 16. `Wi-Fi 설정`에서 AP 검색, 연결, 저장, 연결 해제와 재부팅 복원을 확인한다.
-17. `SD 저장소`에서 실제 카드 용량과 HMI owner가 표시되는지 확인한다.
-18. `PC에 연결` 직후 전체 화면 잠금이 나타나고 Back·Dashboard·다른 page·theme·locale이 동작하지 않는지 확인한다.
-19. PC에서 이동식 디스크를 열고 작은 파일을 생성·수정·삭제한 뒤 안전 제거하면 잠금이 풀리고 SD page 용량이 다시 표시되는지 확인한다.
-20. 다시 연결해 PC가 디스크를 읽은 뒤 USB 케이블을 분리하면 자동으로 HMI owner를 복원하는지 확인한다.
-21. 다시 연결해 `HMI로 돌아가기`를 두 단계로 확인하면 PC 접근이 끝나고 앱 기능이 다시 열리는지 확인한다.
-22. USB suspend만 발생한 경우 잠금과 PC owner가 유지되는지 확인한다.
-23. asset updater CDC와 MSC connector를 실제 보드에서 식별하고 MSC 전환 전후 CDC log/asset protocol이 유지되는지 확인한다.
+17. 기존 STA가 연결된 상태에서 `Wi-Fi AP 웹 제어`의 AP를 시작해 STA IPv4가 유지되는지 확인한다.
+18. 휴대폰으로 Wi-Fi QR을 읽고 진단 AP의 DHCP 주소를 받는지 확인한다.
+19. client 감지 뒤 URL QR로 전환되고, 다시 Wi-Fi QR을 볼 수 있는지 확인한다.
+20. URL QR이 로컬 웹을 열고 HMI↔휴대폰의 네 switch가 양방향으로 동기화되는지 확인한다.
+21. 휴대폰 Wi-Fi off/on과 browser background/foreground 뒤 최신 snapshot으로 복구되는지 확인한다.
+22. AP 실행 중 원래 공유기 LAN의 다른 기기에서도 기존 STA 주소로 접근되는지 확인한다.
+23. locale/theme 전환과 AP 시작·종료를 반복해도 중복 callback, reset과 STA 재연결 대기가 없는지 확인한다.
+24. AP 종료와 Back 확인 뒤 AP client는 끊기고 기존 STA 연결은 유지되는지 확인한다.
+25. `SD 저장소`에서 실제 카드 용량과 HMI owner가 표시되는지 확인한다.
+26. `PC에 연결` 직후 전체 화면 잠금이 나타나고 Back·Dashboard·다른 page·theme·locale이 동작하지 않는지 확인한다.
+27. PC에서 이동식 디스크를 열고 작은 파일을 생성·수정·삭제한 뒤 안전 제거하면 잠금이 풀리고 SD page 용량이 다시 표시되는지 확인한다.
+28. 다시 연결해 PC가 디스크를 읽은 뒤 USB 케이블을 분리하면 자동으로 HMI owner를 복원하는지 확인한다.
+29. 다시 연결해 `HMI로 돌아가기`를 두 단계로 확인하면 PC 접근이 끝나고 앱 기능이 다시 열리는지 확인한다.
+30. USB suspend만 발생한 경우 잠금과 PC owner가 유지되는지 확인한다.
+31. asset updater CDC와 MSC connector를 실제 보드에서 식별하고 MSC 전환 전후 CDC log/asset protocol이 유지되는지 확인한다.
+32. `등록 WAV`의 다섯 행을 각각 눌러 실제 소리와 화면 이름이 일치하는지 확인한다.
+33. 재생 중 진행 막대와 경과·전체·남은 시간이 자연스럽게 변하고 완료 시 100%·`재생 완료`·`다시 재생`이 일치하는지 확인한다.
+34. `일시정지`에서 소리와 시간이 함께 멈추고 `계속 재생`이 같은 위치에서 자연스럽게 이어지는지 확인한다.
+35. `중지`, 빠른 행 교체, 음량 0·10과 page 이탈에서 소리가 겹치거나 남지 않는지 확인한다.
+36. WAV 재생 중 `SD 저장소`의 PC 연결을 시작하면 소리가 먼저 멈추고, HMI 복귀 후 다시 재생되는지 확인한다.
 
 확인 결과를 P6 근거로 기록하기 전에는 firmware compile 성공을 실기기 완료로 간주하지 않는다.
 
@@ -339,11 +389,7 @@ Remove-Item -Recurse -Force .pio/build/hmi/main,.pio/build/hmi/sample-suite
 
 ## 11. 현재 미구현 범위
 
-- Wi-Fi STA 설정
-- SD 상태와 PC USB Mass Storage 접근 전환
-- 등록 WAV asset의 단순 재생
 - camera preview·촬영·SD gallery·보기·삭제
-- Wi-Fi AP 접속정보·QR·local web 4-switch 동기화
 - RS485·GPIO/PWM·USB command의 최소 public contract와 안내 page
 - main-only export, Windows bundle, CI와 외부 배포 자동화
 

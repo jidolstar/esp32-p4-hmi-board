@@ -1,6 +1,6 @@
 # S09 계획: RS485 · I/O · USB Command 기반 안내 Page
 
-작성: 2026-11-08. 상태: `pending`. 선행 조건: S08 `wifi-ap-web` complete.
+작성: 2026-11-08. 상태: `pending`. 선행 조건: S08 `camera-gallery` complete.
 
 ## 1. 목표와 범위
 

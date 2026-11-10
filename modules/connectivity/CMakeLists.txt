@@ -1,4 +1,7 @@
 add_library(hmi_connectivity_core STATIC
+  src/wifi_ap_runtime.cpp
+  src/wifi_ap_web_controller.cpp
+  src/wifi_ap_web_protocol.cpp
   src/wifi_scan_service.cpp
   src/wifi_sta_registration.cpp
   src/wifi_station_settings.cpp)

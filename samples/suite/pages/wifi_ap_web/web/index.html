@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>HMI Control</title>
+  <style>{{STYLE}}</style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <p class="product">HMI CONTROL</p>
+      <h1 data-copy="title">기기 스위치</h1>
+      <p class="intro" data-copy="intro">이 휴대폰과 HMI의 상태가 함께 바뀝니다.</p>
+    </header>
+    <section class="connection" aria-live="polite">
+      <span class="state-mark" aria-hidden="true"></span>
+      <div>
+        <strong id="connection-title">연결 확인 중</strong>
+        <span id="connection-detail">HMI에 연결하고 있습니다.</span>
+      </div>
+    </section>
+    <section class="controls" aria-label="기기 스위치">
+      <button class="control" type="button" data-switch="1" aria-pressed="false" disabled>
+        <span class="control-name" data-copy="switch1">스위치 1</span>
+        <span class="control-value" data-copy-off="off">꺼짐</span>
+      </button>
+      <button class="control" type="button" data-switch="2" aria-pressed="false" disabled>
+        <span class="control-name" data-copy="switch2">스위치 2</span>
+        <span class="control-value" data-copy-off="off">꺼짐</span>
+      </button>
+      <button class="control" type="button" data-switch="3" aria-pressed="false" disabled>
+        <span class="control-name" data-copy="switch3">스위치 3</span>
+        <span class="control-value" data-copy-off="off">꺼짐</span>
+      </button>
+      <button class="control" type="button" data-switch="4" aria-pressed="false" disabled>
+        <span class="control-name" data-copy="switch4">스위치 4</span>
+        <span class="control-value" data-copy-off="off">꺼짐</span>
+      </button>
+    </section>
+    <footer>
+      <span id="revision">Revision 0</span>
+      <span data-copy="local">로컬 연결 전용</span>
+    </footer>
+  </main>
+  <script>{{SCRIPT}}</script>
+</body>
+</html>

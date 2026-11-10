@@ -5,6 +5,8 @@
 #include <lvgl.h>
 
 #include "app.hpp"
+#include "audio/sdl_wav_playback.hpp"
+#include "hmi/audio/playback_port.hpp"
 #include "settings/memory_level_settings.hpp"
 #include "sdl_lvgl_port.hpp"
 
@@ -60,10 +62,14 @@ int main(int argc, char** argv) {
   lv_init();
   auto lvgl = std::make_unique<hmi::platform::windows::SdlLvglPort>();
   assert(lvgl->begin("display-audio interaction", false));
-  hmi::platform::settings::MemoryLevelSettings settings(
-      *lvgl, "A:samples/suite/");
+  hmi::platform::audio::SdlWavPlayback audio("A:samples/suite/");
+  hmi::audio::AudioPlaybackPort audio_port = audio.port();
+  hmi::platform::settings::MemoryLevelSettings settings(*lvgl, audio_port);
   auto app = std::make_unique<hmi::samples::suite::SampleSuiteApp>();
-  hmi::profiles::AppContext context{"windows", {}, settings.port()};
+  hmi::profiles::AppContext context;
+  context.host_name = "windows";
+  context.level_settings = settings.port();
+  context.audio_playback = &audio_port;
   assert(app->create(context));
   assert(app->request_page("display-audio"));
   assert(app->flush_pending_transition());

@@ -6,12 +6,14 @@ target_include_directories(lvgl PRIVATE
 add_library(hmi_windows_lvgl OBJECT
   lvgl_mem.cpp
   sdl_lvgl_port.cpp
+  audio/sdl_wav_playback.cpp
   settings/memory_level_settings.cpp)
 
 target_compile_features(hmi_windows_lvgl PUBLIC cxx_std_17)
 target_compile_definitions(hmi_windows_lvgl PUBLIC SDL_MAIN_HANDLED)
 target_include_directories(hmi_windows_lvgl PUBLIC
   "${PROJECT_SOURCE_DIR}/include"
+  "${PROJECT_SOURCE_DIR}/modules/audio/include"
   "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(hmi_windows_lvgl PUBLIC
   lvgl::lvgl

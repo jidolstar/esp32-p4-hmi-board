@@ -99,7 +99,15 @@ class GenerationTest(unittest.TestCase):
         )
         source = (target / "page_registry.cpp").read_text(encoding="utf-8")
         self.assertEqual(
-            ["ui-basics", "text-input", "display-audio", "wifi", "sd-storage"],
+            [
+                "ui-basics",
+                "text-input",
+                "display-audio",
+                "wifi",
+                "sd-storage",
+                "wav-sounds",
+                "wifi-ap-web",
+            ],
             [page["id"] for page in resolved["pages"]],
         )
         self.assertIn(
@@ -118,8 +126,20 @@ class GenerationTest(unittest.TestCase):
             "samples/suite/pages/sd_storage/sd_storage_page.cpp",
             resolved["source_groups"]["pages"],
         )
+        self.assertIn(
+            "samples/suite/pages/wav_sounds/wav_sounds_page.cpp",
+            resolved["source_groups"]["pages"],
+        )
+        self.assertIn(
+            "samples/suite/pages/wifi_ap_web/wifi_ap_web_page.cpp",
+            resolved["source_groups"]["pages"],
+        )
         self.assertEqual(
             [
+                "modules/audio/src/playback.cpp",
+                "modules/connectivity/src/wifi_ap_runtime.cpp",
+                "modules/connectivity/src/wifi_ap_web_controller.cpp",
+                "modules/connectivity/src/wifi_ap_web_protocol.cpp",
                 "modules/connectivity/src/wifi_scan_service.cpp",
                 "modules/connectivity/src/wifi_sta_registration.cpp",
                 "modules/connectivity/src/wifi_station_settings.cpp",
@@ -139,6 +159,7 @@ class GenerationTest(unittest.TestCase):
                 "modules/ui/src/user_text_label.cpp",
                 "modules/ui/src/user_text_input_line.cpp",
                 "modules/ui/src/virtual_keyboard.cpp",
+                "platform/windows/connectivity/virtual_wifi_ap.cpp",
                 "platform/windows/connectivity/virtual_wifi_sta.cpp",
                 "platform/windows/storage/virtual_storage_access.cpp",
             ],
@@ -150,8 +171,10 @@ class GenerationTest(unittest.TestCase):
         self.assertIn('"display-audio"', source)
         self.assertIn('"wifi"', source)
         self.assertIn('"sd-storage"', source)
+        self.assertIn('"wav-sounds"', source)
+        self.assertIn('"wifi-ap-web"', source)
         self.assertNotIn('"UI Basics"', source)
-        self.assertEqual(177, len(resolved["assets"]))
+        self.assertEqual(182, len(resolved["assets"]))
         self.assertTrue(all(len(asset["sha256"]) == 64 for asset in resolved["assets"]))
         self.assertEqual(
             sorted(asset["relative_path"] for asset in resolved["assets"]),

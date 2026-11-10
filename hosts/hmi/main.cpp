@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cstdio>
+#include <esp_random.h>
 
 #include "board.hpp"
 #include "config.hpp"
@@ -12,12 +13,19 @@
 #include "hmi/ui/font_repository.hpp"
 #endif
 #include "selected_profile.hpp"
+#if HMI_PROFILE_HAS_AUDIO
+#include "audio/board_wav_playback.hpp"
+#include "hmi/audio/playback_port.hpp"
+#endif
 #if HMI_PROFILE_HAS_SETTINGS
 #include "settings/preferences_level_settings.hpp"
 #endif
 #if HMI_PROFILE_HAS_CONNECTIVITY
+#include "connectivity/esp_hosted_wifi_ap.hpp"
 #include "connectivity/esp_hosted_wifi_sta.hpp"
 #include "connectivity/preferences_wifi_station_settings_store.hpp"
+#include "hmi/connectivity/wifi_ap_runtime.hpp"
+#include "hmi/connectivity/wifi_ap_web_controller.hpp"
 #include "hmi/connectivity/wifi_sta_registration.hpp"
 #endif
 #if HMI_PROFILE_HAS_STORAGE
@@ -32,6 +40,19 @@ hmi::boards::jc1060p470c::Board &board() {
   static hmi::boards::jc1060p470c::Board instance;
   return instance;
 }
+
+#if HMI_PROFILE_HAS_AUDIO
+hmi::platform::audio::BoardWavPlayback& audio_playback() {
+  static hmi::platform::audio::BoardWavPlayback instance(
+      board(), hmi::profiles::generated::kSelectedAssetStorageRoot);
+  return instance;
+}
+
+hmi::audio::AudioPlaybackPort& audio_playback_port() {
+  static hmi::audio::AudioPlaybackPort instance = audio_playback().port();
+  return instance;
+}
+#endif
 
 hmi::profiles::generated::SelectedProfileApp &app() {
   static hmi::profiles::generated::SelectedProfileApp instance;
@@ -49,8 +70,8 @@ bool storage_access_ready = false;
 #if HMI_PROFILE_HAS_SETTINGS
 hmi::platform::settings::PreferencesLevelSettings& level_settings() {
   static hmi::platform::settings::PreferencesLevelSettings instance(
-      board(), hmi::profiles::generated::kSelectedNvsNamespace,
-      hmi::profiles::generated::kSelectedAssetStorageRoot);
+      board(), audio_playback_port(),
+      hmi::profiles::generated::kSelectedNvsNamespace);
   return instance;
 }
 #endif
@@ -82,6 +103,39 @@ hmi::platform::connectivity::PreferencesWifiStationSettingsStore& wifi_store() {
 hmi::connectivity::WifiStaRegistration& wifi_registration() {
   static hmi::connectivity::WifiStaRegistration instance(wifi_port(),
                                                          wifi_store());
+  return instance;
+}
+
+hmi::platform::connectivity::EspHostedWifiAp& wifi_ap_port() {
+  static hmi::platform::connectivity::EspHostedWifiAp instance;
+  return instance;
+}
+
+hmi::connectivity::WifiApRuntime& wifi_ap() {
+  static hmi::connectivity::WifiApRuntime instance(
+      wifi_registration(), wifi_ap_port(),
+      hmi::connectivity::WifiApStationPolicy::keep_connected);
+  return instance;
+}
+
+bool fill_wifi_ap_random(void*, std::uint8_t* output,
+                         const std::size_t size) noexcept {
+  if (output == nullptr || size == 0U) {
+    return false;
+  }
+  esp_fill_random(output, size);
+  return true;
+}
+
+hmi::connectivity::WifiApWebController& wifi_ap_web() {
+  static const hmi::connectivity::WifiApWebSessionSource source = [] {
+    hmi::connectivity::WifiApWebSessionSource value{};
+    value.random = {nullptr, &fill_wifi_ap_random};
+    std::snprintf(value.device_suffix, sizeof(value.device_suffix), "%04X",
+                  static_cast<unsigned>(ESP.getEfuseMac() & 0xFFFFU));
+    return value;
+  }();
+  static hmi::connectivity::WifiApWebController instance(wifi_ap(), source);
   return instance;
 }
 #endif
@@ -177,6 +231,10 @@ void setup() {
 
   hmi::profiles::AppContext app_context;
   app_context.host_name = "hmi";
+#if HMI_PROFILE_HAS_AUDIO
+  app_context.audio_playback =
+      audio_playback_port().valid() ? &audio_playback_port() : nullptr;
+#endif
 #if HMI_PROFILE_HAS_SETTINGS
   app_context.level_settings = level_settings().port();
 #endif
@@ -185,7 +243,9 @@ void setup() {
   if (!wifi_ready) {
     HMI_LOG_ERROR("[hmi-profile] Wi-Fi runtime initialization failed\r\n");
   } else {
+    wifi_ap_port().attach_web_controller(&wifi_ap_web());
     app_context.wifi_registration = &wifi_registration();
+    app_context.ap_control = &wifi_ap_web();
   }
 #endif
 #if HMI_PROFILE_HAS_ASSETS || HMI_PROFILE_HAS_STORAGE
@@ -232,6 +292,7 @@ void loop() {
 #if HMI_PROFILE_HAS_CONNECTIVITY
   if (wifi_ready) {
     wifi_registration().tick(millis());
+    wifi_ap_web().tick(millis());
   }
 #endif
 #if HMI_PROFILE_HAS_STORAGE

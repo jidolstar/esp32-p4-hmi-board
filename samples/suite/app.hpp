@@ -86,6 +86,8 @@ class SampleSuiteApp {
   hmi::ui::UiTheme theme_{};
   hmi::profiles::BinaryFontPort fonts_{};
   hmi::settings::LevelSettingsPort level_settings_{};
+  hmi::audio::AudioPlaybackPort* audio_playback_ = nullptr;
+  hmi::connectivity::WifiApWebController* ap_control_ = nullptr;
   hmi::connectivity::WifiStaRegistration* wifi_registration_ = nullptr;
   hmi::storage::StorageAccessController* storage_access_ = nullptr;
   StorageAccessLock storage_lock_{};
@@ -98,6 +100,7 @@ class SampleSuiteApp {
   std::size_t pending_page_index_ = 0;
   std::size_t active_page_index_ = 0;
   bool transition_scheduled_ = false;
+  bool storage_audio_stopped_ = false;
   SuiteView view_ = SuiteView::kNotCreated;
 };
 

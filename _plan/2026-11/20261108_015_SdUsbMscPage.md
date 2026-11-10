@@ -1,7 +1,7 @@
 # S05 계획: SD Storage & PC USB MSC Page
 
-작성: 2026-11-08. 상세화: 2026-11-09. 상태: `in_progress`.
-현재 단계: M6 `in_progress`. 선행 조건: M5·M4·M3·M2·M1·M0 `complete`, S04 `wifi` `complete`
+작성: 2026-11-08. 상세화: 2026-11-09. 완료: 2026-11-10. 상태: `complete`.
+현재 단계: M0~M6 `complete`. 선행 조건: S04 `wifi` `complete`.
 (2026-11-09 사용자 완료 처리 승인).
 
 ## 1. 목적과 결정 요약
@@ -310,7 +310,7 @@ button 없이 자동으로 앱을 복구한다.
 - 현재 preview audio가 재생 중이면 `sd-storage` page 진입 전 기존 page destroy가 stop을 요청한다.
 - 실제 stream은 lease를 보유하고 worker가 완전히 닫은 뒤 해제한다.
 - MSC enter는 lease가 남아 있으면 성공하지 않는다.
-- S06 WAV와 S07 camera는 동일 lease와 `rescan_revision`을 사용하도록 후속 변경 지점을 제한한다.
+- S06 WAV와 S08 camera는 동일 lease와 `rescan_revision`을 사용하도록 후속 변경 지점을 제한한다.
 - MSC 복귀 시 `rescan_revision`은 성공한 remount당 정확히 한 번 증가한다.
 
 ## 10. UI/UX 상세
@@ -806,7 +806,7 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
   remount retry, CDC asset updater busy 조건과 실기기 checklist를 추가했다.
 - `git diff --check`가 whitespace 오류 없이 통과했다. upload/flash는 수행하지 않았다.
 
-### M6. 실제 PC·SD 수용 — `in_progress`
+### M6. 실제 PC·SD 수용 — `complete`
 
 **목표**
 
@@ -844,6 +844,14 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
 
 - M5 complete, 사용자 직접 upload.
 
+**완료 근거**
+
+- M5에서 Windows sample-suite 33개 test, repository Python 49개 test, catalog generator,
+  네 profile isolation, HMI `sample-suite`·`main` compile과 memory 기록을 완료했다.
+- 2026-11-10 사용자가 M6를 `complete` 처리하고 다음 개발 계획으로 진행하도록 명시적으로
+  요청했다. 이 승인을 실제 PC·SD·USB 수동 수용 checklist와 S05 완료 gate의 종료 근거로
+  기록한다.
+
 ## 14. 단계 게이트 요약
 
 | 단계 | 상태 | 핵심 종료 조건 | 다음 단계 허용 |
@@ -854,10 +862,9 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
 | M3 | `complete` | 공통 상태 machine과 Windows fixture 통과 | M4 |
 | M4 | `complete` | global lock과 세 복귀 경로 UI 통과 | M5 |
 | M5 | `complete` | Windows/HMI/isolation/memory gate 통과 | M6 |
-| M6 | `in_progress` | 실제 PC/SD/USB 수용과 사용자 승인 | S05 complete |
+| M6 | `complete` | 실제 PC/SD/USB 수용과 사용자 승인 | S05 complete |
 
-동시에 하나의 단계만 `in_progress`로 둔다. 현재는 M6만 진행하며 사용자가 직접 upload한
-장치의 실제 PC/SD/USB 확인 근거 없이는 M6와 S05를 완료 처리하지 않는다.
+M0~M6가 모두 `complete`이며 S05를 닫았다. 2026-11-10부터 다음 활성 단계는 S06 V0다.
 
 ## 15. 위험과 완화
 
@@ -881,7 +888,7 @@ Wi-Fi, navigation 회귀가 없음을 compile/test로 확인한다.
 
 - S06 `wav-sounds`: audio page와 WAV catalog가 storage lease와 `rescan_revision`을 소비한다.
   MSC controller나 USB driver 내부는 수정하지 않는다.
-- S07 `camera-gallery`: camera file writer/gallery scanner가 같은 lease와 generation을 소비한다.
+- S08 `camera-gallery`: camera file writer/gallery scanner가 같은 lease와 generation을 소비한다.
   SD owner 상태 machine은 수정하지 않는다.
 - 다른 board 추가: 새 board/platform adapter가 `StorageAccessPort`를 구현한다.
   sample page와 controller는 수정하지 않는다.
@@ -908,47 +915,47 @@ S05는 다음 조건을 모두 만족해야 `complete`다.
 
 ## Automated Verification Checklist
 
-- [ ] `python tools/project.py doctor --host windows --profile sample-suite`가 ready다.
-- [ ] `python tools/project.py doctor --host hmi --profile sample-suite`가 ready다.
-- [ ] lease acquire/move/release, raw mode, owner≤1 test가 통과한다.
-- [ ] full/partial/multi-sector MSC transfer와 overflow test가 통과한다.
-- [ ] enter 실패 rollback, remount 실패, duplicate/late event test가 통과한다.
-- [ ] USB suspend는 자동 reclaim하지 않고 eject/unplug는 한 번만 reclaim한다.
-- [ ] callback in-flight가 0이 되기 전에 driver/storage lifetime을 종료하지 않는다.
-- [ ] CDC asset update와 audio stream이 lease를 보유하고 MSC 중 접근이 거부된다.
-- [ ] remount 성공당 generation/rescan revision이 정확히 한 번 증가한다.
-- [ ] lock 중 navigation/theme/locale/key 입력이 모두 차단된다.
-- [ ] explicit/eject/unplug 복귀 성공 시 lock이 해제되고 `sd-storage` page가 유지된다.
-- [ ] remount 실패 중 lock이 유지되고 retry 외 app 기능이 차단된다.
-- [ ] page/app destroy 뒤 timer, callback, worker, stream, lease, overlay가 남지 않는다.
-- [ ] catalog locale·placeholder·typography parity와 fixed font generator check가 통과한다.
-- [ ] `python tools/project.py check --host windows --profile sample-suite`가 통과한다.
-- [ ] `python -m unittest discover -s tools/tests -v`가 통과한다.
-- [ ] `python tools/project.py check --scope isolation`이 통과한다.
-- [ ] `python tools/project.py build --host hmi --profile sample-suite`가 통과한다.
-- [ ] Board 공통 source 변경 시 `python tools/project.py build --host hmi --profile main`이 통과한다.
-- [ ] `rg` 검사에서 sample/module UI에 Board internal, SD_MMC, USBMSC, FreeRTOS include가 없다.
-- [ ] controller snapshot, adapter/page/lock 객체, worker stack, sector buffer, RAM/flash 크기가 기록된다.
-- [ ] `README.md`에 PC 연결·안전 제거·자동 복귀·실패 복구·USB connector 제한이 기록된다.
+- [x] `python tools/project.py doctor --host windows --profile sample-suite`가 ready다.
+- [x] `python tools/project.py doctor --host hmi --profile sample-suite`가 ready다.
+- [x] lease acquire/move/release, raw mode, owner≤1 test가 통과한다.
+- [x] full/partial/multi-sector MSC transfer와 overflow test가 통과한다.
+- [x] enter 실패 rollback, remount 실패, duplicate/late event test가 통과한다.
+- [x] USB suspend는 자동 reclaim하지 않고 eject/unplug는 한 번만 reclaim한다.
+- [x] callback in-flight가 0이 되기 전에 driver/storage lifetime을 종료하지 않는다.
+- [x] CDC asset update와 audio stream이 lease를 보유하고 MSC 중 접근이 거부된다.
+- [x] remount 성공당 generation/rescan revision이 정확히 한 번 증가한다.
+- [x] lock 중 navigation/theme/locale/key 입력이 모두 차단된다.
+- [x] explicit/eject/unplug 복귀 성공 시 lock이 해제되고 `sd-storage` page가 유지된다.
+- [x] remount 실패 중 lock이 유지되고 retry 외 app 기능이 차단된다.
+- [x] page/app destroy 뒤 timer, callback, worker, stream, lease, overlay가 남지 않는다.
+- [x] catalog locale·placeholder·typography parity와 fixed font generator check가 통과한다.
+- [x] `python tools/project.py check --host windows --profile sample-suite`가 통과한다.
+- [x] `python -m unittest discover -s tools/tests -v`가 통과한다.
+- [x] `python tools/project.py check --scope isolation`이 통과한다.
+- [x] `python tools/project.py build --host hmi --profile sample-suite`가 통과한다.
+- [x] Board 공통 source 변경 시 `python tools/project.py build --host hmi --profile main`이 통과한다.
+- [x] `rg` 검사에서 sample/module UI에 Board internal, SD_MMC, USBMSC, FreeRTOS include가 없다.
+- [x] controller snapshot, adapter/page/lock 객체, worker stack, sector buffer, RAM/flash 크기가 기록된다.
+- [x] `README.md`에 PC 연결·안전 제거·자동 복귀·실패 복구·USB connector 제한이 기록된다.
 
 ## Manual Verification Checklist
 
-- [ ] 사용자가 firmware를 직접 upload하고 boot log에서 SD mount 성공을 확인한다.
-- [ ] SD 미장착 상태에서 `PC에 연결`이 거부되고 앱은 잠기지 않는다.
-- [ ] SD 장착 상태에서 전체/사용/여유 용량이 실제 카드와 대략 일치한다.
-- [ ] `PC에 연결` 직후 전체 화면 lock이 나타나고 Dashboard·Back·theme·locale·다른 page를 누를 수 없다.
-- [ ] PC에서 장치가 이동식 디스크로 한 번만 나타난다.
-- [ ] PC에서 파일 생성·복사·이름 변경·삭제 후 안전 제거가 된다.
-- [ ] PC 안전 제거만으로 HMI가 자동 remount하고 앱 잠금이 해제된다.
-- [ ] 다시 연결한 뒤 HMI의 `HMI로 돌아가기`를 명시적으로 선택하면 remount 후 앱이 열린다.
-- [ ] 다시 연결한 뒤 USB 케이블을 뽑으면 HMI가 자동 remount하고 앱이 열린다.
-- [ ] USB suspend/PC 절전만으로는 HMI가 SD owner를 되찾지 않는다.
-- [ ] PC 연결 중 asset updater·audio/WAV·camera/file 접근이 실행되지 않는다.
-- [ ] 복귀 후 PC에서 만든 파일과 삭제 결과가 후속 rescan에 반영된다.
-- [ ] remount 실패를 유도하면 전체 화면 lock과 `다시 시도`가 유지되고 다른 기능은 열리지 않는다.
-- [ ] 카드 복구 후 `다시 시도`가 성공하면 같은 `sd-storage` page에서 앱 사용이 재개된다.
-- [ ] 연결→파일 변경→eject/명시적 복귀/unplug를 각 10회 반복해 reset·멈춤·중복 callback이 없다.
-- [ ] 강제 cable pull 뒤 filesystem 손상 경고나 mount 실패가 성공으로 표시되지 않는다.
-- [ ] 한국어/영어 lock 문구가 잘리지 않고 multiline line spacing과 button touch가 안정적이다.
-- [ ] serial log에 simultaneous owner, raw/file 동시 접근, watchdog, stack overflow, allocation 실패가 없다.
-- [ ] 사용자가 S05 완료를 명시적으로 승인한다.
+- [x] 사용자가 firmware를 직접 upload하고 boot log에서 SD mount 성공을 확인한다. (2026-11-10 사용자 완료 승인)
+- [x] SD 미장착 상태에서 `PC에 연결`이 거부되고 앱은 잠기지 않는다. (2026-11-10 사용자 완료 승인)
+- [x] SD 장착 상태에서 전체/사용/여유 용량이 실제 카드와 대략 일치한다. (2026-11-10 사용자 완료 승인)
+- [x] `PC에 연결` 직후 전체 화면 lock이 나타나고 Dashboard·Back·theme·locale·다른 page를 누를 수 없다. (2026-11-10 사용자 완료 승인)
+- [x] PC에서 장치가 이동식 디스크로 한 번만 나타난다. (2026-11-10 사용자 완료 승인)
+- [x] PC에서 파일 생성·복사·이름 변경·삭제 후 안전 제거가 된다. (2026-11-10 사용자 완료 승인)
+- [x] PC 안전 제거만으로 HMI가 자동 remount하고 앱 잠금이 해제된다. (2026-11-10 사용자 완료 승인)
+- [x] 다시 연결한 뒤 HMI의 `HMI로 돌아가기`를 명시적으로 선택하면 remount 후 앱이 열린다. (2026-11-10 사용자 완료 승인)
+- [x] 다시 연결한 뒤 USB 케이블을 뽑으면 HMI가 자동 remount하고 앱이 열린다. (2026-11-10 사용자 완료 승인)
+- [x] USB suspend/PC 절전만으로는 HMI가 SD owner를 되찾지 않는다. (2026-11-10 사용자 완료 승인)
+- [x] PC 연결 중 asset updater·audio/WAV·camera/file 접근이 실행되지 않는다. (2026-11-10 사용자 완료 승인)
+- [x] 복귀 후 PC에서 만든 파일과 삭제 결과가 후속 rescan에 반영된다. (2026-11-10 사용자 완료 승인)
+- [x] remount 실패를 유도하면 전체 화면 lock과 `다시 시도`가 유지되고 다른 기능은 열리지 않는다. (2026-11-10 사용자 완료 승인)
+- [x] 카드 복구 후 `다시 시도`가 성공하면 같은 `sd-storage` page에서 앱 사용이 재개된다. (2026-11-10 사용자 완료 승인)
+- [x] 연결→파일 변경→eject/명시적 복귀/unplug를 각 10회 반복해 reset·멈춤·중복 callback이 없다. (2026-11-10 사용자 완료 승인)
+- [x] 강제 cable pull 뒤 filesystem 손상 경고나 mount 실패가 성공으로 표시되지 않는다. (2026-11-10 사용자 완료 승인)
+- [x] 한국어/영어 lock 문구가 잘리지 않고 multiline line spacing과 button touch가 안정적이다. (2026-11-10 사용자 완료 승인)
+- [x] serial log에 simultaneous owner, raw/file 동시 접근, watchdog, stack overflow, allocation 실패가 없다. (2026-11-10 사용자 완료 승인)
+- [x] 사용자가 S05 완료를 명시적으로 승인한다. (2026-11-10 사용자 완료 승인)

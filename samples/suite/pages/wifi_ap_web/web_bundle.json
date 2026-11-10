@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "owner_root": ".",
+  "html": "web/index.html",
+  "style": "web/app.css",
+  "script": "web/app.js",
+  "generated_header": "generated/web_bundle.hpp",
+  "cpp_namespace": "hmi::samples::suite::wifi_ap_web::generated",
+  "max_source_bytes": 16384,
+  "max_bundle_bytes": 24576
+}

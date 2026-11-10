@@ -231,18 +231,18 @@ python tools/project.py bundle --host windows --profile sample-suite
 | S04 | `wifi` | STA 검색·연결·해제·IP·복원 | 가상 AP fixture | ESP-Hosted STA |
 | S05 | `sd-storage` | SD 상태와 HMI↔PC USB MSC 소유권 전환 | MSC 상태 mock | SD·USB MSC |
 | S06 | `wav-sounds` | 등록된 여러 WAV의 단순 재생 | playback mock | SD streaming·audio |
-| S07 | `camera-gallery` | preview·촬영·SD 저장·목록·보기·삭제 | camera/gallery mock | camera·SD |
-| S08 | `wifi-ap-web` | AP 접속정보·QR·웹/HMI 4-switch 동기화 | network/browser mock | ESP-Hosted AP·web server |
+| S07 | `wifi-ap-web` | AP 접속정보·QR·웹/HMI 4-switch 동기화 | network/browser mock | ESP-Hosted AP·web server |
+| S08 | `camera-gallery` | preview·촬영·SD 저장·목록·보기·삭제 | camera/gallery mock | camera·SD |
 | S09 | `interfaces-info` | RS485·I/O·USB command 기반/미구현 안내 | 공통 안내 화면 | 공통 안내 화면 |
 
 ### 구현 경계
 
 - S03은 밝기와 음량을 한 page에 둔다. locale/theme/RTC는 포함하지 않는다.
-- S04는 STA만 소유하고 AP mode는 S08이 소유한다.
+- S04는 STA만 소유하고 AP mode는 S07이 소유한다.
 - S05는 일반 CRUD 예제가 아니라 PC가 SD를 removable disk로 접근하는 MSC 흐름을 소유한다.
 - S06의 WAV는 asset manifest에 등록하지만 독립 `assets` page는 만들지 않는다.
-- S07의 사진은 runtime data이며 build asset이 아니다.
-- S08은 AP 연결 QR과 local URL QR을 구분하고, captive portal 자동 열기를 필수로 보지 않는다.
+- S08의 사진은 runtime data이며 build asset이 아니다.
+- S07은 AP 연결 QR과 local URL QR을 구분하고, captive portal 자동 열기를 필수로 보지 않는다.
 - S09는 실제 RS485 frame, GPIO/PWM 동작, USB command protocol을 구현하지 않는다.
 - update, PC GUI와 실제 interface protocol은 정식 page 완료 뒤 별도 범위로 계획한다.
 
@@ -367,8 +367,8 @@ G1~G4는 배포 범위를 설명하는 상위 milestone로 유지한다. 실제 
 | 단계 | 목표·범위 | 산출물 | 자동 검증과 기대 결과 | 수동 검증 | 종료 조건·의존 |
 | --- | --- | --- | --- | --- | --- |
 | G1 기반·격리 | main, sample-suite Dashboard·ui-basics page, 공통 host, 프로필 등록·빌드 선택 | 별도 저장소 골격·실행기·두 프로필·Dashboard/page 계약·첫 문서 | `doctor --host windows --profile main`, `check --scope isolation`, main/sample-suite 선택 빌드. profile/page 등록 검증, main 격리, Dashboard의 page별 분기 0, main-only export 성공 | Windows의 main/sample-suite를 각각 실행해 Dashboard 왕복·버튼·팝업 확인 | 모든 검사·화면 근거 기록. 선행 없음 |
-| G2 로컬 기능 | S02·S03·S05·S06·S07 page와 필요한 공통 module/asset | text input, 밝기·음량, SD/MSC, WAV, camera/gallery | 각 상세 계획의 단위 test, Windows check, HMI build, isolation | LCD·touch·brightness/audio·SD/USB·camera 확인 | 해당 S02/S03/S05/S06/S07 gate complete |
-| G3 연결 기능 | S04·S08·S09 page | Wi-Fi STA, AP/QR/web control, interface 안내 | 상태/timeout/reconnect/browser mock과 HMI build | 실제 STA·AP·휴대폰 web 확인, 안내 지원 범위 검토 | 해당 S04/S08/S09 gate complete |
+| G2 로컬 기능 | S02·S03·S05·S06·S08 page와 필요한 공통 module/asset | text input, 밝기·음량, SD/MSC, WAV, camera/gallery | 각 상세 계획의 단위 test, Windows check, HMI build, isolation | LCD·touch·brightness/audio·SD/USB·camera 확인 | 해당 S02/S03/S05/S06/S08 gate complete |
+| G3 연결 기능 | S04·S07·S09 page | Wi-Fi STA, AP/QR/web control, interface 안내 | 상태/timeout/reconnect/browser mock과 HMI build | 실제 STA·AP·휴대폰 web 확인, 안내 지원 범위 검토 | 해당 S04/S07/S09 gate complete |
 | G4 독립 배포 | 전체 정식 목록·라이선스·단일 문서·최초 사용·export/bundle | Git 배포본·CI·지원표·수용 기록 | 새 작업 폴더/무캐시에서 준비·main 실행·샘플 검사, 최소 export·독립 bundle | 처음 쓰는 직원의 문서 실행/첫 수정과 표시된 실제 기능 수용 | 미확인 기능을 지원 완료로 표시하지 않으며 G3 complete |
 
 page 구현 순서는 S01→S02→S03→S04→S05→S06→S07→S08→S09로 고정한다. G2·G3 분류가

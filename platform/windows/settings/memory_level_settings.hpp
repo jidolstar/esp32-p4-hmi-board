@@ -1,10 +1,8 @@
 #pragma once
 
-#include <array>
 #include <cstdint>
 
-#include <SDL.h>
-
+#include "hmi/audio/playback_port.hpp"
 #include "hmi/settings/level_settings_port.hpp"
 
 namespace hmi::platform::windows {
@@ -23,7 +21,7 @@ class MemoryLevelSettings {
  public:
   MemoryLevelSettings() = default;
   MemoryLevelSettings(hmi::platform::windows::SdlLvglPort& display,
-                      const char* asset_root) noexcept;
+                      hmi::audio::AudioPlaybackPort playback) noexcept;
   ~MemoryLevelSettings();
   MemoryLevelSettings(const MemoryLevelSettings&) = delete;
   MemoryLevelSettings& operator=(const MemoryLevelSettings&) = delete;
@@ -42,14 +40,11 @@ class MemoryLevelSettings {
   static bool play_preview(void*);
   static bool stop_preview(void*);
 
-  bool open_audio(const SDL_AudioSpec& source_spec) noexcept;
   bool play_preview_file() noexcept;
   bool stop_preview_file() noexcept;
 
   hmi::platform::windows::SdlLvglPort* display_ = nullptr;
-  std::array<char, 320U> preview_path_{};
-  SDL_AudioDeviceID audio_device_ = 0U;
-  SDL_AudioSpec audio_spec_{};
+  hmi::audio::AudioPlaybackPort playback_{};
   std::uint8_t stored_brightness_ = 10U;
   std::uint8_t stored_volume_ = 10U;
   std::uint8_t applied_brightness_ = 10U;
@@ -57,8 +52,6 @@ class MemoryLevelSettings {
   unsigned preview_count_ = 0U;
   bool has_brightness_ = false;
   bool has_volume_ = false;
-  bool audio_subsystem_owned_ = false;
-  bool preview_path_valid_ = false;
 };
 
 }  // namespace hmi::platform::settings

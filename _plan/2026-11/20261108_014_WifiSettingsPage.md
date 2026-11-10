@@ -7,7 +7,7 @@
 
 Wi-Fi STA 검색, SSID 선택/직접 입력, 암호 입력, 연결·해제·재시도, IP와 신호 상태,
 재부팅 후 허용된 연결 복원을 제공한다. 202609의 공통 상태와 ESP-Hosted STA adapter를
-현재 profile 구조에 맞게 이식한다. AP 웹 제어는 S08에서 별도로 구현한다.
+현재 profile 구조에 맞게 이식한다. AP 웹 제어는 S07에서 별도로 구현한다.
 
 참조: `../dev_202609_hmi/src/connectivity/`,
 `../dev_202609_hmi/src/platform/hmi/connectivity/esp_hosted_wifi_sta.*`,

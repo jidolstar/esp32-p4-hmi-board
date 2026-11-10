@@ -50,6 +50,8 @@ struct PageContext {
   hmi::i18n::Locale locale = hmi::i18n::Locale::ko_kr;
   hmi::profiles::BinaryFontPort fonts{};
   const hmi::settings::LevelSettingsPort* level_settings = nullptr;
+  const hmi::audio::AudioPlaybackPort* audio_playback = nullptr;
+  hmi::connectivity::WifiApWebController* ap_control = nullptr;
   hmi::connectivity::WifiStaRegistration* wifi_registration = nullptr;
   hmi::storage::StorageAccessController* storage_access = nullptr;
   hmi::ui::UiTheme *theme = nullptr;

@@ -21,15 +21,34 @@
 #endif
 #include "selected_profile.hpp"
 #include "settings/memory_level_settings.hpp"
+#if HMI_PROFILE_HAS_AUDIO
+#include "audio/sdl_wav_playback.hpp"
+#include "hmi/audio/playback_port.hpp"
+#endif
 #if __has_include("hmi/connectivity/wifi_sta_registration.hpp")
 #define HMI_WINDOWS_HAS_CONNECTIVITY 1
+#include "connectivity/virtual_wifi_ap.hpp"
 #include "connectivity/virtual_wifi_sta.hpp"
+#include "hmi/connectivity/wifi_ap_runtime.hpp"
+#include "hmi/connectivity/wifi_ap_web_controller.hpp"
 #include "hmi/connectivity/wifi_sta_registration.hpp"
 #else
 #define HMI_WINDOWS_HAS_CONNECTIVITY 0
 #endif
 
 namespace {
+
+bool fill_virtual_random(void* context, std::uint8_t* output,
+                         const std::size_t size) noexcept {
+  auto& state = *static_cast<std::uint32_t*>(context);
+  for (std::size_t index = 0U; index < size; ++index) {
+    state ^= state << 13U;
+    state ^= state >> 17U;
+    state ^= state << 5U;
+    output[index] = static_cast<std::uint8_t>(state & 0xFFU);
+  }
+  return true;
+}
 
 struct Arguments {
   bool smoke = false;
@@ -136,14 +155,31 @@ int main(int argc, char **argv) {
     } else {
       // 선택 앱이 커져도 Windows main stack 사용량이 늘지 않게 heap에 둔다.
       StdioFontContext font_context{hmi::profiles::generated::kSelectedAssetRoot};
-      hmi::platform::settings::MemoryLevelSettings level_settings(
-          *port, hmi::profiles::generated::kSelectedAssetRoot);
+#if HMI_PROFILE_HAS_AUDIO
+      hmi::platform::audio::SdlWavPlayback audio_playback(
+          hmi::profiles::generated::kSelectedAssetRoot);
+      hmi::audio::AudioPlaybackPort audio_port = audio_playback.port();
+      hmi::platform::settings::MemoryLevelSettings level_settings(*port,
+                                                                   audio_port);
+#else
+      hmi::platform::settings::MemoryLevelSettings level_settings;
+#endif
 #if HMI_WINDOWS_HAS_CONNECTIVITY
       hmi::platform::connectivity::VirtualWifiSta wifi_port;
       hmi::platform::connectivity::MemoryWifiStationSettingsStore wifi_store;
       hmi::connectivity::WifiStaRegistration wifi_registration(wifi_port,
                                                                wifi_store);
       const bool wifi_ready = wifi_registration.begin(lv_tick_get(), true);
+      hmi::platform::connectivity::VirtualWifiAp wifi_ap_port;
+      hmi::connectivity::WifiApRuntime wifi_ap(
+          wifi_registration, wifi_ap_port,
+          hmi::connectivity::WifiApStationPolicy::keep_connected);
+      std::uint32_t wifi_ap_random_state = 0x53A71D2BU;
+      hmi::connectivity::WifiApWebSessionSource wifi_ap_source{};
+      wifi_ap_source.random = {&wifi_ap_random_state, &fill_virtual_random};
+      std::memcpy(wifi_ap_source.device_suffix, "BEEF", 5U);
+      hmi::connectivity::WifiApWebController wifi_ap_web(wifi_ap,
+                                                        wifi_ap_source);
 #endif
 #if HMI_WINDOWS_HAS_STORAGE
       hmi::platform::windows::storage::VirtualStorageAccess storage_port;
@@ -157,8 +193,12 @@ int main(int argc, char **argv) {
         app_context.fonts = {&font_context, &load_font, &free_font};
       }
       app_context.level_settings = level_settings.port();
+#if HMI_PROFILE_HAS_AUDIO
+      app_context.audio_playback = audio_port.valid() ? &audio_port : nullptr;
+#endif
 #if HMI_WINDOWS_HAS_CONNECTIVITY
       app_context.wifi_registration = wifi_ready ? &wifi_registration : nullptr;
+      app_context.ap_control = wifi_ready ? &wifi_ap_web : nullptr;
 #endif
 #if HMI_WINDOWS_HAS_STORAGE
       app_context.storage_access = &storage_access;
@@ -175,6 +215,7 @@ int main(int argc, char **argv) {
 #if HMI_WINDOWS_HAS_CONNECTIVITY
           if (wifi_ready) {
             wifi_registration.tick(lv_tick_get());
+            wifi_ap_web.tick(lv_tick_get());
           }
 #endif
 #if HMI_WINDOWS_HAS_STORAGE
@@ -191,6 +232,7 @@ int main(int argc, char **argv) {
 #if HMI_WINDOWS_HAS_CONNECTIVITY
           if (wifi_ready) {
             wifi_registration.tick(lv_tick_get());
+            wifi_ap_web.tick(lv_tick_get());
           }
 #endif
 #if HMI_WINDOWS_HAS_STORAGE

@@ -296,7 +296,7 @@ def render_header(inputs: CatalogInputs, cpp_namespace: str) -> str:
 
 namespace {cpp_namespace} {{
 
-enum class TextId : std::uint8_t {{
+enum class TextId : std::uint16_t {{
 {text_ids}
   count,
 }};
@@ -376,7 +376,7 @@ inline constexpr std::array<std::string_view, kTextCount> kPlaceholderContracts 
                                                : std::string_view{{}};
 }}
 
-static_assert(kTextCount <= 255U, "TextId must fit in one byte");
+static_assert(kTextCount <= 65535U, "TextId must fit in two bytes");
 
 }}  // namespace {cpp_namespace}
 '''

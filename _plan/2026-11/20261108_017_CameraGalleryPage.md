@@ -1,6 +1,6 @@
-# S07 계획: Camera & Gallery Page
+# S08 계획: Camera & Gallery Page
 
-작성: 2026-11-08. 상태: `pending`. 선행 조건: S06 `wav-sounds` complete.
+작성: 2026-11-08. 상태: `pending`. 2026-11-10 순서 변경. 선행 조건: S07 `wifi-ap-web` complete.
 
 ## 1. 목표와 범위
 
@@ -49,13 +49,13 @@ navigation/destruction와 두 locale layout을 통과해야 C3로 간다.
 
 frame rate보다 UI 응답성과 안정성을 우선해 해상도/buffer 수를 확정한다. RAM/PSRAM/DMA,
 worker stack, SD write time과 firmware size를 기록한다. 사용자가 반복 촬영, 재부팅 후 목록,
-보기, 삭제, SD/MSC 충돌과 page 왕복을 확인하면 S07을 완료한다.
+보기, 삭제, SD/MSC 충돌과 page 왕복을 확인하면 S08을 완료한다.
 
 ### 단계 게이트 요약
 
 | 단계 | 목표·범위 | 산출물 | 자동 확인 | 수동 확인 | 종료 조건·의존 |
 | --- | --- | --- | --- | --- | --- |
-| C0 | sensor/interface/pin/driver feasibility | 보드 config 근거, probe, format 결정 | config/source/compile probe 검사 | 단일 frame 실기기 확인 | sensor probe 성공. S06 complete |
+| C0 | sensor/interface/pin/driver feasibility | 보드 config 근거, probe, format 결정 | config/source/compile probe 검사 | 단일 frame 실기기 확인 | sensor probe 성공. S07 complete |
 | C1 | camera/frame/storage/gallery 기반 | private driver, public port, atomic writer, scanner | frame owner·capture 실패·path/delete·MSC 충돌 test | mock frame/사진 확인 | 자원·파일 안전 계약 통과. C0 complete |
 | C2 | preview/capture/gallery UI | preview, capture, list/view/delete UI | locale/navigation/re-entry/destruction test | Windows mock 전체 흐름 확인 | callback/frame 정리 통과. C1 complete |
 | C3 | 성능과 실제 camera 수용 | memory/latency/build/실기기 기록 | Windows/HMI build, isolation | 방향·색상·촬영·재부팅 목록·삭제·MSC | 사용자 승인. C2 complete |

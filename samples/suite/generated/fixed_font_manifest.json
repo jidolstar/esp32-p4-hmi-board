@@ -1,5 +1,5 @@
 {
-  "content_hash": "a3cc0269b1772da0beb7917e18323e706717177ff77b9eb8e70aa146482d87d6",
+  "content_hash": "11b7ed96909eb07c6853e72f47abd06e1c87c777789823711bb72e63f86cd70b",
   "generator": "tools/assets/typography/generate.py",
   "header": {
     "bytes": 1211,
@@ -10,37 +10,37 @@
   "styles": [
     {
       "bpp": 4,
-      "bytes": 133045,
-      "glyph_count": 134,
+      "bytes": 144029,
+      "glyph_count": 144,
       "id": "title_32_bold",
       "output": "fonts/fixed/title_32_bold.c",
       "roles": [
         "page_title"
       ],
-      "sha256": "e199d243caaf04374c3badaa15f39d0fc14e4690248cd55a92c303527e15be1c",
+      "sha256": "34010f113cd865f455b88a92683cd7cba25a8cc9d79b5911dd4a188ff505684f",
       "size": 32,
       "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Bold.ttf",
       "weight": "bold"
     },
     {
       "bpp": 4,
-      "bytes": 131506,
-      "glyph_count": 234,
+      "bytes": 163344,
+      "glyph_count": 289,
       "id": "body_18_regular",
       "output": "fonts/fixed/body_18_regular.c",
       "roles": [
         "body",
         "placeholder"
       ],
-      "sha256": "af3846a9f78e4da922668e4fb8052bfe8b8cf665368884eb5234d8867527ea01",
+      "sha256": "ef616a1185f8c1418a5ce723048c2a2ceada366600d990a3c01e4e2d352042a3",
       "size": 18,
       "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Regular.ttf",
       "weight": "regular"
     },
     {
       "bpp": 4,
-      "bytes": 78196,
-      "glyph_count": 137,
+      "bytes": 105642,
+      "glyph_count": 181,
       "id": "control_18_bold",
       "output": "fonts/fixed/control_18_bold.c",
       "roles": [
@@ -48,35 +48,35 @@
         "control",
         "key_action"
       ],
-      "sha256": "f2fcc2463e25771d837d5dfe8863cafb1e002c8de002f34585d7ac60e281d98f",
+      "sha256": "b4d93a34383a74a52f988094adb9e49a1cde8dc000ffd08d155353497942af8d",
       "size": 18,
       "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Bold.ttf",
       "weight": "bold"
     },
     {
       "bpp": 4,
-      "bytes": 96211,
-      "glyph_count": 195,
+      "bytes": 114117,
+      "glyph_count": 229,
       "id": "status_16_regular",
       "output": "fonts/fixed/status_16_regular.c",
       "roles": [
         "status"
       ],
-      "sha256": "4a7f667568856016f55e9e5b580d4aff105eacd8de6f69a429a59369142ba218",
+      "sha256": "a50bdf35e99d7ced53c33c0b3740899da5c07d69c6b90049d1b4d72139dad507",
       "size": 16,
       "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Regular.ttf",
       "weight": "regular"
     },
     {
       "bpp": 4,
-      "bytes": 91696,
-      "glyph_count": 173,
+      "bytes": 104189,
+      "glyph_count": 195,
       "id": "error_16_bold",
       "output": "fonts/fixed/error_16_bold.c",
       "roles": [
         "error"
       ],
-      "sha256": "79c513fc52179f7cacad0dafca07e2a89bced06e85ee13c5f77a12f81f5faecc",
+      "sha256": "4735ace9683ad36f996c149a54e9d883a091860b034c0b2d9a344a3f7c86aa5e",
       "size": 16,
       "source": "tools/assets/typography/source/pyeojin-gothic/PyeojinGothic-Bold.ttf",
       "weight": "bold"

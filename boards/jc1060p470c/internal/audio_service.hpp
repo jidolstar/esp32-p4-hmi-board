@@ -28,12 +28,16 @@ class AudioService {
 
   bool begin();
   bool play(const char* path);
+  bool pause();
+  bool resume();
   bool stop();
   bool set_volume(std::uint8_t volume);
   [[nodiscard]] AudioStatus status() const noexcept;
+  [[nodiscard]] AudioProbeResult probe(const char* path,
+                                       AudioFileInfo& output) const;
 
  private:
-  enum class CommandType : std::uint8_t { play, stop };
+  enum class CommandType : std::uint8_t { play, pause, resume, stop };
   struct Command {
     CommandType type = CommandType::stop;
     char path[257]{};
@@ -41,7 +45,8 @@ class AudioService {
 
   static void worker_entry(void* context);
   void worker();
-  AudioError play_file(const char* path, Command& next, bool& has_next);
+  AudioError play_file(const char* path, Command& next, bool& has_next,
+                       bool& stopped);
   void set(AudioState state, AudioError error) noexcept;
 
   Storage& storage_;
@@ -49,10 +54,13 @@ class AudioService {
   QueueHandle_t queue_ = nullptr;
   std::atomic<AudioState> state_{AudioState::idle};
   std::atomic<AudioError> error_{AudioError::none};
+  std::atomic<std::uint32_t> position_ms_{0U};
+  std::atomic<std::uint32_t> duration_ms_{0U};
+  std::atomic<std::uint32_t> revision_{0U};
   std::atomic<std::uint8_t> volume_{100U};
 };
 
-static_assert(sizeof(AudioService) <= 64U,
+static_assert(sizeof(AudioService) <= 80U,
               "AudioService state must stay bounded; PCM belongs to worker stack");
 
 }  // namespace hmi::boards::jc1060p470c::internal

@@ -142,7 +142,7 @@ generated::TextId status_text(SettingsPageStatus status) noexcept {
 
 }  // namespace
 
-static_assert(sizeof(DisplayAudioPage) <= 304U,
+static_assert(sizeof(DisplayAudioPage) <= 312U,
               "DisplayAudioPage must keep only scalar state and widget handles");
 
 bool DisplayAudioPage::create(lv_obj_t* parent, const PageContext& context) {

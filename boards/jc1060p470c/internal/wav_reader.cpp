@@ -51,6 +51,19 @@ std::size_t wav_frame_bytes(const WavInfo& info) noexcept {
          (info.bits_per_sample / 8U);
 }
 
+std::uint32_t wav_milliseconds_for_bytes(std::uint32_t bytes,
+                                         const WavInfo& info) noexcept {
+  const std::size_t frame_bytes = wav_frame_bytes(info);
+  if (frame_bytes == 0U || info.sample_rate == 0U) {
+    return 0U;
+  }
+  const std::uint64_t frames = bytes / frame_bytes;
+  const std::uint64_t milliseconds =
+      frames * 1000U / static_cast<std::uint64_t>(info.sample_rate);
+  return milliseconds > UINT32_MAX ? UINT32_MAX
+                                    : static_cast<std::uint32_t>(milliseconds);
+}
+
 WavResult parse_wav(WavReadAt read, void* context, std::uint64_t file_size,
                     WavInfo& out) {
   out = {};
