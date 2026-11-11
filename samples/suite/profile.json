@@ -11,6 +11,7 @@
     "common": [
       "app.cpp",
       "storage_access_lock.cpp",
+      "components/page_header.cpp",
       "dashboard/dashboard_page.cpp",
       "generated/fonts/fixed/title_32_bold.c",
       "generated/fonts/fixed/body_18_regular.c",
@@ -22,7 +23,7 @@
     "hmi": []
   },
   "include_dirs": ["."],
-  "modules": ["audio", "connectivity", "i18n", "settings", "storage", "text", "ui"],
+  "modules": ["audio", "connectivity", "i18n", "settings", "storage", "text", "time", "ui"],
   "hosts": {
     "windows": { "enabled": true },
     "hmi": { "enabled": true, "board": "jc1060p470c" }
@@ -74,6 +75,11 @@
       "hmi_sample_suite_font_render",
       "hmi_i18n_format",
       "hmi_settings_level",
+      "hmi_time_date_time",
+      "hmi_time_sync_controller",
+      "hmi_windows_virtual_time_sync_ports",
+      "hmi_sample_suite_date_time_state",
+      "hmi_sample_suite_date_time_interaction",
       "hmi_audio_playback",
       "hmi_windows_sdl_wav_playback",
       "hmi_connectivity_wifi_sta",

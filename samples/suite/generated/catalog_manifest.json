@@ -1,5 +1,5 @@
 {
-  "content_hash": "2301db53464307a4eb2466062563947b310dc183294607f259eaa358b00c3a28",
+  "content_hash": "d88bbd8febc8b2d5ef60f8222abd61a1e06038970b9b67a888f7f993d248bd6d",
   "cpp_namespace": "hmi::samples::suite::generated",
   "entries": [
     {
@@ -13,19 +13,189 @@
       "role": "control"
     },
     {
-      "key": "dashboard.description",
+      "key": "dashboard.title",
       "placeholders": [],
-      "role": "body"
+      "role": "page_title"
     },
     {
-      "key": "dashboard.eyebrow",
+      "key": "date_time.action.apply",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "date_time.action.decrease",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "date_time.action.increase",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "date_time.action.reset",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "date_time.apply.invalid",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "date_time.apply.partial",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "date_time.apply.ready",
       "placeholders": [],
       "role": "status"
     },
     {
-      "key": "dashboard.title",
+      "key": "date_time.apply.success",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.apply.system_error",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "date_time.current.title",
       "placeholders": [],
       "role": "page_title"
+    },
+    {
+      "key": "date_time.editor.note",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "date_time.editor.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "date_time.field.day",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.field.hour",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.field.minute",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.field.month",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.field.second",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.field.year",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.network.idle",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.network.retry",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "date_time.network.synced",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.network.syncing",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.network.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.network.waiting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.rtc.invalid",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "date_time.rtc.read_error",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "date_time.rtc.ready",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.rtc.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.rtc.unsupported",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.rtc.write_error",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "date_time.source.manual",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.source.network",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.source.rtc",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.source.title",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "date_time.source.unset",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "date_time.value.unset",
+      "placeholders": [],
+      "role": "status"
     },
     {
       "key": "display_audio.action.decrease",
@@ -126,6 +296,16 @@
       "key": "locale.label",
       "placeholders": [],
       "role": "field_label"
+    },
+    {
+      "key": "page.date_time.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.date_time.title",
+      "placeholders": [],
+      "role": "page_title"
     },
     {
       "key": "page.display_audio.description",
@@ -1497,10 +1677,10 @@
   "schema_version": 1,
   "sources": {
     "i18n/catalog.json": "e6b7aec4af6fb6f1a603a8858ee77742031952718c9aa6a0f7b3eaa6b0972ae3",
-    "i18n/en.yaml": "9cb21a933444a3eb06bebfaf444d27b40ff21b71ef5b181a5acaa3e53da1cfbd",
-    "i18n/ko.yaml": "a95a49d6bb24f15d16ddecb4a8b86f389d19a6d502c9cdb510f933cc8d78fd93",
-    "i18n/typography.yaml": "83b13df4faae28d46650c6296d0d5535f73c859e7ad0d87974d3d036fce5a4a8"
+    "i18n/en.yaml": "30c8cdb1e868ae6257aaab7f43699c58f191563e17615c56a97e48ea1a499740",
+    "i18n/ko.yaml": "5d6ea28cdb1bee9acf58b24c7f0fd07cf351daaa1e549293f2133dd708aab990",
+    "i18n/typography.yaml": "e059715e2e11ba45c031ff3af17df87731e8bb50978dbc57836ab15e218e90b0"
   },
   "symbol_prefix": "hmi_sample_suite",
-  "text_count": 283
+  "text_count": 319
 }

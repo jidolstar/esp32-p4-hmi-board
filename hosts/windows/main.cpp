@@ -35,6 +35,10 @@
 #else
 #define HMI_WINDOWS_HAS_CONNECTIVITY 0
 #endif
+#if HMI_PROFILE_HAS_TIME
+#include "hmi/time/time_sync_controller.hpp"
+#include "time/virtual_time_sync_ports.hpp"
+#endif
 
 namespace {
 
@@ -186,6 +190,21 @@ int main(int argc, char **argv) {
       hmi::storage::StorageAccessController storage_access(storage_port);
       storage_access.tick(lv_tick_get());
 #endif
+#if HMI_PROFILE_HAS_TIME
+      hmi::platform::windows::time::VirtualTimeSyncPorts virtual_time;
+      hmi::time::DateTimeModel date_time;
+      hmi::time::TimeSyncController time_sync;
+      date_time.begin(lv_tick_get());
+      auto time_ports = virtual_time.ports();
+      time_ports.update = hmi::time::date_time_model_sink(date_time);
+#if HMI_WINDOWS_HAS_CONNECTIVITY
+      virtual_time.set_has_ip(wifi_ready &&
+                              wifi_registration.snapshot().has_ip);
+#endif
+      const bool time_ready =
+          time_sync.begin(time_ports, lv_tick_get());
+      hmi::time::TimeRuntime time_runtime{&date_time, &time_sync};
+#endif
       auto app = std::make_unique<hmi::profiles::generated::SelectedProfileApp>();
       hmi::profiles::AppContext app_context;
       app_context.host_name = "windows";
@@ -202,6 +221,11 @@ int main(int argc, char **argv) {
 #endif
 #if HMI_WINDOWS_HAS_STORAGE
       app_context.storage_access = &storage_access;
+#endif
+#if HMI_PROFILE_HAS_TIME
+      if (time_ready) {
+        app_context.time_runtime = &time_runtime;
+      }
 #endif
       if (!app->create(app_context)) {
         result = 4;
@@ -221,6 +245,17 @@ int main(int argc, char **argv) {
 #if HMI_WINDOWS_HAS_STORAGE
           storage_access.tick(lv_tick_get());
 #endif
+#if HMI_PROFILE_HAS_TIME
+#if HMI_WINDOWS_HAS_CONNECTIVITY
+          virtual_time.set_has_ip(wifi_ready &&
+                                  wifi_registration.snapshot().has_ip);
+#endif
+          virtual_time.tick();
+          if (time_ready) {
+            time_sync.tick(lv_tick_get());
+            date_time.tick(lv_tick_get());
+          }
+#endif
         }
         if (arguments.screenshot_path != nullptr &&
             !port->save_screenshot(arguments.screenshot_path)) {
@@ -237,6 +272,17 @@ int main(int argc, char **argv) {
 #endif
 #if HMI_WINDOWS_HAS_STORAGE
           storage_access.tick(lv_tick_get());
+#endif
+#if HMI_PROFILE_HAS_TIME
+#if HMI_WINDOWS_HAS_CONNECTIVITY
+          virtual_time.set_has_ip(wifi_ready &&
+                                  wifi_registration.snapshot().has_ip);
+#endif
+          virtual_time.tick();
+          if (time_ready) {
+            time_sync.tick(lv_tick_get());
+            date_time.tick(lv_tick_get());
+          }
 #endif
         }
       }

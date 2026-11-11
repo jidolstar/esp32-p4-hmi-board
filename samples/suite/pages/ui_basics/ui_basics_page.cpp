@@ -3,13 +3,14 @@
 #include <array>
 #include <limits>
 
+#include "components/page_header.hpp"
 #include "hmi/i18n/format.hpp"
 #include "hmi/ui/components.hpp"
 #include "generated/fixed_fonts.hpp"
 #include "generated/text_catalog.hpp"
 
 namespace hmi::samples::suite {
-static_assert(sizeof(UiBasicsPage) <= 256U,
+static_assert(sizeof(UiBasicsPage) <= 264U,
               "UI Basics controller must not retain a large embedded model");
 namespace {
 
@@ -117,71 +118,27 @@ bool UiBasicsPage::create(lv_obj_t *parent, const PageContext &context) {
   if (root_ == nullptr) {
     return false;
   }
-  theme.apply_screen(root_);
-  lv_obj_set_size(root_, LV_PCT(100), LV_PCT(100));
-  lv_obj_clear_flag(root_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(root_, 18, 0);
-  lv_obj_set_style_pad_row(root_, 14, 0);
-  lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
+  configure_page_shell_root(root_, theme);
 
-  lv_obj_t *header = lv_obj_create(root_);
-  if (header == nullptr) {
+  PageHeaderSpec header_spec;
+  header_spec.title = generated::TextId::page_ui_basics_title;
+  header_spec.badge = generated::TextId::ui_basics_badge;
+  header_spec.locale = context_.locale;
+  header_spec.back_event = &UiBasicsPage::handle_event;
+  header_spec.locale_ko_event = &UiBasicsPage::handle_event;
+  header_spec.locale_en_event = &UiBasicsPage::handle_event;
+  header_spec.theme_event = &UiBasicsPage::handle_event;
+  header_spec.user_data = this;
+  const PageHeaderWidgets header =
+      create_page_header(root_, header_spec, theme);
+  if (!header) {
     destroy();
     return false;
   }
-  theme.apply_header(header);
-  lv_obj_set_size(header, LV_PCT(100), 74);
-  lv_obj_clear_flag(header, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(header, 12, 0);
-  lv_obj_set_style_pad_column(header, 12, 0);
-  lv_obj_set_flex_flow(header, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(header, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-
-  back_button_ = create_fixed_button(
-      header, context_.locale, generated::TextId::common_back, theme,
-      hmi::ui::ButtonVariant::kGhost,
-      &UiBasicsPage::handle_event, this);
-  lv_obj_t *title = create_fixed_label(
-      header, context_.locale, generated::TextId::page_ui_basics_title, theme,
-      hmi::ui::TextRole::kDisplay);
-  lv_obj_t *badge = create_chip(
-      header, nullptr, theme, generated::TextId::ui_basics_badge,
-      context_.locale);
-  lv_obj_t *spacer = lv_obj_create(header);
-  locale_ko_button_ = create_fixed_button(
-      header, context_.locale, generated::TextId::locale_ko, theme,
-      context_.locale == hmi::i18n::Locale::ko_kr
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost,
-      &UiBasicsPage::handle_event, this);
-  locale_en_button_ = create_fixed_button(
-      header, context_.locale, generated::TextId::locale_en, theme,
-      context_.locale == hmi::i18n::Locale::en_us
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost,
-      &UiBasicsPage::handle_event, this);
-  const generated::TextId theme_id =
-      theme.mode() == hmi::ui::ThemeMode::kDark
-          ? generated::TextId::theme_light
-          : generated::TextId::theme_dark;
-  theme_button_ = create_fixed_button(
-      header, context_.locale, theme_id, theme,
-      hmi::ui::ButtonVariant::kGhost,
-      &UiBasicsPage::handle_event, this);
-  if (back_button_ == nullptr || title == nullptr || badge == nullptr ||
-      spacer == nullptr || locale_ko_button_ == nullptr ||
-      locale_en_button_ == nullptr || theme_button_ == nullptr) {
-    destroy();
-    return false;
-  }
-  lv_obj_set_size(back_button_, 92, 46);
-  theme.apply_transparent(spacer);
-  lv_obj_set_height(spacer, 1);
-  lv_obj_set_flex_grow(spacer, 1);
-  lv_obj_set_size(locale_ko_button_, 92, 42);
-  lv_obj_set_size(locale_en_button_, 92, 42);
-  lv_obj_set_size(theme_button_, 110, 42);
+  back_button_ = header.back_button;
+  locale_ko_button_ = header.locale_ko_button;
+  locale_en_button_ = header.locale_en_button;
+  theme_button_ = header.theme_button;
 
   lv_obj_t *body = lv_obj_create(root_);
   if (body == nullptr) {

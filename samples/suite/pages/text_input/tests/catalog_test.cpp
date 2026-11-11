@@ -26,7 +26,7 @@ void verify_generated_catalog() {
   static_assert(sizeof(Locale) == 1U, "Locale must remain a one-byte value");
   static_assert(sizeof(hmi::i18n::CatalogView) <= sizeof(void*) * 2U,
                 "CatalogView must not own catalog strings");
-  static_assert(catalog::kTextCount == 283U, "Unexpected text catalog size");
+  static_assert(catalog::kTextCount == 319U, "Unexpected text catalog size");
 
   const auto korean = catalog::catalog(Locale::ko_kr);
   const auto english = catalog::catalog(Locale::en_us);

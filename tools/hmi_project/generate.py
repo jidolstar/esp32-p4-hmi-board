@@ -11,7 +11,7 @@ from pathlib import Path
 from .manifest import Profile, ProfileRegistry, SUPPORTED_HOSTS
 from .pages import check_page_source_isolation, load_page_registry
 
-GENERATOR_VERSION = 21
+GENERATOR_VERSION = 23
 
 MODULE_INPUTS = {
     "audio": {
@@ -50,6 +50,14 @@ MODULE_INPUTS = {
             "modules/text/src/keyboard_layout.cpp",
         ),
         "include_dirs": ("modules/text/include",),
+    },
+    "time": {
+        "sources": (
+            "modules/time/src/date_time.cpp",
+            "modules/time/src/date_time_model.cpp",
+            "modules/time/src/time_sync_controller.cpp",
+        ),
+        "include_dirs": ("modules/time/include",),
     },
     "ui": {
         "sources": (
@@ -218,6 +226,13 @@ def resolve_profile_inputs(
         module_sources.append(
             "platform/windows/storage/virtual_storage_access.cpp"
         )
+    if "time" in profile.data["modules"]:
+        if host == "windows":
+            module_sources.append(
+                "platform/windows/time/virtual_time_sync_ports.cpp"
+            )
+        else:
+            host_sources.append("platform/hmi/time/esp_network_time.cpp")
     if "audio" in profile.data["modules"]:
         if host == "windows":
             host_sources.append("platform/windows/audio/sdl_wav_playback.cpp")
@@ -379,6 +394,8 @@ def _selected_header(resolved: dict) -> str:
         f"{str('settings' in resolved['profile']['modules']).lower()};\n\n"
         f"inline constexpr bool kSelectedHasAudio = "
         f"{str('audio' in resolved['profile']['modules']).lower()};\n\n"
+        f"inline constexpr bool kSelectedHasTime = "
+        f"{str('time' in resolved['profile']['modules']).lower()};\n\n"
         "}  // namespace hmi::profiles::generated\n"
     )
 
@@ -410,6 +427,9 @@ def _cmake_input(resolved: dict) -> str:
             f'set(HMI_PROFILE_ROOT "${{HMI_REPOSITORY_ROOT}}/{profile_root}")',
             "set(HMI_PROFILE_HAS_AUDIO "
             + ("1" if "audio" in resolved["profile"]["modules"] else "0")
+            + ")",
+            "set(HMI_PROFILE_HAS_TIME "
+            + ("1" if "time" in resolved["profile"]["modules"] else "0")
             + ")",
             "set(HMI_PROFILE_TEST_IDS\n"
             + "\n".join(f'  "{test_id}"' for test_id in test_ids)
@@ -455,6 +475,10 @@ def _platformio_profile_input(
     build_flags.append(
         "  -D HMI_PROFILE_HAS_STORAGE="
         f"{1 if 'storage' in resolved['profile']['modules'] else 0}"
+    )
+    build_flags.append(
+        "  -D HMI_PROFILE_HAS_TIME="
+        f"{1 if 'time' in resolved['profile']['modules'] else 0}"
     )
     environment = f"hmi-{resolved['profile']['id']}"
     return (

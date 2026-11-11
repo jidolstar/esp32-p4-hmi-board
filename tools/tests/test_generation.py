@@ -107,6 +107,7 @@ class GenerationTest(unittest.TestCase):
                 "sd-storage",
                 "wav-sounds",
                 "wifi-ap-web",
+                "date-time",
             ],
             [page["id"] for page in resolved["pages"]],
         )
@@ -152,6 +153,9 @@ class GenerationTest(unittest.TestCase):
                 "modules/text/src/hangul_composer.cpp",
                 "modules/text/src/input_model.cpp",
                 "modules/text/src/keyboard_layout.cpp",
+                "modules/time/src/date_time.cpp",
+                "modules/time/src/date_time_model.cpp",
+                "modules/time/src/time_sync_controller.cpp",
                 "modules/ui/src/asset_update_overlay.cpp",
                 "modules/ui/src/theme.cpp",
                 "modules/ui/src/components.cpp",
@@ -162,6 +166,7 @@ class GenerationTest(unittest.TestCase):
                 "platform/windows/connectivity/virtual_wifi_ap.cpp",
                 "platform/windows/connectivity/virtual_wifi_sta.cpp",
                 "platform/windows/storage/virtual_storage_access.cpp",
+                "platform/windows/time/virtual_time_sync_ports.cpp",
             ],
             resolved["source_groups"]["modules"],
         )
@@ -193,6 +198,7 @@ class GenerationTest(unittest.TestCase):
         self.assertIn("-D HMI_PROFILE_HAS_SETTINGS=1", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_CONNECTIVITY=1", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_STORAGE=1", platformio_input)
+        self.assertIn("-D HMI_PROFILE_HAS_TIME=1", platformio_input)
         self.assertIn(
             "+<platform/hmi/connectivity/esp_hosted_wifi_sta.cpp>",
             platformio_input,
@@ -225,6 +231,12 @@ class GenerationTest(unittest.TestCase):
             "+<modules/storage/src/storage_access_controller.cpp>",
             platformio_input,
         )
+        self.assertIn(
+            "+<platform/hmi/time/esp_network_time.cpp>", platformio_input
+        )
+        self.assertIn(
+            "+<modules/time/src/time_sync_controller.cpp>", platformio_input
+        )
 
     def test_hmi_generation_has_explicit_platformio_allowlist_input(self) -> None:
         target = self.prepare("hmi")
@@ -255,12 +267,15 @@ class GenerationTest(unittest.TestCase):
         self.assertIn("-D HMI_PROFILE_HAS_SETTINGS=0", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_CONNECTIVITY=0", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_STORAGE=0", platformio_input)
+        self.assertIn("-D HMI_PROFILE_HAS_TIME=0", platformio_input)
         self.assertNotIn("platform/hmi/connectivity", platformio_input)
         self.assertNotIn("asset_usb_updater.cpp", platformio_input)
         self.assertNotIn("audio_service.cpp", platformio_input)
         self.assertNotIn("usb_msc_driver.cpp", platformio_input)
         self.assertNotIn("platform/hmi/storage", platformio_input)
         self.assertNotIn("modules/storage", platformio_input)
+        self.assertNotIn("platform/hmi/time", platformio_input)
+        self.assertNotIn("modules/time", platformio_input)
 
     def test_root_platformio_selects_generated_main_not_common_base(self) -> None:
         root_config = (REPOSITORY_ROOT / "platformio.ini").read_text(encoding="utf-8")

@@ -32,6 +32,10 @@
 #include "hmi/storage/storage_access_controller.hpp"
 #include "storage/board_storage_access.hpp"
 #endif
+#if HMI_PROFILE_HAS_TIME
+#include "hmi/time/time_sync_controller.hpp"
+#include "time/esp_network_time.hpp"
+#endif
 
 namespace {
 
@@ -66,6 +70,9 @@ bool wifi_ready = false;
 #if HMI_PROFILE_HAS_STORAGE
 bool storage_access_ready = false;
 #endif
+#if HMI_PROFILE_HAS_TIME
+bool time_ready = false;
+#endif
 
 #if HMI_PROFILE_HAS_SETTINGS
 hmi::platform::settings::PreferencesLevelSettings& level_settings() {
@@ -73,6 +80,41 @@ hmi::platform::settings::PreferencesLevelSettings& level_settings() {
       board(), audio_playback_port(),
       hmi::profiles::generated::kSelectedNvsNamespace);
   return instance;
+}
+#endif
+
+#if HMI_PROFILE_HAS_CONNECTIVITY
+hmi::connectivity::WifiStaRegistration& wifi_registration();
+#endif
+
+#if HMI_PROFILE_HAS_TIME
+hmi::platform::hmi_host::time::EspNetworkTime& network_time() {
+  static hmi::platform::hmi_host::time::EspNetworkTime instance;
+  return instance;
+}
+
+hmi::time::DateTimeModel& date_time_model() {
+  static hmi::time::DateTimeModel instance;
+  return instance;
+}
+
+hmi::time::TimeSyncController& time_sync_controller() {
+  static hmi::time::TimeSyncController instance;
+  return instance;
+}
+
+hmi::time::TimeRuntime& time_runtime() {
+  static hmi::time::TimeRuntime instance{&date_time_model(),
+                                         &time_sync_controller()};
+  return instance;
+}
+
+bool time_has_ip(void*) {
+#if HMI_PROFILE_HAS_CONNECTIVITY
+  return wifi_ready && wifi_registration().snapshot().has_ip;
+#else
+  return false;
+#endif
 }
 #endif
 
@@ -248,6 +290,24 @@ void setup() {
     app_context.ap_control = &wifi_ap_web();
   }
 #endif
+#if HMI_PROFILE_HAS_TIME
+  date_time_model().begin(millis());
+  hmi::time::TimeSyncPorts time_ports{};
+  time_ports.system = network_time().system_port();
+  time_ports.network = network_time().network_port();
+  time_ports.connectivity = {nullptr, &time_has_ip};
+  time_ports.update = hmi::time::date_time_model_sink(date_time_model());
+  hmi::time::TimeSyncPolicy time_policy{};
+  // RTC chip 호환성 확인 전에는 register write를 절대 시도하지 않는다.
+  time_policy.update_rtc_from_network = false;
+  time_ready =
+      time_sync_controller().begin(time_ports, millis(), time_policy);
+  if (!time_ready) {
+    HMI_LOG_ERROR("[hmi-profile] time synchronization unavailable\r\n");
+  } else {
+    app_context.time_runtime = &time_runtime();
+  }
+#endif
 #if HMI_PROFILE_HAS_ASSETS || HMI_PROFILE_HAS_STORAGE
   {
     if (!board().begin_storage()) {
@@ -298,6 +358,12 @@ void loop() {
 #if HMI_PROFILE_HAS_STORAGE
   if (storage_access_ready) {
     storage_access().tick(millis());
+  }
+#endif
+#if HMI_PROFILE_HAS_TIME
+  if (time_ready) {
+    time_sync_controller().tick(millis());
+    date_time_model().tick(millis());
   }
 #endif
   delay(1);

@@ -80,7 +80,7 @@ class WavSoundsPage final : public SamplePage {
   lv_timer_t* timer_ = nullptr;
 };
 
-static_assert(sizeof(WavSoundsPage) <= 416U,
+static_assert(sizeof(WavSoundsPage) <= 424U,
               "WAV page must keep only bounded scalar state and widget handles");
 
 }  // namespace hmi::samples::suite

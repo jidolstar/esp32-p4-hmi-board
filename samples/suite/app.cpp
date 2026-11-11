@@ -25,6 +25,7 @@ bool SampleSuiteApp::create(const hmi::profiles::AppContext &context) {
   ap_control_ = context.ap_control;
   wifi_registration_ = context.wifi_registration;
   storage_access_ = context.storage_access;
+  time_runtime_ = context.time_runtime;
   screen_ = lv_obj_create(nullptr);
   if (screen_ == nullptr) {
     theme_.reset();
@@ -267,6 +268,7 @@ PageContext SampleSuiteApp::make_page_context() noexcept {
   page_context.ap_control = ap_control_;
   page_context.wifi_registration = wifi_registration_;
   page_context.storage_access = storage_access_;
+  page_context.time_runtime = time_runtime_;
   page_context.theme = &theme_;
   page_context.user_data = this;
   return page_context;
@@ -427,6 +429,7 @@ void SampleSuiteApp::destroy() noexcept {
   storage_audio_stopped_ = false;
   wifi_registration_ = nullptr;
   storage_access_ = nullptr;
+  time_runtime_ = nullptr;
 }
 
 SampleSuiteApp::~SampleSuiteApp() { destroy(); }

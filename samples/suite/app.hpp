@@ -90,6 +90,7 @@ class SampleSuiteApp {
   hmi::connectivity::WifiApWebController* ap_control_ = nullptr;
   hmi::connectivity::WifiStaRegistration* wifi_registration_ = nullptr;
   hmi::storage::StorageAccessController* storage_access_ = nullptr;
+  hmi::time::TimeRuntime* time_runtime_ = nullptr;
   StorageAccessLock storage_lock_{};
   lv_timer_t* storage_timer_ = nullptr;
   hmi::i18n::Locale locale_ = hmi::i18n::Locale::ko_kr;

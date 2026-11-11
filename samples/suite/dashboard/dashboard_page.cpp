@@ -1,5 +1,6 @@
 #include "dashboard/dashboard_page.hpp"
 
+#include "components/page_header.hpp"
 #include "hmi/ui/components.hpp"
 #include "generated/fixed_fonts.hpp"
 #include "generated/text_catalog.hpp"
@@ -14,28 +15,6 @@ void apply_fixed_font(lv_obj_t *label,
   if (label != nullptr) {
     lv_obj_set_style_text_font(label, generated::fixed_font(role), 0);
   }
-}
-
-lv_obj_t *create_fixed_label(lv_obj_t *parent, hmi::i18n::Locale locale,
-                             generated::TextId id, hmi::ui::UiTheme &theme,
-                             hmi::ui::TextRole role) noexcept {
-  lv_obj_t *label = hmi::ui::create_label(
-      parent, generated::text(locale, id).data(), theme, role);
-  apply_fixed_font(label, generated::typography(id));
-  return label;
-}
-
-lv_obj_t *create_fixed_button(lv_obj_t *parent, hmi::i18n::Locale locale,
-                              generated::TextId id, hmi::ui::UiTheme &theme,
-                              hmi::ui::ButtonVariant variant,
-                              lv_event_cb_t callback, void *user_data) noexcept {
-  lv_obj_t *button = hmi::ui::create_button(
-      parent, generated::text(locale, id).data(), theme, variant, callback,
-      user_data);
-  if (button != nullptr) {
-    apply_fixed_font(lv_obj_get_child(button, 0), generated::typography(id));
-  }
-  return button;
 }
 
 }  // namespace
@@ -62,100 +41,24 @@ bool DashboardPage::create(lv_obj_t *parent,
   on_theme_toggle_ = on_theme_toggle;
   on_locale_change_ = on_locale_change;
   user_data_ = user_data;
-  theme.apply_screen(root_);
-  lv_obj_set_size(root_, LV_PCT(100), LV_PCT(100));
-  lv_obj_clear_flag(root_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(root_, 24, 0);
-  lv_obj_set_style_pad_row(root_, 18, 0);
-  lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
+  configure_page_shell_root(root_, theme);
 
-  lv_obj_t *header = lv_obj_create(root_);
-  if (header == nullptr) {
+  PageHeaderSpec header_spec;
+  header_spec.title = generated::TextId::dashboard_title;
+  header_spec.locale = locale;
+  header_spec.title_leading_inset = 10;
+  header_spec.locale_ko_event = &DashboardPage::handle_locale_event;
+  header_spec.locale_en_event = &DashboardPage::handle_locale_event;
+  header_spec.theme_event = &DashboardPage::handle_theme_event;
+  header_spec.user_data = this;
+  const PageHeaderWidgets header =
+      create_page_header(root_, header_spec, theme);
+  if (!header) {
     destroy();
     return false;
   }
-  theme.apply_header(header);
-  lv_obj_set_size(header, LV_PCT(100), 130);
-  lv_obj_clear_flag(header, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(header, 20, 0);
-  lv_obj_set_style_pad_column(header, 18, 0);
-  lv_obj_set_flex_flow(header, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(header, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-
-  lv_obj_t *brand = lv_obj_create(header);
-  if (brand == nullptr) {
-    destroy();
-    return false;
-  }
-  theme.apply_transparent(brand);
-  lv_obj_set_height(brand, LV_PCT(100));
-  lv_obj_set_flex_grow(brand, 1);
-  lv_obj_clear_flag(brand, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(brand, 0, 0);
-  lv_obj_set_style_pad_row(brand, 5, 0);
-  lv_obj_set_flex_flow(brand, LV_FLEX_FLOW_COLUMN);
-  lv_obj_set_flex_align(brand, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START,
-                        LV_FLEX_ALIGN_START);
-
-  lv_obj_t *eyebrow = create_fixed_label(
-      brand, locale, generated::TextId::dashboard_eyebrow, theme,
-      hmi::ui::TextRole::kAccent);
-  lv_obj_t *title = create_fixed_label(
-      brand, locale, generated::TextId::dashboard_title, theme,
-      hmi::ui::TextRole::kDisplay);
-  lv_obj_t *subtitle = create_fixed_label(
-      brand, locale, generated::TextId::dashboard_description, theme,
-      hmi::ui::TextRole::kMuted);
-  if (eyebrow == nullptr || title == nullptr || subtitle == nullptr) {
-    destroy();
-    return false;
-  }
-  hmi::ui::configure_multiline(subtitle, LV_PCT(100), 24, 3);
-
-  lv_obj_t *controls = lv_obj_create(header);
-  if (controls == nullptr) {
-    destroy();
-    return false;
-  }
-  theme.apply_transparent(controls);
-  lv_obj_set_size(controls, 310, 42);
-  lv_obj_clear_flag(controls, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(controls, 0, 0);
-  lv_obj_set_style_pad_column(controls, 8, 0);
-  lv_obj_set_flex_flow(controls, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(controls, LV_FLEX_ALIGN_END, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-
-  locale_ko_button_ = create_fixed_button(
-      controls, locale, generated::TextId::locale_ko, theme,
-      locale == hmi::i18n::Locale::ko_kr ? hmi::ui::ButtonVariant::kPrimary
-                                         : hmi::ui::ButtonVariant::kGhost,
-      &DashboardPage::handle_locale_event, this);
-  locale_en_button_ = create_fixed_button(
-      controls, locale, generated::TextId::locale_en, theme,
-      locale == hmi::i18n::Locale::en_us ? hmi::ui::ButtonVariant::kPrimary
-                                         : hmi::ui::ButtonVariant::kGhost,
-      &DashboardPage::handle_locale_event, this);
-  if (locale_ko_button_ == nullptr || locale_en_button_ == nullptr) {
-    destroy();
-    return false;
-  }
-  lv_obj_set_size(locale_ko_button_, 92, 42);
-  lv_obj_set_size(locale_en_button_, 92, 42);
-
-  const generated::TextId theme_id =
-      theme.mode() == hmi::ui::ThemeMode::kDark
-          ? generated::TextId::theme_light
-          : generated::TextId::theme_dark;
-  lv_obj_t *theme_button = create_fixed_button(
-      controls, locale, theme_id, theme, hmi::ui::ButtonVariant::kGhost,
-      &DashboardPage::handle_theme_event, this);
-  if (theme_button == nullptr) {
-    destroy();
-    return false;
-  }
-  lv_obj_set_size(theme_button, 110, 42);
+  locale_ko_button_ = header.locale_ko_button;
+  locale_en_button_ = header.locale_en_button;
 
   lv_obj_t *main = lv_obj_create(root_);
   if (main == nullptr) {

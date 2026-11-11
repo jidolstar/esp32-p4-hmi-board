@@ -128,6 +128,49 @@ if(BUILD_TESTING)
     "${CMAKE_SOURCE_DIR}/modules/settings/tests/level_settings_test.cpp"
     hmi_settings_level)
   hmi_add_sample_suite_test(
+    hmi_time_date_time_test
+    "${CMAKE_SOURCE_DIR}/modules/time/tests/date_time_test.cpp"
+    hmi_time_date_time)
+  target_sources(hmi_time_date_time_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/modules/time/src/date_time.cpp"
+    "${CMAKE_SOURCE_DIR}/modules/time/src/date_time_model.cpp")
+  target_include_directories(hmi_time_date_time_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/modules/time/include")
+  hmi_add_sample_suite_test(
+    hmi_time_sync_controller_test
+    "${CMAKE_SOURCE_DIR}/modules/time/tests/time_sync_controller_test.cpp"
+    hmi_time_sync_controller)
+  target_sources(hmi_time_sync_controller_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/modules/time/src/date_time.cpp"
+    "${CMAKE_SOURCE_DIR}/modules/time/src/date_time_model.cpp"
+    "${CMAKE_SOURCE_DIR}/modules/time/src/time_sync_controller.cpp")
+  target_include_directories(hmi_time_sync_controller_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/modules/time/include")
+  hmi_add_sample_suite_test(
+    hmi_windows_virtual_time_sync_ports_test
+    "${CMAKE_SOURCE_DIR}/platform/windows/time/tests/virtual_time_sync_ports_test.cpp"
+    hmi_windows_virtual_time_sync_ports)
+  target_sources(hmi_windows_virtual_time_sync_ports_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/modules/time/src/date_time.cpp"
+    "${CMAKE_SOURCE_DIR}/modules/time/src/date_time_model.cpp"
+    "${CMAKE_SOURCE_DIR}/modules/time/src/time_sync_controller.cpp"
+    "${CMAKE_SOURCE_DIR}/platform/windows/time/virtual_time_sync_ports.cpp")
+  target_include_directories(hmi_windows_virtual_time_sync_ports_test PRIVATE
+    "${CMAKE_SOURCE_DIR}/modules/time/include"
+    "${CMAKE_SOURCE_DIR}/platform/windows")
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_date_time_state_test
+    pages/date_time/tests/date_time_state_test.cpp
+    hmi_sample_suite_date_time_state)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_date_time_interaction_test
+    pages/date_time/tests/date_time_interaction_test.cpp
+    hmi_sample_suite_date_time_interaction)
+  set_tests_properties(
+    hmi_sample_suite_date_time_state
+    hmi_sample_suite_date_time_interaction
+    PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+  hmi_add_sample_suite_test(
     hmi_audio_playback_test
     "${CMAKE_SOURCE_DIR}/modules/audio/tests/playback_test.cpp"
     hmi_audio_playback)

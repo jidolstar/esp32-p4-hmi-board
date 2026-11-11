@@ -1,5 +1,4 @@
 #include <cassert>
-#include <cstdlib>
 #include <cstring>
 #include <memory>
 #include <string>
@@ -7,6 +6,7 @@
 #include <lvgl.h>
 
 #include "app.hpp"
+#include "components/page_header.hpp"
 #include "pointer_test_driver.hpp"
 #include "sdl_lvgl_port.hpp"
 
@@ -140,39 +140,52 @@ int main(int argc, char **argv) {
   assert(lv_obj_get_y(english_button) == lv_obj_get_y(dark_button));
   assert(lv_obj_get_x(korean_button) < lv_obj_get_x(english_button));
   assert(lv_obj_get_x(english_button) < lv_obj_get_x(dark_button));
-  lv_obj_t *dashboard_brand = lv_obj_get_parent(
-      find_label(lv_scr_act(), "Sample Suite"));
-  assert(dashboard_brand != nullptr);
-  lv_obj_t *dashboard_header = lv_obj_get_parent(dashboard_brand);
+  lv_obj_t *dashboard_title = find_label(lv_scr_act(), "Sample Suite");
+  assert(dashboard_title != nullptr);
+  lv_obj_t *dashboard_header = lv_obj_get_parent(dashboard_title);
   assert(dashboard_header != nullptr);
-  lv_obj_t *dashboard_eyebrow =
-      find_label(lv_scr_act(), "HMI LAB / COMPONENT PLAYGROUND");
-  lv_obj_t *dashboard_description = find_label(
-      lv_scr_act(), "A single app for testing reusable interface capabilities.");
-  assert(dashboard_eyebrow != nullptr);
-  assert(dashboard_description != nullptr);
-  lv_area_t brand_area{};
-  lv_area_t eyebrow_area{};
-  lv_area_t description_area{};
-  lv_obj_get_coords(dashboard_brand, &brand_area);
-  lv_obj_get_coords(dashboard_eyebrow, &eyebrow_area);
-  lv_obj_get_coords(dashboard_description, &description_area);
-  const int top_gap = eyebrow_area.y1 - brand_area.y1;
-  const int bottom_gap = brand_area.y2 - description_area.y2;
-  assert(std::abs(top_gap - bottom_gap) <= 2);
+  lv_obj_t *dashboard_root = lv_obj_get_parent(dashboard_header);
+  assert(dashboard_root != nullptr);
+  lv_obj_t *dashboard_body = lv_obj_get_child(dashboard_root, 1);
+  assert(dashboard_body != nullptr);
+  assert(lv_obj_get_height(dashboard_header) ==
+         hmi::samples::suite::kPageHeaderHeight);
+  assert(find_label(lv_scr_act(), "HMI LAB / COMPONENT PLAYGROUND") == nullptr);
+  assert(find_label(
+             lv_scr_act(),
+             "A single app for testing reusable interface capabilities.") ==
+         nullptr);
   assert(lv_obj_get_style_bg_grad_dir(dashboard_header, LV_PART_MAIN) ==
          LV_GRAD_DIR_NONE);
   assert(find_label(lv_scr_act(), "Screen language") == nullptr);
   lv_obj_t *ui_basics_card = lv_obj_get_parent(ui_basics_title);
   lv_obj_t *text_input_card = lv_obj_get_parent(text_input_title);
+  lv_obj_t *date_time_title = find_label(lv_scr_act(), "Date & Time");
+  lv_obj_t *date_time_description = find_label(
+      lv_scr_act(), "Inspect and set time, RTC, and network sync.");
   lv_obj_t *ui_basics_description = find_label(
       lv_scr_act(), "Buttons, overlays, and a scrollable list.");
   assert(ui_basics_card != nullptr);
   assert(text_input_card != nullptr);
+  assert(date_time_title != nullptr);
+  assert(date_time_description != nullptr);
   assert(ui_basics_description != nullptr);
+  lv_obj_t *date_time_card = lv_obj_get_parent(date_time_title);
+  assert(date_time_card != nullptr);
+  lv_obj_update_layout(lv_scr_act());
   lv_obj_update_layout(ui_basics_card);
   assert(lv_obj_get_y(ui_basics_card) == lv_obj_get_y(text_input_card));
   assert(lv_obj_get_x(ui_basics_card) < lv_obj_get_x(text_input_card));
+  assert(lv_obj_get_height(date_time_card) == lv_obj_get_height(ui_basics_card));
+  lv_area_t dashboard_header_area{};
+  lv_area_t dashboard_body_area{};
+  lv_area_t dashboard_title_area{};
+  lv_obj_get_coords(dashboard_header, &dashboard_header_area);
+  lv_obj_get_coords(dashboard_body, &dashboard_body_area);
+  lv_obj_get_coords(dashboard_title, &dashboard_title_area);
+  assert(dashboard_header_area.x1 == dashboard_body_area.x1);
+  assert(dashboard_header_area.x2 == dashboard_body_area.x2);
+  assert(dashboard_title_area.x1 - dashboard_header_area.x1 >= 18);
   lv_area_t dashboard_card_area{};
   lv_area_t dashboard_description_area{};
   lv_obj_get_coords(ui_basics_card, &dashboard_card_area);
@@ -201,6 +214,25 @@ int main(int argc, char **argv) {
                          (ui_basics_area.y1 + ui_basics_area.y2) / 2);
   assert(app->flush_pending_transition());
   assert(app->snapshot().view == SuiteView::kPage);
+  lv_obj_t *page_title = find_label(lv_scr_act(), "UI Basics");
+  assert(page_title != nullptr);
+  lv_obj_t *page_header = lv_obj_get_parent(page_title);
+  assert(page_header != nullptr);
+  lv_obj_t *page_root = lv_obj_get_parent(page_header);
+  assert(page_root != nullptr);
+  lv_obj_t *page_body = lv_obj_get_child(page_root, 1);
+  assert(page_body != nullptr);
+  lv_obj_update_layout(lv_scr_act());
+  lv_area_t page_header_area{};
+  lv_area_t page_body_area{};
+  lv_obj_get_coords(page_header, &page_header_area);
+  lv_obj_get_coords(page_body, &page_body_area);
+  assert(page_header_area.x1 == dashboard_header_area.x1);
+  assert(page_header_area.x2 == dashboard_header_area.x2);
+  assert(page_body_area.x1 == dashboard_body_area.x1);
+  assert(page_body_area.x2 == dashboard_body_area.x2);
+  assert(page_body_area.y1 - page_header_area.y2 ==
+         dashboard_body_area.y1 - dashboard_header_area.y2);
   if (argc == 3 && std::strcmp(argv[1], "--screenshot") == 0) {
     for (int frame = 0; frame < 10; ++frame) {
       port->tick();

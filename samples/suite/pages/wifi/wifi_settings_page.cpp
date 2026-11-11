@@ -5,6 +5,7 @@
 #include <cstring>
 #include <new>
 
+#include "components/page_header.hpp"
 #include "hmi/i18n/format.hpp"
 #include "hmi/text/utf8.hpp"
 #include "hmi/ui/components.hpp"
@@ -191,57 +192,25 @@ bool WifiSettingsPage::create_layout(lv_obj_t* parent) noexcept {
   if (root_ == nullptr) {
     return false;
   }
-  theme.apply_screen(root_);
-  lv_obj_set_size(root_, LV_PCT(100), LV_PCT(100));
-  lv_obj_clear_flag(root_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(root_, 14, 0);
-  lv_obj_set_style_pad_row(root_, 12, 0);
-  lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
+  configure_page_shell_root(root_, theme);
 
-  lv_obj_t* header = lv_obj_create(root_);
-  if (header == nullptr) {
+  PageHeaderSpec header_spec;
+  header_spec.title = TextId::page_wifi_title;
+  header_spec.locale = context_.locale;
+  header_spec.back_event = &WifiSettingsPage::handle_event;
+  header_spec.locale_ko_event = &WifiSettingsPage::handle_event;
+  header_spec.locale_en_event = &WifiSettingsPage::handle_event;
+  header_spec.theme_event = &WifiSettingsPage::handle_event;
+  header_spec.user_data = this;
+  const PageHeaderWidgets header =
+      create_page_header(root_, header_spec, theme);
+  if (!header) {
     return false;
   }
-  theme.apply_header(header);
-  lv_obj_set_size(header, LV_PCT(100), 62);
-  lv_obj_clear_flag(header, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(header, 8, 0);
-  lv_obj_set_style_pad_column(header, 10, 0);
-  lv_obj_set_flex_flow(header, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(header, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-  back_button_ = create_fixed_button(
-      header, TextId::common_back, hmi::ui::ButtonVariant::kGhost);
-  lv_obj_t* title = create_fixed_label(
-      header, TextId::page_wifi_title, hmi::ui::TextRole::kTitle);
-  lv_obj_t* spacer = lv_obj_create(header);
-  locale_ko_button_ = create_fixed_button(
-      header, TextId::locale_ko,
-      context_.locale == hmi::i18n::Locale::ko_kr
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost);
-  locale_en_button_ = create_fixed_button(
-      header, TextId::locale_en,
-      context_.locale == hmi::i18n::Locale::en_us
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost);
-  theme_button_ = create_fixed_button(
-      header,
-      theme.mode() == hmi::ui::ThemeMode::kDark ? TextId::theme_light
-                                                 : TextId::theme_dark,
-      hmi::ui::ButtonVariant::kGhost);
-  if (back_button_ == nullptr || title == nullptr || spacer == nullptr ||
-      locale_ko_button_ == nullptr || locale_en_button_ == nullptr ||
-      theme_button_ == nullptr) {
-    return false;
-  }
-  lv_obj_set_size(back_button_, 78, 44);
-  theme.apply_transparent(spacer);
-  lv_obj_set_height(spacer, 1);
-  lv_obj_set_flex_grow(spacer, 1);
-  lv_obj_set_size(locale_ko_button_, 92, 44);
-  lv_obj_set_size(locale_en_button_, 92, 44);
-  lv_obj_set_size(theme_button_, 110, 44);
+  back_button_ = header.back_button;
+  locale_ko_button_ = header.locale_ko_button;
+  locale_en_button_ = header.locale_en_button;
+  theme_button_ = header.theme_button;
 
   lv_obj_t* body = lv_obj_create(root_);
   if (body == nullptr) {

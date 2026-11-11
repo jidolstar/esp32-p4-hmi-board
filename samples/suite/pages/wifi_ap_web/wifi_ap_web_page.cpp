@@ -6,6 +6,7 @@
 
 #include <src/extra/libs/qrcode/lv_qrcode.h>
 
+#include "components/page_header.hpp"
 #include "generated/fixed_fonts.hpp"
 #include "generated/text_catalog.hpp"
 #include "hmi/ui/components.hpp"
@@ -125,65 +126,20 @@ bool WifiApWebPage::create(lv_obj_t* parent, const PageContext& context) {
     destroy();
     return false;
   }
-  theme.apply_screen(root_);
-  lv_obj_set_size(root_, LV_PCT(100), LV_PCT(100));
-  lv_obj_clear_flag(root_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(root_, 14, 0);
-  lv_obj_set_style_pad_row(root_, 10, 0);
-  lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
+  configure_page_shell_root(root_, theme);
 
-  lv_obj_t* header = lv_obj_create(root_);
-  if (header == nullptr) {
+  PageHeaderSpec header_spec;
+  header_spec.title = generated::TextId::page_wifi_ap_web_title;
+  header_spec.locale = context_.locale;
+  header_spec.back_event = &WifiApWebPage::handle_back;
+  header_spec.locale_ko_event = &WifiApWebPage::handle_locale_ko;
+  header_spec.locale_en_event = &WifiApWebPage::handle_locale_en;
+  header_spec.theme_event = &WifiApWebPage::handle_theme;
+  header_spec.user_data = this;
+  if (!create_page_header(root_, header_spec, theme)) {
     destroy();
     return false;
   }
-  theme.apply_header(header);
-  lv_obj_set_size(header, LV_PCT(100), 62);
-  lv_obj_clear_flag(header, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(header, 8, 0);
-  lv_obj_set_style_pad_column(header, 8, 0);
-  lv_obj_set_flex_flow(header, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(header, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-
-  lv_obj_t* back = create_button(
-      header, context_.locale, generated::TextId::common_back, theme,
-      hmi::ui::ButtonVariant::kGhost, &WifiApWebPage::handle_back, this);
-  lv_obj_t* title = create_label(
-      header, context_.locale, generated::TextId::page_wifi_ap_web_title, theme,
-      hmi::ui::TextRole::kDisplay);
-  lv_obj_t* spacer = lv_obj_create(header);
-  lv_obj_t* ko = create_button(
-      header, context_.locale, generated::TextId::locale_ko, theme,
-      context_.locale == hmi::i18n::Locale::ko_kr
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost,
-      &WifiApWebPage::handle_locale_ko, this);
-  lv_obj_t* en = create_button(
-      header, context_.locale, generated::TextId::locale_en, theme,
-      context_.locale == hmi::i18n::Locale::en_us
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost,
-      &WifiApWebPage::handle_locale_en, this);
-  const generated::TextId theme_id =
-      theme.mode() == hmi::ui::ThemeMode::kDark
-          ? generated::TextId::theme_light
-          : generated::TextId::theme_dark;
-  lv_obj_t* theme_button = create_button(
-      header, context_.locale, theme_id, theme,
-      hmi::ui::ButtonVariant::kGhost, &WifiApWebPage::handle_theme, this);
-  if (back == nullptr || title == nullptr || spacer == nullptr || ko == nullptr ||
-      en == nullptr || theme_button == nullptr) {
-    destroy();
-    return false;
-  }
-  lv_obj_set_size(back, 84, 44);
-  theme.apply_transparent(spacer);
-  lv_obj_set_height(spacer, 1);
-  lv_obj_set_flex_grow(spacer, 1);
-  lv_obj_set_size(ko, 84, 42);
-  lv_obj_set_size(en, 84, 42);
-  lv_obj_set_size(theme_button, 100, 42);
 
   body_ = lv_obj_create(root_);
   if (body_ == nullptr) {

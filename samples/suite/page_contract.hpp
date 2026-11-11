@@ -54,6 +54,7 @@ struct PageContext {
   hmi::connectivity::WifiApWebController* ap_control = nullptr;
   hmi::connectivity::WifiStaRegistration* wifi_registration = nullptr;
   hmi::storage::StorageAccessController* storage_access = nullptr;
+  hmi::time::TimeRuntime* time_runtime = nullptr;
   hmi::ui::UiTheme *theme = nullptr;
   void *user_data = nullptr;
 };

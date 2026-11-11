@@ -5,12 +5,12 @@
 | Profile | 목적 | 현재 화면 |
 | --- | --- | --- |
 | `main` | 새 응용 기능을 시작하는 최소 앱 | 외부 자산 없는 실행·입력 진단 화면 |
-| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage·등록 WAV·Wi-Fi AP/Web page |
+| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage·등록 WAV·Wi-Fi AP/Web·날짜/시간 page |
 
 `sample-suite`의 Dashboard는 생성된 page descriptor만 사용한다. 현재 활성 page 하나만 만들며 page 구현끼리 참조하지 않는다. 한·영 i18n과 키보드 입력의 기반은 `_plan/2026-11/20261107_004_BilingualI18nAndTextInput.md`, 완성된 입력 UX와 검증 기준은 `_plan/2026-11/20261108_010_TextInputUxCompletion.md`에 기록돼 있다.
 
 `wifi`(STA 설정), `sd-storage`(PC USB MSC 접근), `wav-sounds`(등록 음원 재생),
-`wifi-ap-web`(QR·웹 4-switch)까지 구현돼 있다. 남은 page는
+`wifi-ap-web`(QR·웹 4-switch)과 `date-time`(수동 설정·SNTP 상태)까지 구현돼 있다. 남은 page는
 `camera-gallery`(촬영·저장·보기·삭제)와
 `interfaces-info`(RS485·I/O·USB command 안내)다. 독립 `assets` page는 만들지 않으며
 asset pipeline은 폰트와 WAV를 배포하는 내부 기반으로만 사용한다. 상세 상태는
@@ -142,6 +142,15 @@ token을 사용하고 URL token은 fragment에만 두며 일반 snapshot과 log�
 허용 endpoint는 `/`, `/favicon.ico`, `/healthz`, `/ws`로 제한되고 외부 CDN이나 인터넷
 자산을 사용하지 않는다. 구현·검증 근거는
 `_plan/2026-11/20261108_018_WifiApWebControlPage.md`에 기록돼 있다.
+
+Dashboard의 `날짜와 시간` card에서는 현재 날짜·시각과 출처, RTC 및 네트워크 동기화
+상태를 확인하고 년·월·일·시·분·초를 수동으로 조정한다. 편집 중인 값도 실제 시각처럼
+초 단위로 계속 진행한다. 수동 적용은 시스템 시각을 먼저
+변경하며 RTC 기록 실패를 부분 성공으로 따로 표시한다. Windows는 PC 시계를 바꾸지 않는
+가상 시계를 사용한다. 현재 HMI는 보드의 RTC 칩과 register 호환성이 실물에서 확인되기
+전까지 RTC 접근을 비활성화하고 `RTC 칩 확인 전`으로 표시한다. Wi-Fi IP를 얻은 HMI의
+시스템 시각은 `Asia/Seoul` 정책으로 SNTP 동기화하며, 실제 RTC 유지와 전원 재인가 동작은
+기기 접근이 가능할 때 별도로 확인한다.
 
 Dashboard의 `SD 저장소` card에서는 mount 상태, HMI/PC owner, FAT 여부와
 전체·사용·여유 용량을 확인한다. `PC에 연결`을 누르는 순간 전체 화면 잠금이 표시되고
@@ -333,6 +342,10 @@ VS Code PlatformIO를 사용하는 경우에도 `hmi-sample-suite` 환경을 선
 34. `일시정지`에서 소리와 시간이 함께 멈추고 `계속 재생`이 같은 위치에서 자연스럽게 이어지는지 확인한다.
 35. `중지`, 빠른 행 교체, 음량 0·10과 page 이탈에서 소리가 겹치거나 남지 않는지 확인한다.
 36. WAV 재생 중 `SD 저장소`의 PC 연결을 시작하면 소리가 먼저 멈추고, HMI 복귀 후 다시 재생되는지 확인한다.
+37. `날짜와 시간`에서 현재 시각·출처·RTC·네트워크 상태와 년·월·일·시·분·초 조작 영역이 잘리지 않고 하단 안내가 상하 중앙에 표시되는지 확인한다.
+38. 수동 시각 적용 뒤 시스템 시각은 즉시 바뀌고 RTC 미지원은 부분 성공으로 정확히 안내되는지 확인한다.
+39. 보드 revision과 RTC 칩/register 호환성, CR1220 충전 금지 bit를 확인한 뒤에만 RTC adapter를 활성화한다.
+40. RTC adapter 활성화 뒤 전원 재인가 유지, Wi-Fi IP 획득 후 KST 보정과 RTC 기록 조건을 확인한다.
 
 확인 결과를 P6 근거로 기록하기 전에는 firmware compile 성공을 실기기 완료로 간주하지 않는다.
 
@@ -391,6 +404,7 @@ Remove-Item -Recurse -Force .pio/build/hmi/main,.pio/build/hmi/sample-suite
 
 - camera preview·촬영·SD gallery·보기·삭제
 - RS485·GPIO/PWM·USB command의 최소 public contract와 안내 page
+- 실물 확인을 거친 RTC register adapter와 CR1220 유지 시각 수용
 - main-only export, Windows bundle, CI와 외부 배포 자동화
 
 현재 locale과 theme는 앱 수명 동안만 유지되며 재부팅 후 기본값으로 돌아간다. 범용

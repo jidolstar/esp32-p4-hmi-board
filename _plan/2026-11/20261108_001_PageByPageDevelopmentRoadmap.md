@@ -1,14 +1,14 @@
 # 범용 HMI 시작 프로젝트: 페이지 단위 개발 로드맵
 
 작성: 2026-11-08. 갱신: 2026-11-11. 상태: `in_progress` (S01~S07 `complete`,
-S08~S09 `pending`).
+S08 `blocked` (실기기 접근 대기), S09 `pending`, S10 `blocked` (D4 실기기 접근 대기)).
 
 ## 1. 재편 결론
 
 향후 구현 순서를 다음과 같이 고정한다.
 
 `ui-basics` → `text-input` → `display-audio` → `wifi` → `sd-storage` →
-`wav-sounds` → `wifi-ap-web` → `camera-gallery` → `interfaces-info`
+`wav-sounds` → `wifi-ap-web` → `camera-gallery` / `interfaces-info` → `date-time`
 
 - 밝기와 음량은 서로 다른 page로 나누지 않고 S03 한 화면에서 설정한다.
 - 독립 `assets` page는 제거한다. 자산 manifest·bundle·검사는 폰트와 WAV가 사용하는
@@ -21,7 +21,13 @@ S08~S09 `pending`).
 - 2026-11-10 사용자 결정에 따라 카메라 제어 경험과 보드 하드웨어 근거가 부족한
   `camera-gallery`보다 기존 Wi-Fi 기반을 확장하는 `wifi-ap-web`을 먼저 진행한다.
 - RS485, I/O, USB command는 실제 통신 기능을 구현하지 않는다. 202609의 공개 경계를
-  참고한 최소 기반과 설명만 S09 한 page에 모은다.
+  참고한 최소 기반과 storage/USB 관련 설명을 S09의 목록→상세 page에 모은다.
+- S08의 실기기 camera 판정은 S09와 코드·하드웨어 의존이 없으므로 S08이 `blocked`여도
+  S09를 병행한다.
+- RTC·수동 시각·SNTP 동기화는 202609의 변경된 시간 정책을 먼저 이식하는 S10 독립
+  page로 구성한다.
+- 펌웨어 업데이트는 별도 page로 확장하지 않는다. 202609의 도메인 중립 update core를
+  S09에서 수정 이식하고 목록의 설명 항목으로 사용법과 미구현 adapter 경계를 안내한다.
 
 ## 2. 페이지 상태와 상세 계획
 
@@ -34,8 +40,9 @@ S08~S09 `pending`).
 | S05 | `sd-storage` | `complete` | `_plan/2026-11/20261108_015_SdUsbMscPage.md` | SD 상태, 전역 앱 잠금과 PC USB MSC 접근 |
 | S06 | `wav-sounds` | `complete` | `_plan/2026-11/20261108_016_RegisteredWavPage.md` | 목록·progress·pause/resume 실기기 수용과 사용자 승인 완료 |
 | S07 | `wifi-ap-web` | `complete` | `_plan/2026-11/20261108_018_WifiApWebControlPage.md` | AP+STA·두 QR·웹/HMI 4스위치 동기화와 사용자 승인 완료 |
-| S08 | `camera-gallery` | `pending` | `_plan/2026-11/20261108_017_CameraGalleryPage.md` | 촬영·SD 저장·보기·삭제 |
-| S09 | `interfaces-info` | `pending` | `_plan/2026-11/20261108_019_InterfaceOverviewPage.md` | RS485·I/O·USB command 기반 안내 |
+| S08 | `camera-gallery` | `blocked` (C0 실기기 확인 대기) | `_plan/2026-11/20261108_017_CameraGalleryPage.md` | 촬영·SD 저장·보기·삭제, C0.5 통과 시 5-point 얼굴 특징점 |
+| S09 | `interfaces-info` | `pending` | `_plan/2026-11/20261108_019_InterfaceOverviewPage.md` | RS485·GPIO·PWM·USB·storage·update 8항목 목록→상세 안내와 중립 core |
+| S10 | `date-time` | `blocked` (D4 실기기 접근 대기) | `_plan/2026-11/20261111_001_DateTimeRtcPage.md` | RTC·수동 설정·SNTP 기반과 화면, 202609 기초설정1 비교 반영 |
 
 S04는 공통 STA 상태·Windows fixture·HMI adapter와 Wi-Fi 설정 UI, 지연 scan, 목록→선택→입력,
 검색 spinner, 터치 보정, 인증 실패 재입력과 연결 AP 강조까지 구현했다. 2026-11-09 사용자가
@@ -58,6 +65,14 @@ build, A0/A0.5 실기기 data path 근거를 통과했고 2026-11-11 사용자 �
 `complete`로 닫았다. 출시 전 장시간 휴대폰 회귀는 전역 G3와 README 수동 체크리스트에서
 별도로 수행한다.
 
+S10은 날짜 계산·동기화 core, Windows 가상 시계, HMI system clock/SNTP adapter와
+`date-time` page를 구현했다. 202609 기초설정1과 비교해 초 편집·실시간 초 진행·연도 경계를
+반영하고 상태 항목별 구획과 하단 안내의 좌측·상하 중앙 정렬을 보정했다. Windows 49/49,
+도구 58/58, isolation과 HMI
+compile이 통과했고 1024×600 Windows 화면도 확인했다. 실제 RTC register adapter는 칩 호환성을 확인하기 전까지
+비활성화했다. 현재 사용자가 다른 장소에 있어 보드 revision·RTC·CR1220·SNTP·LCD/touch
+수용을 할 수 없으므로 D4만 `blocked`로 남긴다.
+
 ## 3. 202609 재사용 판정
 
 | 기능 | 판정 | 가져올 핵심 | 그대로 가져오지 않는 것 |
@@ -69,13 +84,17 @@ build, A0/A0.5 실기기 data path 근거를 통과했고 2026-11-11 사용자 �
 | 카메라 | 신규 | 공개 camera port만 새로 정의 | 존재하지 않는 202609 구현을 가정하지 않음 |
 | Wi-Fi AP 웹 | 신규 확장 | 기존 STA/Hosted 초기화 지식 | STA adapter를 AP 구현으로 간주하지 않음 |
 | RS485·I/O·USB command | 계약 참고 | 공개 facade와 capability 설명 | worker, protocol, 실제 장치 동작 |
+| RTC·시각 동기화 | 수정 이식 | 날짜 모델, Clock facade, time-sync controller와 ports | 제품 설정 화면, NVS 시각 fallback, 칩 무검증 복사 |
+| 펌웨어 업데이트 | S09 수정 이식·설명 | update state, ports, 서명/binding, journal, asset generation, boot recovery | 실제 update UI, CT-A1 ID, 운영 server/credential, factory 등록 흐름, flash adapter |
+| TMP102 온도 | 제외 | 외부 I2C sensor를 추가할 때 별도 adapter 후보 | 보드 기본 장착 기능으로 간주하지 않음 |
 
 참조 원본은 `../dev_202609_hmi/`이며 복사 전에 제품명·profile·화면·보드 내부 의존을
 제거한다. 현재 저장소의 page와 module은 원본 파일을 직접 include하지 않는다.
 
 ## 4. 공통 실행 규칙
 
-1. 동시에 하나의 page 계획만 `in_progress`로 둔다.
+1. 동시에 하나의 page 계획만 `in_progress`로 둔다. 실기기 확인만 남아 `blocked`인 독립
+   page는 다른 page의 진행을 막지 않는다.
 2. 각 단계는 상세 계획의 자동 검사와 수동 확인을 통과해야 다음 단계로 진행한다.
 3. Windows와 HMI가 공유할 상태·정책은 공통 module에 두고 실제 장치 접근만 adapter로 둔다.
 4. UI/page는 Board internal, ESP-IDF handle, LVGL port 내부 객체를 직접 사용하지 않는다.
@@ -95,6 +114,8 @@ build, A0/A0.5 실기기 data path 근거를 통과했고 2026-11-11 사용자 �
 - S07은 현재 ESP-Hosted 버전에서 AP data path가 확인되지 않으면 A0에서 `blocked`로 둔다.
 - S08은 camera sensor·pin·clock·driver가 확인되지 않으면 C0에서 `blocked`로 둔다.
 - S09는 안내 page이므로 실제 RS485/I/O/USB command 동작을 완료 조건으로 요구하지 않는다.
+- S10은 RTC 칩·register 호환 근거가 없으면 실제 adapter를 비활성 상태로 유지하고 D4
+  실기기 수용을 `blocked`로 둔다.
 
 ## 6. 전체 완료 정의
 
@@ -109,7 +130,7 @@ build, A0/A0.5 실기기 data path 근거를 통과했고 2026-11-11 사용자 �
 
 ## Automated Verification Checklist
 
-- [x] 활성 page 계획이 하나만 `in_progress` 또는 `blocked`다.
+- [x] `in_progress` page는 하나뿐이며 독립적인 `blocked` page와 의존성이 구분돼 있다.
 - [x] 활성 단계의 단위 test와 Windows profile check가 통과한다.
 - [x] Windows와 HMI `sample-suite` build가 통과한다.
 - [x] `python tools/project.py check --scope isolation`이 통과한다.
@@ -124,4 +145,5 @@ build, A0/A0.5 실기기 data path 근거를 통과했고 2026-11-11 사용자 �
 - [ ] 사용자가 정상·실패·재시도·Dashboard 복귀를 확인한다.
 - [ ] 사용자가 실제로 지원하는 hardware capability를 확인한다.
 - [ ] page 반복 진입·이탈 후 reset·멈춤·중복 callback이 없다.
-- [ ] 사용자가 현재 page 완료를 승인한 뒤에만 다음 page를 시작한다.
+- [ ] 사용자가 현재 page 완료를 승인한 뒤 의존하는 다음 page를 시작한다. 독립 page는
+  `blocked` 실기기 gate와 병행할 수 있다.

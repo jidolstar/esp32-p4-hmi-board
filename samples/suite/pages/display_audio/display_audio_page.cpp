@@ -2,6 +2,7 @@
 
 #include <array>
 
+#include "components/page_header.hpp"
 #include "generated/fixed_fonts.hpp"
 #include "generated/text_catalog.hpp"
 #include "hmi/i18n/format.hpp"
@@ -142,7 +143,7 @@ generated::TextId status_text(SettingsPageStatus status) noexcept {
 
 }  // namespace
 
-static_assert(sizeof(DisplayAudioPage) <= 312U,
+static_assert(sizeof(DisplayAudioPage) <= 320U,
               "DisplayAudioPage must keep only scalar state and widget handles");
 
 bool DisplayAudioPage::create(lv_obj_t* parent, const PageContext& context) {
@@ -166,66 +167,23 @@ bool DisplayAudioPage::create(lv_obj_t* parent, const PageContext& context) {
     destroy();
     return false;
   }
-  theme.apply_screen(root_);
-  lv_obj_set_size(root_, LV_PCT(100), LV_PCT(100));
-  lv_obj_clear_flag(root_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(root_, 16, 0);
-  lv_obj_set_style_pad_row(root_, 12, 0);
-  lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
+  configure_page_shell_root(root_, theme);
 
-  lv_obj_t* header = lv_obj_create(root_);
-  if (header == nullptr) {
+  PageHeaderSpec header_spec;
+  header_spec.title = generated::TextId::page_display_audio_title;
+  header_spec.locale = context_.locale;
+  header_spec.back_event = &DisplayAudioPage::handle_event;
+  header_spec.locale_ko_event = &DisplayAudioPage::handle_locale_ko_event;
+  header_spec.locale_en_event = &DisplayAudioPage::handle_locale_en_event;
+  header_spec.theme_event = &DisplayAudioPage::handle_theme_event;
+  header_spec.user_data = this;
+  const PageHeaderWidgets header =
+      create_page_header(root_, header_spec, theme);
+  if (!header) {
     destroy();
     return false;
   }
-  theme.apply_header(header);
-  lv_obj_set_size(header, LV_PCT(100), 68);
-  lv_obj_clear_flag(header, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(header, 10, 0);
-  lv_obj_set_style_pad_column(header, 10, 0);
-  lv_obj_set_flex_flow(header, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(header, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-  back_button_ = create_button(
-      header, context_.locale, generated::TextId::common_back, theme,
-      hmi::ui::ButtonVariant::kGhost, &DisplayAudioPage::handle_event, this);
-  lv_obj_t* title = create_label(
-      header, context_.locale, generated::TextId::page_display_audio_title,
-      theme, hmi::ui::TextRole::kDisplay);
-  lv_obj_t* spacer = lv_obj_create(header);
-  lv_obj_t* locale_ko_button = create_button(
-      header, context_.locale, generated::TextId::locale_ko, theme,
-      context_.locale == hmi::i18n::Locale::ko_kr
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost,
-      &DisplayAudioPage::handle_locale_ko_event, this);
-  lv_obj_t* locale_en_button = create_button(
-      header, context_.locale, generated::TextId::locale_en, theme,
-      context_.locale == hmi::i18n::Locale::en_us
-          ? hmi::ui::ButtonVariant::kPrimary
-          : hmi::ui::ButtonVariant::kGhost,
-      &DisplayAudioPage::handle_locale_en_event, this);
-  const generated::TextId theme_id =
-      theme.mode() == hmi::ui::ThemeMode::kDark
-          ? generated::TextId::theme_light
-          : generated::TextId::theme_dark;
-  lv_obj_t* theme_button = create_button(
-      header, context_.locale, theme_id, theme,
-      hmi::ui::ButtonVariant::kGhost, &DisplayAudioPage::handle_theme_event,
-      this);
-  if (back_button_ == nullptr || title == nullptr || spacer == nullptr ||
-      locale_ko_button == nullptr || locale_en_button == nullptr ||
-      theme_button == nullptr) {
-    destroy();
-    return false;
-  }
-  lv_obj_set_size(back_button_, 86, 44);
-  theme.apply_transparent(spacer);
-  lv_obj_set_height(spacer, 1);
-  lv_obj_set_flex_grow(spacer, 1);
-  lv_obj_set_size(locale_ko_button, 88, 42);
-  lv_obj_set_size(locale_en_button, 88, 42);
-  lv_obj_set_size(theme_button, 104, 42);
+  back_button_ = header.back_button;
 
   lv_obj_t* body = lv_obj_create(root_);
   if (body == nullptr) {

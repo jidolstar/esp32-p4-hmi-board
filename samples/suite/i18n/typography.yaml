@@ -4,9 +4,7 @@ roles:
   common.open: control
   theme.light: control
   theme.dark: control
-  dashboard.eyebrow: status
   dashboard.title: page_title
-  dashboard.description: body
   page.ui_basics.title: page_title
   page.ui_basics.description: body
   ui_basics.badge: status
@@ -283,3 +281,41 @@ roles:
   wifi_ap.probe.value.password: status
   wifi_ap.probe.value.ipv4: status
   wifi_ap.probe.value.endpoint: status
+  page.date_time.title: page_title
+  page.date_time.description: body
+  date_time.current.title: page_title
+  date_time.value.unset: status
+  date_time.source.title: field_label
+  date_time.source.unset: status
+  date_time.source.manual: status
+  date_time.source.rtc: status
+  date_time.source.network: status
+  date_time.rtc.title: field_label
+  date_time.rtc.ready: status
+  date_time.rtc.invalid: error
+  date_time.rtc.unsupported: status
+  date_time.rtc.read_error: error
+  date_time.rtc.write_error: error
+  date_time.network.title: field_label
+  date_time.network.idle: status
+  date_time.network.waiting: status
+  date_time.network.syncing: status
+  date_time.network.synced: status
+  date_time.network.retry: error
+  date_time.editor.title: page_title
+  date_time.editor.note: body
+  date_time.field.year: field_label
+  date_time.field.month: field_label
+  date_time.field.day: field_label
+  date_time.field.hour: field_label
+  date_time.field.minute: field_label
+  date_time.field.second: field_label
+  date_time.action.decrease: control
+  date_time.action.increase: control
+  date_time.action.reset: control
+  date_time.action.apply: control
+  date_time.apply.ready: status
+  date_time.apply.success: status
+  date_time.apply.partial: error
+  date_time.apply.invalid: error
+  date_time.apply.system_error: error

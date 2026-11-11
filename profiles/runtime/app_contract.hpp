@@ -18,6 +18,10 @@ namespace hmi::storage {
 class StorageAccessController;
 }
 
+namespace hmi::time {
+struct TimeRuntime;
+}
+
 namespace hmi::profiles {
 
 enum class AppKey : std::uint8_t {
@@ -41,9 +45,9 @@ struct BinaryFontPort {
 /**
  * 선택된 앱에 host가 전달하는 최소 플랫폼 비종속 정보다.
  *
- * host_name과 font port context는 앱보다 오래 살아야 한다. font port는 opaque
- * binary font handle만 전달하며 display, touch, Board 내부 객체는 경계를 통과하지
- * 않는다. 앱은 host runtime보다 먼저 정리된다.
+ * host_name, font port context와 주입된 runtime 포인터는 앱보다 오래 살아야 한다.
+ * font port는 opaque binary font handle만 전달하며 display, touch, Board 내부 객체는
+ * 경계를 통과하지 않는다. 앱은 host runtime보다 먼저 정리된다.
  */
 struct AppContext {
   const char *host_name = nullptr;
@@ -53,6 +57,7 @@ struct AppContext {
   hmi::connectivity::WifiApWebController* ap_control = nullptr;
   hmi::connectivity::WifiStaRegistration* wifi_registration = nullptr;
   hmi::storage::StorageAccessController* storage_access = nullptr;
+  hmi::time::TimeRuntime* time_runtime = nullptr;
 };
 
 }  // namespace hmi::profiles

@@ -23,6 +23,7 @@ foreach(required_variable
     HMI_PROFILE_SOURCES
     HMI_INCLUDE_DIRS
     HMI_PROFILE_HAS_AUDIO
+    HMI_PROFILE_HAS_TIME
     HMI_SELECTED_PROFILE_INCLUDE_DIR)
   if(NOT DEFINED ${required_variable})
     message(FATAL_ERROR
@@ -40,7 +41,8 @@ function(hmi_add_selected_profile_app)
     ${HMI_INCLUDE_DIRS}
     "${HMI_SELECTED_PROFILE_INCLUDE_DIR}")
   target_compile_definitions(hmi_selected_app PUBLIC
-    HMI_PROFILE_HAS_AUDIO=${HMI_PROFILE_HAS_AUDIO})
+    HMI_PROFILE_HAS_AUDIO=${HMI_PROFILE_HAS_AUDIO}
+    HMI_PROFILE_HAS_TIME=${HMI_PROFILE_HAS_TIME})
   target_link_libraries(hmi_selected_app PUBLIC lvgl::lvgl)
 
   if(MSVC)

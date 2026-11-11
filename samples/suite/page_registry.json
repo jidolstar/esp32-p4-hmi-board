@@ -136,6 +136,24 @@
         "wifi_ap_web_interaction"
       ],
       "data_key": "wifi_ap_web"
+    },
+    {
+      "id": "date-time",
+      "title_key": "page.date_time.title",
+      "description_key": "page.date_time.description",
+      "order": 100,
+      "entry": {
+        "header": "pages/date_time/date_time_page.hpp",
+        "type": "hmi::samples::suite::DateTimePage"
+      },
+      "sources": {
+        "common": ["pages/date_time/date_time_page.cpp"],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["connectivity", "i18n", "time"],
+      "verification": ["date_time_state", "date_time_interaction"],
+      "data_key": "date_time"
     }
   ]
 }
