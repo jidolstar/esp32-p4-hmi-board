@@ -22,6 +22,10 @@ if(BUILD_TESTING)
     "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/storage_access_guard_test.cpp"
     hmi_board_storage_access_guard)
   hmi_add_sample_suite_test(
+    hmi_board_camera_frame_lease_tracker_test
+    "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/camera_frame_lease_tracker_test.cpp"
+    hmi_board_camera_frame_lease_tracker)
+  hmi_add_sample_suite_test(
     hmi_board_wav_reader_test
     "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/wav_reader_test.cpp"
     hmi_board_wav_reader)

@@ -1,0 +1,41 @@
+menuconfig CAMERA_OV02C10
+    bool "Guition OV02C10"
+    default y
+    depends on SOC_MIPI_CSI_SUPPORTED
+    help
+        Enable the OV02C10 driver pinned from the JC1060P470C-I-W-Y vendor demo.
+
+if CAMERA_OV02C10
+    config CAMERA_OV02C10_AUTO_DETECT_MIPI_INTERFACE_SENSOR
+        bool "Detect OV02C10 on MIPI CSI"
+        default y
+
+    config CAMERA_OV02C10_MIPI_RAW10_1288X728_30FPS
+        bool "MIPI 1-lane, 24 MHz input, 1288x728 30 fps, RAW10"
+        default y
+
+    config CAMERA_OV02C10_MIPI_DEFAULT_FMT_RAW10_1288X728_30FPS
+        bool
+        default y
+        depends on CAMERA_OV02C10_MIPI_RAW10_1288X728_30FPS
+
+    config CAMERA_OV02C10_MIPI_IF_FORMAT_INDEX_DEFAULT
+        int
+        default 0
+
+    config CAMERA_OV02C10_ABSOLUTE_GAIN_LIMIT
+        int
+        default 66016
+        range 4000 126016
+
+    choice CAMERA_OV02C10_ABS_GAIN_MAP_PRIORITY
+        prompt "OV02C10 gain control priority"
+        default CAMERA_OV02C10_DIG_GAIN_PRIORITY
+
+        config CAMERA_OV02C10_ANA_GAIN_PRIORITY
+            bool "Analog gain priority"
+
+        config CAMERA_OV02C10_DIG_GAIN_PRIORITY
+            bool "Digital gain priority"
+    endchoice
+endif
