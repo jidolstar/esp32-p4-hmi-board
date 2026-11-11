@@ -1,6 +1,6 @@
 # S08 상세 계획: Camera & Gallery Page
 
-작성: 2026-11-08. 전면 구체화: 2026-11-11. 구현 상태: `blocked` (C0 실기기 확인 대기).
+작성: 2026-11-08. 전면 구체화: 2026-11-11. 구현 상태: `in_progress` (C0.5 camera frame 검증).
 선행 조건: S07 `wifi-ap-web` complete.
 
 ## 1. 목적과 결정 요약
@@ -331,7 +331,7 @@ write를 실행하지 않는다.
 모든 단계는 순서대로 진행한다. 동시에 한 단계만 `in_progress`다. manual hardware gate가
 남으면 다음 단계로 가지 않고 현재 단계를 `blocked`로 둔다.
 
-### C0. 보드·sensor·capture feasibility — `blocked`
+### C0. 보드·sensor·capture feasibility — `complete`
 
 **목표**
 
@@ -359,7 +359,9 @@ write를 실행하지 않는다.
 - [x] Guition OV02C10 근거, registry `esp_video 2.1.0`, IDF 5.5.4와 source SHA-256을
   `CAMERA_PROVENANCE.md`에 기록했다.
 - [x] 독립 진단 firmware가 RAW10 1288×728, buffer 2개와 30-frame 반환 경로로 빌드됐다.
-  산출물은 408,560 B이고 1,500 KiB app partition의 73%가 남는다.
+  실기기 chip revision v1.3에 맞춰 image 범위를 v1.0~v1.99로 제한했고, bootloader와 app
+  header의 revision 범위와 checksum/hash를 확인했다. app 산출물은 406,496 B이고
+  1,500 KiB app partition의 74%가 남는다.
 - [x] `python tools/project.py build --host hmi --profile sample-suite`가 통과했다.
 - [x] Windows sample-suite 44/44가 통과했고 frame lease test가 duplicate return, timeout,
   uint32 wrap과 stop 중 outstanding frame을 검증했다.
@@ -372,9 +374,14 @@ package 경로로 빌드해 source compile, link, image 생성과 크기 검사�
 
 **수동 검증**
 
-- 사용자가 board revision과 camera module label/사진을 확인한다.
-- 사용자가 직접 올린 diagnostic firmware에서 probe와 연속 30-frame 획득을 확인한다.
-- 한 frame의 방향, 색상, tearing과 실제 width/height가 기록된다.
+- [x] SoC revision은 esptool로 v1.3을 확인했고, camera sensor는 OV02C10 detector가 PID
+  register를 판독한 뒤 정상 stream을 시작한 것으로 확인했다. 시각적 label 사진은 선택적
+  provenance 보강 자료로 남긴다.
+- [x] 사용자가 직접 올린 diagnostic firmware에서 연속 30-frame 획득과 전량 반환을 확인했다.
+  각 확인 frame은 1,172,080 B였고 `PASS captured=30 returned=30 outstanding=0` 및
+  `C0_CAMERA_PROBE_PASS`로 종료됐다.
+- [x] 실제 frame 크기가 1288×728 RAW10의 1,172,080 B와 일치한다. RAW10 probe 범위에서
+  판단할 수 없는 방향, 색상과 tearing은 C1 preview 수동 검증으로 넘긴다.
 
 **종료 조건**
 
@@ -384,7 +391,7 @@ package 경로로 빌드해 source compile, link, image 생성과 크기 검사�
 
 - S07 complete, 사용자가 실제 camera module을 연결한 board 제공.
 
-### C0.5. 5-point 얼굴 특징점 feasibility — `pending`
+### C0.5. 5-point 얼굴 특징점 feasibility — `in_progress`
 
 **목표**
 
@@ -408,11 +415,26 @@ package 경로로 빌드해 source compile, link, image 생성과 크기 검사�
 
 **자동 검증**
 
-- 공식 static fixture에서 box, 두 눈, 코, 두 입꼬리 순서가 검증된다.
-- feature off build에 detector worker와 runtime allocation이 없다.
+- [x] 제조사 demo와 공식 registry example에 맞춰 `human_face_detect 0.2.0`, ESP-DL 3.1.0,
+  P4 MSR+MNP model과 fixture hash를 고정했다.
+- [x] 공식 static fixture에서 face 1개, score 0.731059, box `[100,66,191,188]`와
+  왼눈·왼쪽 입꼬리·코·오른눈·오른쪽 입꼬리 순서가 실기기에서 검증됐다.
+  build된 진단의 result shape·기하 관계 자동 판정도 통과했다.
+- [x] feature off build에는 detector 호출과 runtime allocation이 없고 app은 207,632 B다.
+  feature on은 1,306,112 B로 증분은 1,098,480 B다.
 - HMI build가 platform package patch 없이 재현된다.
-- app slot ≤70%, stack 여유 ≥25%와 allocation failure 0을 확인한다.
-- `git diff --check`와 dependency license/provenance 검사가 통과한다.
+- [x] feature-on 진단 전체는 제품의 6,553,600 B OTA slot 중 19.93%로 flash 70% gate를
+  통과한다.
+- [x] isolated fixture의 최저 main task stack 여유는 1,608 B/3,584 B(44.9%)였고 allocation
+  failure는 0건이었다. model load까지 internal heap 33,244 B와 PSRAM 623,688 B를 사용했고,
+  release 뒤 PSRAM은 시작값으로 복구됐다. 총 추론 시간은 35,318 us였다.
+- [x] OV02C10 RAW10→hardware ISP RGB565→ESP-DL 결합 진단이 compile/link/image 생성됐다.
+  app은 1,485,056 B로 제품 OTA slot의 22.66%이고 bootloader는 22,912 B다. 두 image의
+  v1.0~v1.99 header와 checksum/hash가 유효하다.
+- [x] 160×120 detector 좌표의 rotation, horizontal mirror, letterbox와 edge clamp native
+  test가 g++ 16.1.0에서 build·실행돼 `C0_5_COORDINATE_TRANSFORM_PASS`로 끝났다.
+- [ ] 실제 camera RGB565 frame에서 face와 5-point 결과를 확인한다.
+- [x] `git diff --check`와 dependency license/provenance 검사가 통과한다.
 
 **수동 검증**
 
@@ -647,8 +669,8 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 
 | 단계 | 상태 | 핵심 종료 조건 | 다음 단계 |
 | --- | --- | --- | --- |
-| C0 | `blocked` | sensor 근거와 실제 30-frame capture | C0.5 |
-| C0.5 | `pending` | 5-point 포함/제외 결정과 코드 정리 | C1 |
+| C0 | `complete` | sensor 근거와 실제 30-frame capture | C0.5 |
+| C0.5 | `in_progress` | 5-point 포함/제외 결정과 코드 정리 | C1 |
 | C1 | `pending` | common lifecycle/storage contract와 Windows direct tests | C2 |
 | C2 | `pending` | 실제 preview/capture와 SD/MSC 안전 계약 | C3 |
 | C3 | `pending` | 기본 camera/gallery UX와 lifecycle | C4 또는 C5 |
@@ -659,7 +681,7 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 
 | 위험 | 영향 | 대응 |
 | --- | --- | --- |
-| board revision/sensor 불명 | probe 실패 또는 hardware 손상 가능 | C0에서 label·회로 근거 없으면 blocked |
+| board revision/sensor 불명 | probe 실패 또는 hardware 손상 가능 | C0에서 esptool revision과 sensor PID 판독을 확인 |
 | Arduino build와 esp-video/ESP-DL 부조화 | integration 범위 폭증 | framework migration/package patch가 필요하면 5-point 제외, camera도 근거 없이 우회하지 않음 |
 | preview/display/camera가 PSRAM·DMA 경합 | frame drop, allocation 실패 | 고정 frame pool, detector scratch 1개, largest DMA block 측정 |
 | JPEG encode가 검증되지 않음 | 느린 저장 또는 큰 파일 | C0에서 sensor/codec 경로 확정, raw fallback 금지 |
@@ -683,7 +705,7 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 ## Automated Verification Checklist
 
 - [x] camera sensor/interface/pin/clock/reset/power 근거와 component version이 기록돼 있다.
-- [ ] 실제 sensor probe와 연속 30-frame capture가 통과한다.
+- [x] 실제 sensor probe와 연속 30-frame capture가 통과한다.
 - [ ] 5-point 기능의 포함/제외 결정이 C0.5 근거와 일치하고 dead spike code가 없다.
 - [ ] frame pool, detector scratch, gallery decode, metadata와 queue 상한이 고정돼 있다.
 - [ ] task stack이나 snapshot에 full frame/image/model vector가 없다.
@@ -703,7 +725,7 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 
 ## Manual Verification Checklist
 
-- [ ] 사용자가 board revision과 실제 camera module part number를 확인한다.
+- [x] 사용자가 SoC revision v1.3과 OV02C10 sensor PID 기반 실제 동작을 확인한다.
 - [ ] 사용자가 직접 upload한 장치에서 preview 방향·색상·비율과 touch 응답을 확인한다.
 - [ ] 촬영 30회에서 사진이 atomic하게 저장되고 목록/선택 보기에서 열린다.
 - [ ] 선택 삭제 뒤 파일과 목록이 함께 갱신된다.

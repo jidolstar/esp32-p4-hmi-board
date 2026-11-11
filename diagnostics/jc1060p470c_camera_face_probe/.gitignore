@@ -1,0 +1,5 @@
+.pio/
+managed_components/
+vendor_ov02c10/
+sdkconfig.*
+!sdkconfig.defaults

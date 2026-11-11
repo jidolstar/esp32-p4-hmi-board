@@ -1,0 +1,9 @@
+dependencies:
+  idf: "==5.5.4"
+  espressif/esp_video:
+    version: "==2.1.0"
+  # EXTRA_COMPONENT_DIRS의 pinned OV02C10 driver가 configure 시 직접 참조한다.
+  espressif/esp_cam_sensor:
+    version: "==2.1.0"
+  espressif/human_face_detect:
+    version: "==0.2.0"

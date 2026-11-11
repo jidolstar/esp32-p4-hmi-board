@@ -1,6 +1,6 @@
 # JC1060P470C-I-W-Y camera provenance
 
-상태: C0 자동 근거·build 확인 완료, 실기기 label/capture 확인 대기.
+상태: C0 완료, C0.5 얼굴 5점 검출 feasibility 진행 중.
 
 이 문서는 S08 camera/gallery 구현에 사용할 수 있는 값과 아직 확정하면 안 되는 값을
 구분한다. 제조사 데모의 설정은 강한 근거지만, 사용자가 가진 보드와 camera module이 같은
@@ -29,6 +29,7 @@ panel 이름과 camera module label을 혼동하지 않는다.
 
 | 항목 | 확인 값 | 근거 수준 | C0 처리 |
 | --- | --- | --- | --- |
+| SoC revision | ESP32-P4 v1.3 | 실기기 esptool 응답 | 진단 image를 v1.0~v1.99로 제한 |
 | SoC camera interface | ESP32-P4 MIPI CSI | 제조사 demo + ESP-IDF capability | 진단에 사용 |
 | sensor | OmniVision OV02C10 | `CONFIG_CAMERA_OV02C10=y` | 실물 label 확인 전 후보 |
 | SCCB address | `0x36` | vendored OV02C10 header | 진단 log에 기대값 기록 |
@@ -60,6 +61,10 @@ camera code가 별도 I2C owner를 생성하는 방식은 진단에만 허용한
   component source가 없다.
 - 따라서 `diagnostics/jc1060p470c_camera_probe/`만 ESP-IDF 5.5.4 standalone build로 격리한다.
   제품 source와 `Board` public facade에는 아직 연결하지 않는다.
+- 실기기 esptool 응답은 chip revision v1.3이다. ESP32-P4의 v1.x와 v3.x build는 상호
+  호환되지 않으므로 진단 `sdkconfig.defaults`는 v1.0~v1.99를 선택한다. bootloader와 app
+  header도 같은 revision 범위, 유효한 checksum/hash로 확인했으며 revision 불일치 시
+  force flash를 금지한다.
 - 제조사 BSP manifest는 `esp_video ~2.0`을 요구하면서 OV02C10이 추가된
   `esp_cam_sensor 2.1.0` 사본을 local component로 override한다. 같은 version 문자열의
   registry `esp_cam_sensor 2.1.0`에는 OV02C10이 없으므로 제조사 선언을 registry만으로
@@ -88,16 +93,31 @@ camera code가 별도 I2C owner를 생성하는 방식은 진단에만 허용한
 
 | 항목 | 결과 |
 | --- | --- |
-| 보드 전면/후면 label과 panel revision | 미확인 |
-| camera module label 또는 선명한 사진 | 미확인 |
-| probe가 보고한 sensor/driver/card/bus | 미실행 |
-| 30/30 frame, queue return 30/30 | 미실행 |
-| 실제 width × height / fourcc / bytesused 범위 | 미실행 |
+| 보드 전면/후면 label과 panel revision | 시각 확인 없음; SoC revision은 esptool로 대체 확인 |
+| SoC chip revision | ESP32-P4 v1.3 (esptool 확인) |
+| camera module label 또는 선명한 사진 | 시각 확인 없음; OV02C10 PID register 판독으로 대체 확인 |
+| probe가 보고한 sensor/driver/card/bus | OV02C10 PID 판독과 driver 동작 확인, startup의 card/bus log는 미기록 |
+| 30/30 frame, queue return 30/30 | 통과, outstanding 0 |
+| 실제 width × height / fourcc / bytesused 범위 | 1288×728 RAW10, 모든 확인 frame 1,172,080 bytes |
 | 방향 / 좌우 반전 / 색상 / tearing | 미실행 |
-| 실패 또는 timeout log | 미실행 |
+| 실패 또는 timeout log | 30-frame 구간에서 없음 |
+
+## 2026-11-12 실기기 capture 결과
+
+- chip revision: ESP32-P4 v1.3
+- driver log: `ov02c10`, stream 정상 종료
+- buffer index: 0과 1이 교대로 반환됨
+- frame 25~30 `bytesused`: 모두 1,172,080 bytes
+- 종료: `PASS captured=30 returned=30 outstanding=0`
+- 판정 marker: `C0_CAMERA_PROBE_PASS`
+
+1,172,080 bytes는 1288 × 728 × 10 bit ÷ 8과 정확히 일치하므로 설정한 RAW10 frame
+크기와 실측 buffer 크기가 일치한다.
 
 ## C0 판정
 
-정적 근거와 build 호환성은 확인했다. 실제 보드 revision/module label과 30-frame capture가
-남아 있으므로 현재 판정은 `blocked_on_manual_hardware`다. 이 상태에서 C0.5 또는 gallery UI로
-진행하지 않는다.
+정적 근거, build 호환성과 실제 30-frame capture를 확인했다. OV02C10 detector는 SCCB의
+`0x300A/0x300B` PID register를 읽고 기대 PID와 다르면 초기화를 실패시키므로 정상 stream과
+30/30 PASS는 sensor의 직접 확인 근거다. SoC revision도 esptool로 v1.3을 확인했다. 따라서
+C0 판정은 `complete`다. 보드/panel과 module label 사진은 선택적 provenance 보강 자료로
+남기며, RAW10 probe만으로 판단할 수 없는 방향·색상·tearing은 C1 preview에서 확인한다.
