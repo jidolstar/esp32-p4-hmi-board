@@ -20,6 +20,7 @@ from hmi_project.commands import (
 )
 from hmi_project.generate import GenerationError
 from hmi_project.manifest import ManifestError, load_registry
+from hmi_project.windows_tools import WindowsToolError
 
 
 def repository_root() -> Path:
@@ -81,7 +82,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "list":
             return list_profiles(registry)
         if args.command == "doctor":
-            return doctor(registry.get(args.profile), args.host)
+            return doctor(root, registry.get(args.profile), args.host)
         if args.command == "prepare":
             return prepare(root, registry, args.host, args.profile)
         if args.command == "bundle-assets":
@@ -110,6 +111,9 @@ def main(argv: list[str] | None = None) -> int:
     except (ManifestError, GenerationError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
+    except WindowsToolError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 3
     raise AssertionError(f"unhandled command: {args.command}")
 
 

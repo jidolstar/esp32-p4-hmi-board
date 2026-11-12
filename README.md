@@ -20,7 +20,7 @@ asset pipeline은 폰트와 WAV를 배포하는 내부 기반으로만 사용한
 
 - Windows 10 이상
 - Python 3.11 이상
-- CMake 3.21 이상, Ninja, C++17 compiler
+- Windows build용 CMake 3.21 이상, Ninja, C++17 compiler, Git
 - HMI build용 PlatformIO Core
 - 최초 LVGL·SDL·ESP32-P4 platform 다운로드를 위한 인터넷 연결
 
@@ -59,10 +59,18 @@ python tools/project.py run --host windows --profile sample-suite
 같은 명령을 실행하는 profile별 편의 wrapper는 `main_run_windows.bat`와
 `samples_run_windows.bat`다.
 
-`run`은 먼저 선택 profile을 build한 뒤 해당 실행 파일을 연다. 실행 파일은 각각 다음 위치에 생성된다.
+x64 Windows에서는 실행 배치가 Python 3.11 이상을 사용해 빌드 도구를 준비한다. CMake·CTest,
+Ninja, C/C++ 컴파일러, Git 중 없는 도구를 첫 실행에 내려받아 SHA-256을 확인하고
+`.local/windows-tools/`에 저장한다. 다음 실행과 `doctor`, `build`, `check`에서도 같은 도구를
+재사용한다. 도구 경로는 해당 실행에서만 적용된다. 첫 실행에는 인터넷 연결과 다운로드 및 빌드 시간이 필요하다.
+
+`run`은 도구 준비가 끝나면 선택 profile을 build하고 실행 파일을 연다. 실행 파일은 각각 다음 위치에 생성된다.
 
 - `build/windows-main/hosts/windows/hmi_main_windows.exe`
 - `build/windows-sample-suite/hosts/windows/hmi_sample_suite_windows.exe`
+
+`WinError 4551`이 표시되면 Windows 앱 제어 정책이 실행 파일을 차단한 것이다. Windows 보안의
+앱 및 브라우저 컨트롤과 이벤트 뷰어의 `CodeIntegrity > Operational`에서 적용된 정책을 확인한다.
 
 창은 1024×600이다. Esc 또는 창 닫기로 종료한다.
 

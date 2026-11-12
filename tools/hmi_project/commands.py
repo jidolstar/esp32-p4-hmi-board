@@ -10,6 +10,7 @@ from pathlib import Path
 
 from .generate import check_generated_isolation, prepare_profile
 from .manifest import ManifestError, Profile, ProfileRegistry
+from .windows_tools import compiler_available, uses_bundled_gcc, windows_environment
 
 
 def list_profiles(registry: ProfileRegistry) -> int:
@@ -37,12 +38,36 @@ def _platformio_command() -> str | None:
     return None
 
 
-def _run(command: list[str], *, working_directory: Path) -> int:
-    completed = subprocess.run(command, cwd=working_directory, check=False)
+def _run(
+    command: list[str],
+    *,
+    working_directory: Path,
+    environment: dict[str, str] | None = None,
+) -> int:
+    if environment is not None:
+        # CreateProcess searches the parent PATH, even when env supplies a new one.
+        executable = shutil.which(command[0], path=environment.get("PATH", ""))
+        if executable is None:
+            print(
+                f"error: {command[0]} is unavailable. Run the Windows launcher to prepare build tools.",
+                file=sys.stderr,
+            )
+            return 3
+        command = [executable, *command[1:]]
+    try:
+        completed = subprocess.run(command, cwd=working_directory, env=environment, check=False)
+    except OSError as error:
+        if environment is None:
+            raise
+        if getattr(error, "winerror", None) == 4551:
+            print(f"error: Windows App Control blocked {command[0]} (WinError 4551).", file=sys.stderr)
+        else:
+            print(f"error: Could not start {command[0]}: {error}", file=sys.stderr)
+        return 4
     return completed.returncode
 
 
-def doctor(profile: Profile, host: str) -> int:
+def doctor(repository_root: Path, profile: Profile, host: str) -> int:
     if host not in profile.enabled_hosts:
         raise ManifestError(
             "unsupported-profile-host",
@@ -55,10 +80,15 @@ def doctor(profile: Profile, host: str) -> int:
         ("profile manifest", True, profile.manifest_path.name),
     ]
     if host == "windows":
+        environment = windows_environment(repository_root)
+        path = environment.get("PATH", "")
         checks.extend(
             [
-                ("CMake", shutil.which("cmake") is not None, "command"),
-                ("Ninja", shutil.which("ninja") is not None, "command"),
+                ("CMake", shutil.which("cmake", path=path) is not None, "command"),
+                ("CTest", shutil.which("ctest", path=path) is not None, "command"),
+                ("Ninja", shutil.which("ninja", path=path) is not None, "command"),
+                ("Git", shutil.which("git", path=path) is not None, "command"),
+                ("C/C++ compiler", compiler_available(environment), "CC/CXX or toolchain on PATH"),
             ]
         )
     elif host == "hmi":
@@ -184,6 +214,8 @@ def build_profile(
     registry: ProfileRegistry,
     host: str,
     profile_id: str,
+    *,
+    download_windows_tools: bool = False,
 ) -> int:
     profile = registry.get(profile_id)
     if host not in profile.enabled_hosts:
@@ -195,6 +227,7 @@ def build_profile(
     generated = prepare_profile(repository_root, registry, host, profile_id)
 
     if host == "windows":
+        environment = windows_environment(repository_root, download=download_windows_tools)
         build_directory = repository_root / "build" / f"windows-{profile.id}"
         configure_command = [
             "cmake",
@@ -207,11 +240,15 @@ def build_profile(
             "-DBUILD_TESTING=ON",
             f"-DHMI_GENERATED_DIR={generated}",
         ]
-        if _run(configure_command, working_directory=repository_root) != 0:
+        if uses_bundled_gcc(repository_root, environment):
+            # SDL auto-detects WinLibs' optional ccache, which can fail on Windows.
+            configure_command.append("-DSDL_CCACHE=OFF")
+        if _run(configure_command, working_directory=repository_root, environment=environment) != 0:
             return 4
         return _run(
             ["cmake", "--build", str(build_directory)],
             working_directory=repository_root,
+            environment=environment,
         )
 
     platformio = _platformio_command()
@@ -268,6 +305,7 @@ def check_profile(
             "--output-on-failure",
         ],
         working_directory=repository_root,
+        environment=windows_environment(repository_root),
     )
 
 
@@ -283,7 +321,9 @@ def run_profile(
             "--host",
             "HMI run/upload is intentionally manual; build the firmware and upload it yourself",
         )
-    build_result = build_profile(repository_root, registry, host, profile_id)
+    build_result = build_profile(
+        repository_root, registry, host, profile_id, download_windows_tools=True
+    )
     if build_result != 0:
         return build_result
     executable_id = profile_id.replace("-", "_")
@@ -298,4 +338,8 @@ def run_profile(
     if not executable.is_file():
         print(f"error: Windows executable is missing: {executable.name}", file=sys.stderr)
         return 4
-    return _run([str(executable)], working_directory=repository_root)
+    return _run(
+        [str(executable)],
+        working_directory=repository_root,
+        environment=windows_environment(repository_root),
+    )
