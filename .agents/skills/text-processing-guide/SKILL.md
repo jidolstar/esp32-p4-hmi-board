@@ -1,55 +1,37 @@
 ---
 name: text-processing-guide
-description: Guide on how to use utf8_utils and text_utils for parsing and rendering multi-font LVGL strings. Use this when developing new text components like TextBox, TextArea, etc.
+description: Use the project's UTF-8, text editing, and multi-font LVGL components when implementing or reviewing dynamic user text, cursor behavior, and text input.
 ---
 
-# Text Processing Guide
+# UTF-8과 사용자 텍스트
 
-이 가이드는 `UserTextLabel` 외에 새로운 텍스트 관련 UI 컴포넌트를 개발할 때, 공통으로 제공되는 텍스트 처리 유틸리티를 활용하는 방법을 안내합니다.
+고정 문구와 형식은 [ui-text-policy](../ui-text-policy/SKILL.md)에 따라 카탈로그에서 가져온다. 사용자가 입력한 문자열과 장치명 같은 동적 문자열에는 아래 공통 모듈을 사용한다.
 
-## 1. UTF-8 디코딩 (`hmi::utils::utf8`)
+## UTF-8 순회와 편집
 
-LVGL은 내부적으로 UTF-8을 사용하지만, 순회용 API를 외부에 노출하지 않으므로 직접 파싱해야 합니다. 문자열을 순회하며 글자 개수를 세거나 특정 문자를 찾을 때 사용합니다.
+`modules/text/`는 LVGL에 의존하지 않는다. [UTF-8 API](../../../modules/text/include/hmi/text/utf8.hpp)의 `validate()`로 전체 문자열의 유효성과 길이를 확인하고, 코드 포인트 순회에는 `decode_next()`를 사용한다.
 
-**파일:** `src/utils/utf8_utils.hpp`
-
-**사용법:**
 ```cpp
-#include "utils/utf8_utils.hpp"
+#include "hmi/text/utf8.hpp"
 
-std::size_t offset = 0;
-std::size_t next_offset = 0;
-std::uint32_t codepoint = 0;
-
-while (hmi::utils::utf8::decode_next_codepoint(text, offset, next_offset, codepoint)) {
-    // codepoint를 활용한 로직 수행
-    offset = next_offset;
-}
-```
-
-## 2. 폰트 세그먼트 생성 (`hmi::ui::text`)
-
-LVGL의 `lv_label`은 중간에 폰트를 바꿀 수 없습니다. 다중 폰트(Common/Block)가 섞인 문자열을 표시하려면 문자열을 폰트 단위로 분할하여 여러 개의 `lv_label`로 구성해야 합니다.
-
-**파일:** `src/ui/text_utils.hpp`
-
-**사용법:**
-```cpp
-#include "ui/text_utils.hpp"
-
-std::array<hmi::ui::text::FontSegment, hmi::ui::text::kMaxSegments> segments {};
-std::size_t segment_count = 0;
-
-if (hmi::ui::text::build_font_segments(text, segments, segment_count)) {
-    for (std::size_t i = 0; i < segment_count; ++i) {
-        lv_obj_t* label = lv_label_create(parent);
-        lv_label_set_text(label, segments[i].text.c_str());
-        lv_obj_set_style_text_font(label, segments[i].font, 0);
+namespace utf8 = hmi::text::utf8;
+for (std::size_t offset = 0; offset < text.size();) {
+    const auto decoded = utf8::decode_next(text, offset);
+    if (decoded.status != utf8::DecodeStatus::ok) {
+        // 호출자의 입력 정책에 따라 잘못된 UTF-8을 처리한다.
+        break;
     }
+    // decoded.codepoint를 처리한다.
+    offset = decoded.next_offset;
 }
 ```
 
-## 3. 원칙 및 주의사항
+`next_offset`은 바이트 위치다. 편집과 커서 이동에는 [Editor](../../../modules/text/include/hmi/text/editor.hpp), 키 입력 및 한글 조합과 연동할 때는 [InputModel](../../../modules/text/include/hmi/text/input_model.hpp)을 먼저 확인한다.
 
-- **레이어 분리 유지**: `utf8_utils`는 UI(LVGL 등)에 독립적인 순수 로직이어야 합니다. `text_utils`는 UI 테마 폰트에 의존하므로 분리되어 있습니다.
-- **최적화 내장**: `build_font_segments`는 이미 인접한 동일 폰트 문자를 단일 세그먼트로 병합하는 렌더링 최적화를 포함하고 있습니다. 컴포넌트 측에서 이를 중복 구현하지 마십시오.
+## 표시와 입력 위젯
+
+- 동적 문자열 표시는 [UserTextLabel](../../../modules/ui/include/hmi/ui/user_text_label.hpp)을 재사용한다. 위젯은 인접한 동일 폰트 구간을 묶어 표시하고, `set_text()` 결과로 잘못된 UTF-8, 폰트 문제와 용량 제한을 알려 준다.
+- 편집 문자열과 터치 커서를 표시할 때는 [UserTextInputLine](../../../modules/ui/include/hmi/ui/user_text_input_line.hpp)을 사용한다. 위젯의 터치 인덱스는 코드 포인트 경계이며 편집 상태는 호출자가 소유한다.
+- 동적 글꼴 선택과 캐시는 [FontRepository](../../../modules/ui/include/hmi/ui/font_repository.hpp)가 관리한다. 저장소 객체는 사용하는 위젯보다 오래 유지한다. 자산 범위와 누락 처리 변경은 [font-management-guide](../font-management-guide/SKILL.md)를 따른다.
+
+UTF-8, editor, 조합과 렌더링 변경은 관련 Windows 테스트와 `sample-suite`의 Text Input 화면에서 확인한다. 다중 바이트 문자와 혼합 폰트, 커서, 폰트 자산 누락 중 변경된 경로를 재현한다.

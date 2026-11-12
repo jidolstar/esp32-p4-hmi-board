@@ -1,28 +1,25 @@
 ---
 name: windows-native-gpp-test
-description: Prepare and verify Windows host g++ for PlatformIO native C/C++ tests, install MSYS2 UCRT64 GCC when explicitly authorized, repair PATH, and execute generated assertion programs. Use when native PlatformIO tests fail because g++ is missing or when verifying embedded logic on Windows without hardware upload.
+description: Prepare Windows host g++ and run standalone PlatformIO native diagnostic assertions. Use for diagnostic projects with a platform = native environment.
 ---
 
 # Windows Native g++ Test
 
-Use `scripts/run_native_tests.ps1` for compiler discovery, approved installation, PATH handling, native build, and assertion execution.
+Use [run_native_tests.ps1](scripts/run_native_tests.ps1) for PlatformIO native diagnostics. For the Windows `main` and `sample-suite` profiles, use the CMake/Ninja build and CTest workflow in [change-scoped-verification](../change-scoped-verification/SKILL.md).
 
 ## Workflow
 
 1. Run without `-Install` first.
-2. If g++ is missing, request approval before using `-Install`; it downloads MSYS2/GCC, uses about 500 MB, and updates the user PATH.
-3. Pass only `platform = native` environments from `platformio.ini`.
+2. Use `-Install` only when the user has authorized installing MSYS2/GCC and updating their user PATH.
+3. Run from the standalone diagnostic directory that contains `platformio.ini`. Pass only environments declared there with `platform = native`.
 4. Verify both `pio run` and the generated `program.exe`. A successful build alone does not execute assertions.
 5. Report the compiler version, environments, build result, assertion result, and PATH restart requirement.
 
 ```powershell
+Set-Location diagnostics/jc1060p470c_camera_face_probe/coordinate_transform_test
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
-  .agents\skills\windows-native-gpp-test\scripts\run_native_tests.ps1
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
-  .agents\skills\windows-native-gpp-test\scripts\run_native_tests.ps1 -Install
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
-  .agents\skills\windows-native-gpp-test\scripts\run_native_tests.ps1 `
-  -Environment cooking-device-operation-coordinator-test,manual-cooking-controller-test
+  ../../../.agents/skills/windows-native-gpp-test/scripts/run_native_tests.ps1 `
+  -Environment coordinate-transform-test
 ```
 
 ## Guardrails

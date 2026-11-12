@@ -5,7 +5,7 @@ description: Create and execute sequential development plans with verifiable pha
 
 # Phase-gated Development
 
-Treat every phase as a deliverable that must be independently verifiable. Finish and verify the current phase before implementing the next phase.
+Treat every phase as an independently verifiable deliverable. Use the plan's dependency list to determine when a phase may start.
 
 ## Write verifiable phases
 
@@ -39,7 +39,7 @@ Keep at most one phase `in_progress`. While a phase is active:
 5. Fix failures and rerun the relevant checks.
 6. Mark the phase `complete` only after every required criterion passes.
 
-Do not begin implementation for the next phase while the current phase is `in_progress` or `blocked`. Planning or inspecting future work is allowed, but changing future-phase production code is not.
+Start a dependent phase only after its prerequisites are `complete`. An independent phase may start while another phase is `blocked` on manual acceptance if the plan permits it and they share no unmet prerequisite. For the page roadmap, keep at most one page `in_progress` and preserve the blocked page's acceptance criteria.
 
 ## Handle manual gates and blockers
 
@@ -48,7 +48,7 @@ If a required check needs a physical device or user judgment that Codex cannot p
 1. Complete all remaining safe work in the current phase.
 2. Mark the phase `blocked`, not `complete` or `partial complete`.
 3. Give the user a short, exact verification procedure and expected result.
-4. Wait for explicit confirmation before closing the phase and advancing.
+4. Close the blocked phase only after its required confirmation. While waiting, advance independent work allowed by the plan.
 
 Never reinterpret "build succeeds" as proof that visual layout, hardware behavior, runtime assets, or user interaction passed.
 

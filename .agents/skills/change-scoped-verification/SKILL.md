@@ -13,22 +13,27 @@ Choose checks from the files changed, the owning profile, the executed code path
 | --- | --- | --- |
 | Documentation, plan, or skill | Re-read links, paths, format, and referenced commands | Executable code or generator also changed |
 | Batch wrapper rename | Search old/new names and inspect wrapper command/profile | Wrapper behavior changed |
-| Catalog, wording, typography, or generated fixed assets | Generator validation/check, affected Windows profile tests, representative layout | Runtime loading or firmware-generated sources changed |
+| Catalog, wording, typography, or generated fixed assets | Generator validation/check, affected Windows profile build/check, representative layout | Runtime loading or firmware-generated sources changed |
 | Shared UI or state | Affected Windows profile build/check and direct tests | Common API/build wiring or HMI-only risk changed |
-| Profile/page registry, source, config, or asset declaration | Affected profile check plus isolation check | Host generation or firmware inputs changed |
+| Profile/page registry, source, config, or asset declaration | Refresh affected host/profile inputs, then run affected Windows build/check and isolation | Firmware inputs changed |
 | HMI adapter, board code, runtime asset loader, embedded lifetime | Affected HMI profile build and direct tests | Shared contracts affect another profile |
 
 ## Commands
 
 - Inspect profiles: `python tools/project.py list`
 - Diagnose: `python tools/project.py doctor --host <windows|hmi> --profile <id>`
+- Refresh build inputs without compiling: `python tools/project.py prepare --host <windows|hmi> --profile <id>`
 - Build: `python tools/project.py build --host <windows|hmi> --profile <id>`
 - Run Windows: `python tools/project.py run --host windows --profile <id>`
 - Profile checks: `python tools/project.py check --host windows --profile <id>`
 - Isolation: `python tools/project.py check --scope isolation`
 - Generator tests: `python -m unittest discover -s tools/tests -v`
 
-Use the commands documented by the owning asset generator for dry-run, generate, check, and bundle operations. Do not invent a profile-specific path inside reusable tool code.
+After changing Windows sources or build inputs, run `build --host windows --profile <id>` before `check --host windows --profile <id>`. On an existing build, `check` runs CTest against the binaries already present.
+
+Before checking isolation, run `prepare` or `build` for each affected host/profile pair so the check sees current generated inputs. Inspect which pairs the command reports. It only checks generated inputs that exist.
+
+Use the owning asset generator for validation and generation. On a fresh checkout, if the registry reports `missing-asset` for `samples/suite/assets/fonts`, initialize the runtime fonts as documented in [font-management-guide](../font-management-guide/SKILL.md), then retry.
 
 ## Decision rules
 

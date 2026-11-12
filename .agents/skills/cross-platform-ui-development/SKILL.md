@@ -29,8 +29,8 @@ New sample pages should normally change their own page directory and the page re
 
 ## Verification
 
-- Use `python tools/project.py check --host windows --profile <id>` for the affected profile and run its direct tests.
-- Use `python tools/project.py check --scope isolation` after profile, page-registry, source, asset, or build-wiring changes.
+- Follow [change-scoped-verification](../change-scoped-verification/SKILL.md). After editing Windows sources or inputs, run `python tools/project.py build --host windows --profile <id>` and then `python tools/project.py check --host windows --profile <id>`.
+- After profile, page-registry, source declaration, asset declaration, or build-wiring changes, refresh affected host/profile inputs with `prepare` or `build` before `python tools/project.py check --scope isolation`.
 - Build only the affected HMI profile when common API/build wiring, generated C assets, platform integration, memory lifetime, or a required integration gate changes.
 - Inspect translated layouts, touch/click behavior, navigation, theme/locale rebuilds, and dynamic asset failure in the Windows simulator.
 - Record actual LCD, touch, SD, performance, and boot behavior separately as device checks. Codex does not upload firmware.

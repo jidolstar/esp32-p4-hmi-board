@@ -27,6 +27,17 @@ Font tools under `tools/` must accept or derive explicit input, output, and owne
 
 Read `tools/assets/typography/README.md` for the currently supported commands and inputs. If the documented tool cannot target the intended owner without source edits, update or plan the tool interface before moving catalog/assets.
 
+## Fresh checkout
+
+The sample profile declares `samples/suite/assets/fonts/`, which is populated by the user font generator. Registry commands, including `project.py list` and isolation checks, validate that directory even when the selected profile is `main`. If validation reports `missing-asset`, run from the repository root:
+
+```powershell
+npm ci --prefix tools/assets/typography
+python tools/assets/typography/generate_user.py --config samples/suite/i18n/catalog.json --ensure
+```
+
+Run the npm step when the local font converter is missing. After generation, retry the original project command.
+
 ## Verification
 
 - Validate catalog keys, placeholders, typography roles, source hashes, glyph coverage, range overlap, output size, and stale generated files.

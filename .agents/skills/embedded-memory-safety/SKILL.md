@@ -1,6 +1,6 @@
 ---
 name: embedded-memory-safety
-description: Prevent stack overflow, oversized embedded models, excessive snapshot copying, and eager allocation in this cooker HMI firmware. Use when creating or changing C/C++ structs, classes, nested arrays or containers, recipe/catalog/session models, JSON parsing or serialization, startup paths, callbacks, task stack settings, large buffers, or code that copies model objects.
+description: Review ESP32-P4 memory use when a change affects stack pressure, allocation size or placement, model copies, buffer ownership, or lifetime.
 ---
 
 # Embedded Memory Safety
@@ -22,7 +22,7 @@ Review memory layout before implementing the change, then verify the resulting f
 ## Stack rules
 
 - Treat task stack increases as diagnostic headroom, not the primary correction.
-- Do not create catalogs, full batch sessions, framebuffers, JSON payload buffers, or image data as automatic local variables.
+- Keep framebuffers, camera frames, font caches and other large buffers off task stacks. Check the required memory capabilities before moving buffers between internal RAM and PSRAM.
 - Small views, indices, handles, and bounded scalar arrays may remain on the stack.
 - When heap allocation can fail, use checked allocation and leave the previous persistent state unchanged on failure.
 
@@ -35,11 +35,11 @@ Review memory layout before implementing the change, then verify the resulting f
 
 ## Verification checklist
 
-Use targeted searches where the changed types are used. Select builds through `change-scoped-verification`; the examples below are searches, not a mandatory whole-repository checklist:
+Search for the affected allocation and its owner. Use [change-scoped-verification](../change-scoped-verification/SKILL.md) to choose builds. Examples for current code paths:
 
 ```powershell
-rg -n "RecipeCatalog|RecipeBatchEditSession|std::array|std::vector|std::string" src test
-rg -n "RecipeCatalog\s+\w+|RecipeBatchEditSession\s+\w+" src
+rg -n 'framebuffer|CameraFrameLeaseTracker|MALLOC_CAP_' boards/jc1060p470c platform/hmi
+rg -n 'FontRepository|BinaryFontPort' modules/ui profiles/runtime hosts
 ```
 
 Before completion, confirm:
@@ -47,4 +47,4 @@ Before completion, confirm:
 - No newly introduced large automatic local exists on startup or UI callback paths.
 - Nested capacity multiplication and live-copy counts were reviewed.
 - Compile-time size guards still pass without raising limits casually.
-- Report RAM/flash when a firmware build was needed; otherwise state any material unverified memory risk. No direct upload was performed.
+- Report firmware RAM/flash when a firmware build was needed and identify any remaining runtime memory checks.

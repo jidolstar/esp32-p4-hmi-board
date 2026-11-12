@@ -1,4 +1,4 @@
 interface:
   display_name: "Windows Native g++ Test"
   short_description: "Windows g++로 PlatformIO native 테스트 준비 및 실행"
-  default_prompt: "Use $windows-native-gpp-test to prepare Windows g++ and run the relevant PlatformIO native tests."
+  default_prompt: "Use $windows-native-gpp-test to run the standalone PlatformIO native diagnostic assertions on Windows."
