@@ -3,6 +3,7 @@
   "pages": [
     {
       "id": "ui-basics",
+      "dashboard_title_key": "dashboard.card.ui_basics.title",
       "title_key": "page.ui_basics.title",
       "description_key": "page.ui_basics.description",
       "order": 10,
@@ -21,6 +22,7 @@
     },
     {
       "id": "text-input",
+      "dashboard_title_key": "dashboard.card.text_input.title",
       "title_key": "page.text_input.title",
       "description_key": "page.text_input.description",
       "order": 20,
@@ -41,6 +43,7 @@
     },
     {
       "id": "display-audio",
+      "dashboard_title_key": "dashboard.card.display_audio.title",
       "title_key": "page.display_audio.title",
       "description_key": "page.display_audio.description",
       "order": 30,
@@ -59,6 +62,7 @@
     },
     {
       "id": "wifi",
+      "dashboard_title_key": "dashboard.card.wifi.title",
       "title_key": "page.wifi.title",
       "description_key": "page.wifi.description",
       "order": 40,
@@ -77,6 +81,7 @@
     },
     {
       "id": "sd-storage",
+      "dashboard_title_key": "dashboard.card.sd_storage.title",
       "title_key": "page.sd_storage.title",
       "description_key": "page.sd_storage.description",
       "order": 50,
@@ -95,6 +100,7 @@
     },
     {
       "id": "wav-sounds",
+      "dashboard_title_key": "dashboard.card.wav_sounds.title",
       "title_key": "page.wav_sounds.title",
       "description_key": "page.wav_sounds.description",
       "order": 60,
@@ -113,6 +119,7 @@
     },
     {
       "id": "wifi-ap-web",
+      "dashboard_title_key": "dashboard.card.wifi_ap_web.title",
       "title_key": "page.wifi_ap_web.title",
       "description_key": "page.wifi_ap_web.description",
       "order": 70,
@@ -138,7 +145,30 @@
       "data_key": "wifi_ap_web"
     },
     {
+      "id": "interfaces-info",
+      "dashboard_title_key": "dashboard.card.interfaces_info.title",
+      "title_key": "page.interfaces_info.title",
+      "description_key": "page.interfaces_info.description",
+      "order": 90,
+      "entry": {
+        "header": "pages/interfaces_info/interfaces_info_page.hpp",
+        "type": "hmi::samples::suite::InterfacesInfoPage"
+      },
+      "sources": {
+        "common": [
+          "pages/interfaces_info/interfaces_info_model.cpp",
+          "pages/interfaces_info/interfaces_info_page.cpp"
+        ],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["i18n", "interfaces", "update"],
+      "verification": ["interfaces_info_state", "interfaces_info_interaction"],
+      "data_key": "interfaces_info"
+    },
+    {
       "id": "date-time",
+      "dashboard_title_key": "dashboard.card.date_time.title",
       "title_key": "page.date_time.title",
       "description_key": "page.date_time.description",
       "order": 100,

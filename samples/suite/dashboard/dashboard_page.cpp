@@ -111,7 +111,7 @@ bool DashboardPage::create(lv_obj_t *parent,
                         LV_EVENT_SHORT_CLICKED, this);
 
     lv_obj_t *card_title = hmi::ui::create_label(
-        card, generated::text(locale, descriptor.title_key).data(), theme,
+        card, generated::text(locale, descriptor.dashboard_title_key).data(), theme,
         hmi::ui::TextRole::kTitle);
     lv_obj_t *description = hmi::ui::create_label(
         card, generated::text(locale, descriptor.description_key).data(), theme,
@@ -120,7 +120,8 @@ bool DashboardPage::create(lv_obj_t *parent,
       destroy();
       return false;
     }
-    apply_fixed_font(card_title, generated::typography(descriptor.title_key));
+    apply_fixed_font(
+        card_title, generated::typography(descriptor.dashboard_title_key));
     apply_fixed_font(description,
                      generated::typography(descriptor.description_key));
     hmi::ui::configure_multiline(description, LV_PCT(100), LV_SIZE_CONTENT, 5);

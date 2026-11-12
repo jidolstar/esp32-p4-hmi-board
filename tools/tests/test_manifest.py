@@ -18,6 +18,7 @@ from hmi_project.manifest import (  # noqa: E402
     REGISTRY_REQUIRED_KEYS,
     ManifestError,
     load_registry,
+    SUPPORTED_MODULES,
 )
 
 
@@ -113,6 +114,10 @@ class ManifestValidationTest(unittest.TestCase):
             [profile.id for profile in registry.profiles],
         )
         self.assertEqual(("windows", "hmi"), registry.get("main").enabled_hosts)
+        self.assertIn("interfaces", SUPPORTED_MODULES)
+        self.assertIn("interfaces", registry.get("sample-suite").data["modules"])
+        self.assertIn("update", SUPPORTED_MODULES)
+        self.assertIn("update", registry.get("sample-suite").data["modules"])
 
     def test_loader_does_not_write_repository_files(self) -> None:
         self.fixture.write()

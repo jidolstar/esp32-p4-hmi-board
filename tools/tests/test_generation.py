@@ -107,6 +107,7 @@ class GenerationTest(unittest.TestCase):
                 "sd-storage",
                 "wav-sounds",
                 "wifi-ap-web",
+                "interfaces-info",
                 "date-time",
             ],
             [page["id"] for page in resolved["pages"]],
@@ -135,6 +136,10 @@ class GenerationTest(unittest.TestCase):
             "samples/suite/pages/wifi_ap_web/wifi_ap_web_page.cpp",
             resolved["source_groups"]["pages"],
         )
+        self.assertIn(
+            "samples/suite/pages/interfaces_info/interfaces_info_page.cpp",
+            resolved["source_groups"]["pages"],
+        )
         self.assertEqual(
             [
                 "modules/audio/src/playback.cpp",
@@ -146,6 +151,7 @@ class GenerationTest(unittest.TestCase):
                 "modules/connectivity/src/wifi_station_settings.cpp",
                 "modules/i18n/src/locale.cpp",
                 "modules/i18n/src/format.cpp",
+                "modules/interfaces/src/capability.cpp",
                 "modules/settings/src/level_settings.cpp",
                 "modules/storage/src/storage_access_controller.cpp",
                 "modules/text/src/utf8.cpp",
@@ -163,6 +169,16 @@ class GenerationTest(unittest.TestCase):
                 "modules/ui/src/user_text_label.cpp",
                 "modules/ui/src/user_text_input_line.cpp",
                 "modules/ui/src/virtual_keyboard.cpp",
+                "modules/update/src/types.cpp",
+                "modules/update/src/json_view.cpp",
+                "modules/update/src/manifest.cpp",
+                "modules/update/src/artifact_download.cpp",
+                "modules/update/src/durable_record.cpp",
+                "modules/update/src/install_journal.cpp",
+                "modules/update/src/asset_lifecycle.cpp",
+                "modules/update/src/asset_store.cpp",
+                "modules/update/src/boot_coordinator.cpp",
+                "modules/update/src/engine.cpp",
                 "platform/windows/connectivity/virtual_wifi_ap.cpp",
                 "platform/windows/connectivity/virtual_wifi_sta.cpp",
                 "platform/windows/storage/virtual_storage_access.cpp",
@@ -178,6 +194,7 @@ class GenerationTest(unittest.TestCase):
         self.assertIn('"sd-storage"', source)
         self.assertIn('"wav-sounds"', source)
         self.assertIn('"wifi-ap-web"', source)
+        self.assertIn('"interfaces-info"', source)
         self.assertNotIn('"UI Basics"', source)
         self.assertEqual(182, len(resolved["assets"]))
         self.assertTrue(all(len(asset["sha256"]) == 64 for asset in resolved["assets"]))

@@ -1,0 +1,5739 @@
+
+===== PAGE 1 =====
+datasheet
+PRODUCT SPECIFICATION
+1/7.25" color CMOS 2 megapixel (1920 x 1080) image sensor
+with PureCel®Plus-S technology
+OV02C10
+Confidential for Waching Only
+
+===== PAGE 2 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+00Copyright ©2022 OmniVision Technologies, Inc. All rights reserved.
+This document is provided “as is” with no warranties whatsoever, including any warranty of merchantability, 
+non-infringement, fitness for any particular purpose, or any warranty otherwise arising out of any proposal, specification, 
+or sample.
+OmniVision Technologies, Inc. and all its affiliates disclaim all liability, including liability for infringement of any proprietary 
+rights, relating to the use of information in this document. No license, expressed or implied, by estoppel or otherwise, to 
+any intellectual property rights is granted herein.
+The information contained in this document is considered proprietary to OmniVision Technologies, Inc. and all its 
+affiliates. This information may be distributed to individuals or organizations authorized by OmniVision Technologies, Inc. 
+to receive said information. Individuals and/or organizations are not allowed to re-distribute said information.
+OmniVision products are tested to comply with internal quality testing processes. OmniVision products are not designed 
+or tested for fail-safe performance, including for use in Class III Medical Devices or other critical applications that could 
+lead to death or personal injury. Buyers are advised to perform their own final characterization, testing and certification 
+for use of OmniVision products in any critical application or medical device application. Buyer assumes sole risk and 
+liability for use of OmniVision products in critical applications.
+Trademark Information
+PureCel, VarioPixel, OmniVision and the OmniVision logo are registered trademarks of OmniVision Technologies, Inc.
+All other trademarks used herein are the property of their respective owners.
+To learn more about OmniVision Technologies, visit www.ovt.com.
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technology
+datasheet (CSP)
+PRODUCT SPECIFICATION
+version 2.01
+july 2022
+Confidential for Waching Only
+
+===== PAGE 3 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+i
+ordering information
+ OV02C10-A21A-001A-Z (color, lead-free)
+21-pin CSP , engineering sample
+ OV02C10-A21A-001A (color, lead-free)
+21-pin CSP
+00applications
+ notebooks/PC
+ tablets, detachables, and 2-in-1s
+ wearables
+ smartphones and feature phones
+00features
+ 1.116 µm x 1.116 µm pixel
+ optical size of 1/7.25"
+ 34° CRA
+ 2MP at 60 fps
+ programmable controls for frame rate, mirror and flip, 
+cropping, and windowing
+ supports images sizes: 2MP (1920x1080), 720p 
+(1280x720), VGA (640x480), and more
+ support for output formats: 8-bit or 10-bit RGB RAW
+ two-wire serial bus control (SCCB)
+ MIPI serial output interface (1-lane or 2-lane) / 2-wire 
+serial output
+ two on-chip phase lock loops (PLLs)
+ 2x binning support
+ supports multiple frame sequential HDR
+ image quality controls: defect pixel correction, and 
+automatic black level calibration
+ suitable for module size of 5 mm x 3.6 mm x 2.6 mm
+00key specifications (typical)
+ active array size: 1920 x 1080
+ power supply: 
+analog: 2.7 to 3.0V (2.8V nominal)
+core: 1.14 to 1.26V (1.2V nominal)
+I/O: 1.7 to 1.9V (1.8V nominal)
+ power requirements: 
+active: 115.4 mW
+standby: 0.25 mA
+XSHUTDN: 1 µA
+ temperature range: 
+operating: -30°C to +85°C junction temperature 
+(see table 7-2)
+stable image: 0°C to +60°C junction temperature 
+(see table 7-2)
+ output interface: 1-lane or 2-lane MIPI serial output 
+/ 1-lane 2-wire serial interface
+ output formats: 8/10-bit RGB RAW MIPI, 8-bit in 
+2-wire serial interface
+ lens size: 1/7.25" 
+ input clock frequency: 6~27 MHz
+ lens chief ray angle: 33.98° non-linear (see 
+figure 9-3)
+ maximum image transfer rate: 
+2MP (1920 x 1080): 60 fps
+2x2 binning RGB (640 x 480): 60 fps
+ sensitivity: 4,240 e-/Lux-sec
+ max S/N ratio: 36.8 dB
+ dynamic range: 72.2 dB @ 16x gain
+ minimum exposure: 4-row
+ maximum exposure: (VTS-15)-row
+ pixel size: 1.116 µm x 1.116 µm
+ image area: 2160.576 µm x 1223.136 µm
+ package dimensions: 3136 µm x 1885 µm
+note Power 
+consumption, pixel data 
+(e.g., sensitivity, max 
+SNR, dynamic range) 
+are subject to change 
+based on actual chip 
+measurement when 
+chip is back.
+Confidential for Waching Only
+
+===== PAGE 4 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+THIS PAGE INTENTIONALLY LEFT BLANK
+Confidential for Waching Only
+
+===== PAGE 5 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+iii
+00table of contents
+1   signal descriptions  1-1
+2   system level description  2-1
+2.1   overview  2-1
+2.2   architecture  2-1
+2.3   format and frame  2-4
+2.4   I/O control  2-4
+2.5   MIPI/2-wire serial interface  2-5
+2.6   power management  2-5
+2.6.1   power up sequence 2-5
+2.6.2   power down sequence 2-7
+2.7   reset  2-10
+2.7.1   power ON reset 2-10
+2.7.2   software reset 2-10
+2.8   standby mode  2-10
+2.8.1   hardware standby 2-10
+2.8.2   software standby 2-10
+2.9   system clock control  2-11
+2.9.1   PLL1 2-11
+2.9.2   PLL2 2-11
+2.10   serial camera control bus (SCCB) interface  2-15
+2.10.1   data transfer protocol 2-15
+2.10.2   message format 2-15
+2.10.3   read / write operation 2-15
+2.10.4   SCCB timing 2-18
+2.11   group write  2-19
+2.12   hold  2-25
+2.13   launch  2-25
+2.13.1   launch mode 1 – quick manual launch 2-25
+2.13.2   launch mode 2 – delay manual launch 2-26
+2.13.3   launch mode 3 – quick auto launch 2-26
+2.13.4   launch mode 4 – delay auto launch 2-26
+2.13.5   launch mode 5 – repeat launch 2-27
+2.13.6   launch mode 6 – auto/repeat launch and manual launch combination 2-27
+2.13.7   launch mode 7 – launch in sleep mode 2-28
+Confidential for Waching Only
+
+===== PAGE 6 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+2.13.8   launch mode 8 – delay launch multiple groups in one frame 2-28
+3   block level description  3-1
+3.1   pixel array structure  3-1
+3.2   subsampling  3-2
+3.3   analog amplifier  3-3
+3.4   10-bit A/D converters  3-3
+4   image sensor core digital functions  4-1
+4.1   mirror and flip  4-1
+4.2   image cropping and windowing  4-2
+4.3   black level calibration (BLC)  4-4
+4.4   test pattern  4-9
+4.5   strobe flash and frame exposure  4-10
+4.5.1   strobe flash control 4-10
+5   image sensor processor digital functions  5-1
+5.1   ISP general controls  5-1
+5.2   defective pixel cancellation (DPC)  5-1
+5.3   window cut (WINC)  5-3
+5.4   manual white balance gain  5-4
+5.5   pre_ISP  5-5
+6   register tables  6-1
+6.1   system [0x0100, 0x0103]  6-1
+6.2   PLL [0x0300 ~ 0x0330]  6-1
+6.3   system control [0x3000 ~ 0x3041]  6-3
+6.4   SCCB [0x3100 ~ 0x3108]  6-10
+6.5   group hold [0x3200 ~ 0x3251]  6-10
+6.6   ANA [0x3600 ~ 0x366F]  6-16
+6.7   sensor top [0x3700 ~ 0x37FF]  6-16
+6.8   timing control [0x3800 ~ 0x3844]  6-17
+6.9   power saving mode (PSV) [0x3C00 ~ 0x3C2D]  6-17
+6.10   BLC [0x4000 ~ 0x4082]  6-24
+6.11   MIPI [0x4800 ~ 0x4891]  6-30
+6.12   ISPFC [0x4900 ~ 0x4903]  6-39
+6.13   strobe control [0x3B00, 0x3B02 ~ 0x3B05]  6-40
+6.14   TPM [0x4D00 ~ 0x4D23]  6-41
+6.15   2-wire serial interface [0x4C00 ~ 0x4C09]  6-42
+Confidential for Waching Only
+
+===== PAGE 7 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+v
+6.16   AEC_CFG_REG [0x3503 ~ 0x353F]  6-43
+6.17   AO_CTRL_TOP [0x4F00 ~ 0x4F18]  6-45
+6.18   SENSOR_TIMING [0x3900 ~ 0x39E1]  6-47
+6.19   ISP_TOP [0x5000 ~ 0x5047]  6-47
+6.20   AWB_GAIN [0x5100 ~ 0x5111]  6-52
+6.21   DPC [0x5202 ~ 0x522F]  6-52
+6.22   WINDOW [0x5800 ~ 0x5815]  6-55
+6.23   PRE_ISP [0x5080 ~ 0x5089]  6-56
+7   operating specifications  7-1
+7.1   absolute maximum ratings  7-1
+7.2   functional temperature  7-1
+7.3   DC characteristics  7-2
+7.4   timing characteristics  7-3
+8   mechanical specifications  8-1
+8.1   physical specifications  8-1
+8.2   IR reflow specifications  8-3
+8.3   PCB and SMT design recommendations  8-4
+8.3.1   PCB design recommendations 8-4
+8.3.2   SMT design recommendations 8-4
+9   optical specifications  9-1
+9.1   sensor array center  9-1
+9.2   lens chief ray angle (CRA)  9-2
+Confidential for Waching Only
+
+===== PAGE 8 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+THIS PAGE INTENTIONALLY LEFT BLANK
+Confidential for Waching Only
+
+===== PAGE 9 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+vii
+00list of figures
+figure 1-1 pin diagram 1-1
+figure 2-1 OV02C10 block diagram 2-2
+figure 2-2 OV02C10 CSP reference schematic 2-3
+figure 2-3 power up sequence 2-6
+figure 2-4 software st andby sequence 2-8
+figure 2-5 power down sequence 2-9
+figure 2-6 PLL1 clock scheme 2-11
+figure 2-7 PLL2 clock scheme 2-12
+figure 2-8 message type 2-15
+figure 2-9 SCCB single read from random location 2-16
+figure 2-10 SCCB single read  from current location 2-16
+figure 2-11 SCCB sequential read from random location 2-16
+figure 2-12 SCCB sequential re ad from current location 2-17
+figure 2-13 SCCB single write to random location 2-17
+figure 2-14 SCCB sequential write to random location 2-17
+figure 2-15 SCCB interface timing 2-18
+figure 3-1 sensor output pattern (1920x1080) 3-1
+figure 3-2 example of 2x2 binning 3-2
+figure 3-3 example of 2x2 mono binning 3-2
+figure 4-1 mirror and flip samples 4-1
+figure 4-2 image croppi ng and windowing 4-2
+figure 4-3 color bar 4-9
+figure 4-4 xenon flash mode 4-10
+figure 4-5 LED 1 & 2 mode - one pulse output 4-11
+figure 4-6 LED 1 & 2 mode - multiple pulse output 4-12
+figure 4-7 LED 3 mode 4-12
+figure 4-8 LED 4 mode 4-13
+figure 5-1 pre_ISP test patterns 5-5
+figure 7-1 reference clock input timing diagram 7-3
+figure 8-1 package specifications 8-1
+figure 8-2 IR reflow ramp rate requirements 8-3
+figure 8-3 NSMD PCB land pad with tear drop example 8-4
+Confidential for Waching Only
+
+===== PAGE 10 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+figure 9-1 sensor array center 9-1
+figure 9-2 final image output 9-1
+figure 9-3 chief ra y angle (CRA) 9-2
+Confidential for Waching Only
+
+===== PAGE 11 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+ix
+00list of tables
+table 1-1     signal descriptions 1-1
+table 1-2     configuration under various conditions 1-2
+table 1-3      symbol and equivalent circuit 1-3
+table 2-1     format and frame rate 2-4
+table 2-2     I/O control registers 2-4
+table 2-3     power up sequence 2-5
+table 2-4     power up sequence timing constraints 2-5
+table 2-5     power down sequence 2-7
+table 2-6     power down sequence timing constraints 2-7
+table 2-7     hardware and standby description 2-10
+table 2-8     PLL control registers 2-12
+table 2-9     sample PLL configuration 2-14
+table 2-10     SCCB interface timing specifications 2-18
+table 2-11     group hold control 2-19
+table 3-1     binning-related registers 3-3
+table 4-1     mirror and flip registers 4-1
+table 4-2     image cropping and windowing control functions 4-2
+table 4-3     BLC registers 4-4
+table 4-4     test pattern register 4-9
+table 4-5     strobe control registers 4-13
+table 5-1     ISP top register 5-1
+table 5-2     DPC registers 5-1
+table 5-3     WINC registers 5-3
+table 5-4     MWB gain registers 5-4
+table 5-5     PRE_ISP registers 5-6
+table 6-1     system registers 6-1
+table 6-2     PLL registers 6-1
+table 6-3     system control registers 6-3
+table 6-4     SCCB registers 6-10
+table 6-5     group hold registers 6-10
+table 6-6     ANA registers 6-16
+table 6-7     sensor top registers 6-16
+Confidential for Waching Only
+
+===== PAGE 12 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+table 6-8     timing control registers 6-17
+table 6-9     PSV registers 6-17
+table 6-10     BLC registers 6-24
+table 6-11     MIPI registers 6-30
+table 6-12     ISPFC registers 6-39
+table 6-13     strobe control registers 6-40
+table 6-14     TPM registers 6-41
+table 6-15     2-wire serial interface registers 6-42
+table 6-16     AEC_CFG_REG registers 6-43
+table 6-17     AO_CTRL_TOP registers 6-45
+table 6-18     SENSOR_TIMING registers 6-47
+table 6-19     ISP_TOP registers 6-47
+table 6-20     AWB_GAIN registers 6-52
+table 6-21     DPC registers 6-52
+table 6-22     WINDOW registers 6-55
+table 6-23     PRE_ISP registers 6-56
+table 7-1     absolute maximum ratings 7-1
+table 7-2     functional temperature 7-1
+table 7-3     DC characteristics (-30°C < TJ < 85°C) 7-2
+table 7-4     timing characteristics 7-3
+table 8-1     package dimensions 8-1
+table 8-2     reflow conditions 8-3
+table 8-3     ball pad opening size and recommended PCB NSMD ball pad size 8-4
+table 9-1     CRA versus image height plot 9-2
+Confidential for Waching Only
+
+===== PAGE 13 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+1-1
+1 signal descriptions
+ lists the signal descriptions and their corresponding pad numbers for the OV02C10 image sensor. The die information 
+is shown in section 8.
+figure 1-1 pin diagram
+table 1-1 signal descriptions (sheet 1 of 2)
+pin
+number signal name
+pin
+type description
+A1 MDP0 output MIPI TX data lane positive output/2-wire serial clock out
+A3 MDN0 output MIPI TX data lane negative output/2-wire serial data out
+A5 MCP output MIPI TX clock lane positive output
+A7 VH reference internal analog reference
+A9 VN reference internal analog reference
+B2 MDP1 output MIPI TX data lane positive output
+B4 MCN output MIPI TX clock lane negative output
+B6 SDA I/O SCCB data
+B8 DOGND ground ground for I/O circuit
+C1 DOGND ground ground for I/O circuit
+C3 MDN1 output MIPI TX data lane negative output
+C7 SCL input SCCB clock
+C9 SID input chip ID selection
+D2 DVDD power power for digital circuit
+A1
+MDP0
+A3
+MDN0
+B6
+SDA
+A9
+VN
+C1
+DOGND
+C3
+MDN1 D6
+XSHUTDN
+C9
+SID
+E1
+FSIN
+E3
+XVCLK
+D8
+TM
+D2
+DVDD
+D4
+DOVDD
+A5
+MCP
+B8
+DOGND
+B2
+MDP1
+B4
+MCN
+E9
+AGND
+OV02C10
+A7
+VH
+C7
+SCL
+E7
+AVDD
+Confidential for Waching Only
+
+===== PAGE 14 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+D4 DOVDD power power for I/O circuit
+D6 XSHUTDN input XSHUTDN (active low)
+D8 TM input test mode control input
+E1 FSIN I/O FSIN output
+E3 XVCLK input system clock input
+E7 AVDD power power for analog circuit
+E9 AGND ground ground for analog circuit
+table 1-2 configuration under various conditions
+pin signal name XSHUTDNa
+a. XSHUTDN = 0
+after XSHUTDN
+releaseb
+b. XSHUTDN from 0 to 1
+software standby
+A1 MDP0 high-z high high by default (configurable)
+A3 MDN0 high-z high high by default (configurable)
+A5 MCP high-z high high by default (configurable)
+B2 MDP1 high-z high high by default (configurable)
+B4 MCN high-z high high by default (configurable)
+B6 SDA open drain I/O I/O
+C3 MDN1 high-z high high by default (configurable)
+C7 SCL input input input
+C9 SID input input input
+D6 XSHUTDN input input input
+D8 TM input input input
+E1 FSIN high-z high-z high-z (configurable)
+E3 XVCLK input input input
+table 1-1 signal descriptions (sheet 2 of 2)
+pin
+number signal name
+pin
+type description
+Confidential for Waching Only
+
+===== PAGE 15 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+1-3
+table 1-3  symbol and equivalent circuit (sheet 1 of 2)
+symbol equivalent circuit
+XVCLK
+SID
+SDA
+SCL
+FSIN
+VN
+MDP1, MDN1, MDP0, MDN0, 
+MCP, MCN, AGND, DOGND, VH
+AVDD, DVDD, DOVDD
+PAD
+DOGND
+DOVDD
+EN
+PAD
+DOGND
+from core
+to core
+open-drain
+PD1
+PAD
+DOGND
+PD1
+PAD
+DOGND
+DIN
+DOUT
+EN
+PD2DOGND
+PAD
+DOVDD
+PAD
+DOGND
+PAD
+DOGND
+PAD
+DOGND
+Confidential for Waching Only
+
+===== PAGE 16 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+XSHUTDN, TM
+table 1-3  symbol and equivalent circuit (sheet 2 of 2)
+symbol equivalent circuit
+DOGND
+PAD
+DOGND
+DOGND
+Confidential for Waching Only
+
+===== PAGE 17 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-1
+2 system level description
+2.1 overview
+The OV02C10 (color) RAW RGB image sensors are high performance, 1/7.25-inch, 2 megapixel, CMOS, image sensors 
+that deliver 1920x1080 resolution at 60 fps. They provide full-frame, sub-sampled, and windowed 8/10-bit MIPI or 8-bit 
+2-wire serial interface images in various formats via the control of the Serial Camera Control Bus (SCCB) interface.
+The OV02C10 has a 2 megapixel image array capable of operating at up to 60 frames per second (fps) in 10-bit 
+resolution with complete user control over image quality, formatting and output data transfer. Some image processing 
+functions, such as defective pixel canceling, etc., are programmable through the SCCB interface.
+In addition, OmniVision image sensors use proprietary sensor technology to improve image quality by reducing or 
+eliminating common lighting/electrical sources of image contamination, such as fixed pattern noise, smearing, etc., to 
+produce a clean, fully stable, color image.
+2.2 architecture
+The OV02C10 sensor core generates streaming pixel data at a constant frame rate. figure 2-1 shows the functional 
+block diagram of the OV02C10 image sensor.
+The timing generator outputs clocks to access the rows of the imaging array, pre-charging and sampling the rows of the 
+array sequentially. In the time between pre-charging and sampling a row, the charge in the pixels decreases with 
+exposure to incident light. This is the exposure time in rolling shutter architecture.
+The exposure time is controlled by adjusting the time interval between pre-charging and sampling. After the data of the 
+pixels in the row has been sampled, it is processed through analog circuitry to correct the offset and multiply the data 
+with corresponding gain. Following analog processing is the ADC which outputs up to 10-bit data for each pixel in the 
+array.
+Confidential for Waching Only
+
+===== PAGE 18 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+figure 2-1 OV02C10 block diagram
+image
+sensor
+processor
+image output
+interface
+image sensor core
+column
+sample/hold
+row select
+PLLPLLs
+control register bank
+SCCB slave interfacetiming generator and system control logic
+image
+array
+gain control
+XVCLK
+FSIN
+SCL
+SID
+SDA
+AMP 10-bit ADC
+MIPI/
+2-wire serial
+MCP/MCN
+MDP1/MDN1
+MDP0/MDN0
+ISP
+TM
+XSHUTDN
+OV02C10
+Confidential for Waching Only
+
+===== PAGE 19 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-3
+figure 2-2 OV02C10 CSP reference schematic
+C3MDN1
+C1
+D2
+DOGND
+DVDD
+E3XVCLK
+FSIN E1
+SID
+DOGND
+XSHUTDN
+AVDD
+AGND
+C9
+D8
+D6
+E7
+E9
+MDN1
+DOGND
+DVDD
+FSIN
+XVCLK
+A1
+A3
+A5
+B4
+MDP0
+MDN0
+MCP
+MCN
+VN
+VH
+SCL
+SDA
+A9
+A7
+B6
+C7U1
+OV02C10
+CSP
+MDP0
+MDN0
+MCP
+MCN
+MDP1 B2 MDP1
+VN
+VH
+SDA
+SCL
+DOGNDB8DOGND
+SID
+TM
+XSHUTDN
+AGND
+AVDDD4DOVDD DOVDD
+JP1 QTE-020-01-X-D-A
+12
+34
+56
+78
+91 0
+11 12
+13 14
+MDP0
+MDN0
+MCP
+MCN
+MDP1
+MDN1
+FSIN
+15 16
+17 18
+19 20
+21 22
+SID
+DOGND
+AVDD
+23 24
+25 26
+27 28
+29 30
+31 32
+33 34
+35 36
+37 38
+39 40DOGND
+DOVDD
+DOGND
+SDA
+SCL
+XSHUTDN
+DOGND
+DOGND
+XVCLK
+DVDD
+AGND
+note 1
+note 2
+note 3
+note 4
+note 5
+note 6
+note 7
+note 8
+note 9
+note 10
+note 11
+XSHUTDN should be connected to DOVDD outside of module if unused.
+FSIN pin, if unused, can be floating.
+A TEST pin can be floating.
+AVDD (analog power) is 2.8V typical.
+DOVDD (digital IO power) is 1.8V typical.
+DVDD (digital power) is 1.2V typical.
+sensor AGND and DOGND should be separated inside module and connected
+to a single point outside PCB (do not connect inside module).
+capacitors should be close to their related sensor pins.
+MCP and MCN are MIPI clock lane positive and negative outputs.
+MDP0 and MDN0 are MIPI data lane0 positive and negative outputs.
+MDP1 and MDN1 are MIPI data lane1 positive and negative outputs.
+traces of MCP , MCN, MDP0, MDN0, MDP1, and MDN1 should have same or similar length.
+differential impedance of clock pair and data pair transmission lines should be controlled at 100 Ohm.
+SID is SCCB ID select input:
+     SID = 0, SCCB device address = 0x6C
+     SID = 1, SCCB device address = 0x20
+if customers do not need to switch SID, connect it to DOVDD or DOGND, depending on which ID customers want to use.
+AGND C1 1µF-0603
+C3 1µF-0603
+C2 1µF-0603
+AVDD VN VH
+close to respective
+power pins
+C4 0.1µF-0603
+C5 0.1µF-0603
+DVDD
+close to respective
+power pins
+DOVDD
+Confidential for Waching Only
+
+===== PAGE 20 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+2.3 format and frame
+The OV02C10 supports RAW RGB output with a 1/2-lane MIPI interface or 1-lane 2-wire serial interface. The horizontal 
+size of the format must be a multiple of 8.
+2.4 I/O control
+The OV02C10 can configure its I/O pads as an input or output. For the output signal, it follows one of two paths: either 
+from the data path or from register control.
+table 2-1 format and frame rate
+format resolution
+frame
+rate methodology
+10-bit output
+MIPI data rate
+full, 10-bit 1920x1080 60 fps full resolution 2-lane @ 800 Mbps/lane 1-lane @ 1500 Mbps/lane
+1280x720, 10-bit 1280x720 60 fps crop from full resolution 1-lane @ 960 Mbps/lane
+sub2 for RGB 640x480 60 fps bin2 or skip2 1-lane @ 800 Mbps/lane
+sub4 for RGB 480x270 60 fps bin4 or skip4 1-lane @ 800 Mbps/lane
+table 2-2 I/O control registers
+function register description
+output drive capability control 0x3643
+Bit[6:5]: I/O pad drive capability
+00: 1x
+01: 2x
+10: 3x
+11: 4x
+FSIN I/O control 0x3002
+Bit[7]: FSIN output enable
+0: Input
+1: Output
+FSIN output select 0x3010 Bit[7]: Enable FSIN  as GPIO controlled by register
+FSIN output value 0x3008 Bit[7]: Register control FSIN output
+Confidential for Waching Only
+
+===== PAGE 21 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-5
+2.5 MIPI/2-wire serial interface
+The OV02C10 supports a 1/2-lane MIPI or 1-lane 2-wire serial interface. The MIPI interface is capable of a data transfer 
+rate of up to 800 Mbps/lane for 2-lane or 1500 Mbps/lane for 1-lane. The 2-wire serial interface is capable of data transfer 
+at up to 140 Mbps.
+2.6 power management
+Based on the system power configuration (XSHUTDN), the power up sequence will be different. OmniVision 
+recommends cutting off all power supplies, including the external DVDD, when the sensor is not in use.
+2.6.1 power up sequence
+To avoid any glitch from a strong external noise source, OmniVision recommends controlling XSHUTDN by GPIO.
+Whether or not XSHUTDN is controlled by GPIO, XSHUTDN rising cannot occur before AVDD, DVDD and DOVDD.
+table 2-3 power up sequence
+XSHUTDN power up sequence requirement
+GPIO
+Refer to figure 2-3
+1. DOVDD, AVDD, and DVDD can rise in any order.
+2. XSHUTDN rising must occur afte r AVDD, DOVDD and DVDD are stable.
+table 2-4 power up sequence timing constraints
+constraint label min max unit
+XSHUTDN rising – system ready t1 5 ms
+minimum number of XVCLK cycles prior to 
+first SCCB transaction t2 8192 XVCLK cycles
+MIPI clock startup time t3 8192 XVCLK cycles
+entering streaming mode – first frame start 
+sequence (variable) t4 delay related to output frame rate and line timing lines
+AVDD, DOVDD or DVDD, whichever is last – 
+XSHUTDN rising t5 0 ∞ ns
+Confidential for Waching Only
+
+===== PAGE 22 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+figure 2-3 power up sequence
+DOVDD, AVDD, DVDD
+note 1
+power offSTA TE software standby streaming (active)
+hardware
+standby
+XVCLK
+(free running)
+XSHUTDN
+XVCLK
+(gated)
+SDA
+SCL
+t3
+XVCLK may either be free running or gated.
+requirement is that XVCLK must be active for time t2 prior to first SCCB transaction.
+t2
+t4 (variable)
+t1
+t5
+MDP/MDN
+MIPI
+MCP/MCN LP-11
+LP-11high-z
+high-z
+LP-01LP-11
+DOVDD, AVDD and DVDD may rise in any ordernote 1
+Confidential for Waching Only
+
+===== PAGE 23 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-7
+2.6.2 power down sequence
+Pull XSHUTDN low to set the sensor into power down mode. The digital and analog supply voltages can be cut off in any 
+order (e.g., DOVDD, DVDD, then AVDD or AVDD, DVDD, then DOVDD). Similar to the power up sequence, the XVCLK 
+input clock may be either gated or continuous. To avoid bad frames from MIPI, OmniVision recommends setting the 
+sensor into sleep mode in inter frame first before sending the sensor into power down mode by setting register 
+0x3021[6:5]=2'b00 and register 0x0100 = 0x00.
+table 2-5 power down sequence
+XSHUTDN power down sequence requirement
+GPIO
+Refer to figure 2-5
+1. Software standby recommended.
+2. Pull XSHUTDN low for minimum power consumption.
+3. Pull AVDD, DVDD, and DOVDD low in any order.
+table 2-6 power down sequence timing constraints
+constraint label min max unit
+enter software standby SCCB command
+device in software standby mode t0
+when a frame of MIPI data is output, 
+wait for MIPI end code before 
+entering software for standby; 
+otherwise, enter software standby 
+mode immediately
+minimum of XVCLK cycles after last 
+SCCB transaction or MIPI frame end t1 512 XVCLK cycles
+last SCCB transaction or MIPI frame 
+end, XSHUTDN falling t2 512 XVCLK cycles
+XSHUTDN falling – AVDD, DVDD or 
+DOVDD falling whichever is first t3 0.0 ns
+Confidential for Waching Only
+
+===== PAGE 24 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+figure 2-4 software standby sequence
+MCP/MCN
+MIPI
+MIPI
+MDP/MDN
+SCL
+SDA
+LP-11 (high)
+enter
+software
+if SCCB command is received during readout of frame, then sensor must wait
+after MIPI end of frame short packet before entering software standby mode.
+t0
+STA TE software standbystreaming (active)
+LP-11 (high)
+MCP/MCN
+MDP/MDN
+SCL
+SDA
+LP-11 (high)
+enter
+software
+if SCCB command is received during inter
+frame time, then sensor enters software
+standby mode immediately.
+t1
+STA TE software standbystreaming (active)
+LP-11 (high)
+Confidential for Waching Only
+
+===== PAGE 25 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-9
+figure 2-5 power down sequence
+XVCLK
+(free running)
+AVDD, DVDD, DOVDD 
+XVCLK
+(gated)
+SDA
+SCL
+t1
+if SCCB command is received during readout of frame, then sensor must wait after
+MIPI frame end short packet before entering sleep mode. if SCCB command is
+received during inter frame time, then sensor must enter sleep mode immediately.
+XVCLK may either be free running or gated.
+requirement is that XVCLK must be active for time t1 after last SCCB transaction
+or after MIPI frame end short packet, whichever is  later event.
+t0
+t2
+t3
+power
+ offSTA TE software standbystreaming (active)
+hardware
+standby
+XSHUTDN
+Confidential for Waching Only
+
+===== PAGE 26 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+2.7 reset
+The whole chip will be reset during power up. Manually applying a hardware reset (XSHUTDN=0) upon power up is 
+recommended even though the on-chip power up reset is included. The hardware reset is active low with an 
+asynchronized design. The reset pulse width should be greater than or equal to 2 ms.
+2.7.1 power ON reset
+The power on reset can be controlled from an external pin. Additionally, in this sensor, a power on reset is generated 
+after the core power becomes stable.
+2.7.2 software reset
+When register 0x0103[0] is configured as 1, all registers are reset to default value.
+2.8 standby mode
+Two suspend modes are available for the OV02C10:
+• hardware standby
+• software standby
+2.8.1 hardware standby
+If XSHUTDN is tied to low, it will initiate hardware standby mode. In this mode, the total power consumption will be less 
+than 100 µW.
+2.8.2 software standby
+Executing a software power down (0x0100[0]) through the SCCB interface suspends internal circuit activity, but does not 
+halt the device clock. All register content is maintained in standby mode. During the resume state, all the registers are 
+restored to their original values.
+table 2-7 hardware and standby description
+mode description
+hardware standby with XSHUTDN
+1. Enabled by pulling XSHUTDN low.
+2. Power down all blocks.
+3. Register values are reset to default values.
+4. No SCCB communication.
+5. Minimum power consumption.
+software standby
+1. Default mode after power on reset.
+2. Power down all blocks except SCCB.
+3. Register values are maintained.
+4. SCCB communication is available.
+5. Low power consumption.
+6. GPIO can be configured as high/low/tri-state.
+Confidential for Waching Only
+
+===== PAGE 27 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-11
+2.9 system clock control
+The OV02C10 has two on-chip PLLs which generate the system clock from a 6~27 MHz input clock. A programmable 
+clock divider is provided to generate different frequencies for the system. PLL settings can only be changed during 
+sensor software standby mode (0x0100 = 0).
+2.9.1 PLL1
+The PLL1 generates a default 187.5 MHz pixel clock and 1500 MHz MIPI serial clock from a 6~27 MHz input clock. The 
+VCO range is from 500 MHz to 1500 MHz.
+2.9.2 PLL2
+The PLL2 generates a default 160 MHz system clock from a 6~27 MHz input clock. The VCO range is from 500 MHz to 
+1500 MHz. PLL2 is only used for sensor timing and should not be adjusted by the customer.
+figure 2-6 PLL1 clock scheme
+ref clock
+6 ~ 27 MHz
+PreDiv0
+/1/2
+r_predivp
+VCO
+500~1500MHz
+PreDiv
+/1/1.5/2/2.5/3/4/6/8
+r_prediv[2:0]
+multiplier
+r_divp[9:0]
+PLL1
+inside PLL
+outside PLL
+sys_pre-divider
+1+r_divsp[3:0]
+pix_bit_div
+/4/5
+/1/2
+PLL PCLK
+sys_bit_div
+/4/5
+/1/2/4
+PLL SCLK
+PIX CLK
+PLL MIPI CLK
+MIPI PHY CLKSYS CLK
+Confidential for Waching Only
+
+===== PAGE 28 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+figure 2-7 PLL2 clock scheme
+table 2-8 PLL control registers (sheet 1 of 3)
+address register name
+default
+value R/W description
+0x0300 PLL1 CTRL1 0x70 RW
+Bit[7]: pll1_r_bp_vco_sync
+Bit[6:4]: pll1_r_cntck
+Bit[3]: pll1_r_dither_en
+Bit[2:0]: pll1_pre_clk_div
+0x0301 PLL1 CTRL2 0x00 RW
+Bit[7]: pll1_r_divs
+Bit[6]: pll1_pre_clk_divp
+Bit[5]: pll1_r_div_rst_sync_en
+Bit[4]: pll1_r_sscg_en
+Bit[3]: pll1_r_bias_ext
+Bit[2]: pll1_r_divpix
+Bit[1]: pll1_r_ssc_3xfast
+Bit[0]: pll1_r_en_extI
+0x0302 PLL1 CTRL3 0x00 RW
+Bit[7]: pll1_rst
+Bit[6:4]: pll1_cp
+Bit[3]: pll1_bypass
+Bit[2:0]: pll1_r_divmipi
+ref clock
+6 ~ 27 MHz
+PreDiv0
+/1/2
+r_predivp
+sram-divider
+1+r_divsram[3:0]
+dac-divider
+1+r_divdac[3:0]
+r_sa1_clk_sel
+PLLsramclk PLLsa1 PLLsysclk PLLdacclk
+sa1-div
+1+r_divsa1[3:0]
+sa1post-div
+1+r_divsa1[4]
+sys_pre-divider
+1+r_divsp[3:0]
+sys-divider
+/1/1.5/2/2.5/3/3.5/4/4.5
+r_divs[3:0]
+VCO
+500~1500MHz
+0 mux
+PreDiv
+/1/1.5/2/2.5/3/4/6/8
+r_prediv[2:0]
+multiplier
+r_divp[9:0]
+PLL2
+Confidential for Waching Only
+
+===== PAGE 29 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-13
+0x0303 PLL1 CTRL4 0x06 RW Bit[7:4]: pll1_vt_sys_clk_div Bit[1:0]: pll1_vt_pix_clk_div
+0x0304 PLL1 CTRL5 0x02 RW Bit[7:0]: pll1_r_loopdiv[7:0]
+0x0305 PLL1 CTRL6 0xEE RW Bit[1:0]: pll1_r_loopdiv[9:8]
+0x0306 PLL1 CTRL7 0x70 RW Bit[7:0]: pll1_r_dsm[7:0]
+0x0307 PLL1 CTRL8 0x00 RW Bit[7:0]: pll1_r_dsm[15:8]
+0x0308 PLL1 CTRL9 0x00 RW Bit[3:0]: pll1_r_dsm[19:16]
+0x0309 PLL1 CTRL10 0x10 RW Bit[3:0]: pll1_r_cntstep[3:0]
+0x030A PLL1 CTRL11 0x00 RW
+Bit[5]: pll1_r_frac_en
+Bit[4]: pll1_r_lock_det_en
+Bit[3:2]: pll1_r_precision
+Bit[1:0]: pll1_r_cnt_ref
+0x0314 PLL2 CTRL1 0x04 RW Bit[2:0]: pll2_pre_div
+0x0315 PLL2 CTRL2 0x01 RW Bit[1:0]: pll2_r_divp[9:8]
+0x0316 PLL2 CTRL3 0x40 RW Bit[7:0]: pll2_r_divp[7:0]
+0x0317 PLL2 CTRL4 0x02 RW Bit[3:0]: pll2_r_divs
+0x0318 PLL2 CTRL5 0x03 RW Bit[3:0]: pll2_r_divsp
+0x0319 PLL2 CTRL6 0x01 RW Bit[2:0]: pll2_r_cp
+0x031A PLL2 CTRL7 0x01 RW pll2_predivp
+0x031B PLL2 CTRL8 0x00 RW
+Bit[7]: pll2_r_bp_vco_sync
+Bit[6]: pll2_r_sel_bak_divs
+Bit[5]: pll2_r_sel_bak_sa1
+Bit[4:3]: pll2_cnt_ref
+Bit[2:1]: pll2_precision
+Bit[0]: pll2_lock_det_en
+0x031C PLL2 CTRL9 0x0F RW
+Bit[6]: pll2_r_bias_ext
+Bit[5]: pll2_r_sa1_clk_sel
+Bit[4:0]: pll2_r_divsa1
+0x031D PLL2 CTRL10 0x01 RW Bit[4]: pll2_byp Bit[3:0]: pll2_r_divdac
+0x031E MIPI BIT CONTROL 0x09 RW
+Bit[0]: mipi_bit_sel
+0: 8-bit
+1: 10-bit
+0x031F PLL SMOOTHLY CHANGE VCO CONTROL 0x00 RW Bit[2]: r_pll3_lat_en Bit[1]: r_pll2_lat_en Bit[0]: r_pll1_lat_en
+table 2-8 PLL control registers (sheet 2 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 30 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x0320 PLL2 CTRL11 0x15 RW Bit[4]: pll2_div_rst_sync_en Bit[3:0]: pll2_div_sram
+0x0321 PLL2 CTRL12 0x03 RW Bit[0]: pll2_rst_o
+0x0330 PLL SMOOTHLY CHANGE VCO CONTROL – W Bit[0]: Change PLL VCO trigger
+table 2-9 sample PLL configuration 
+control name address
+input clock (XVCLK)
+24 MHz 6 MHz
+PLL1_PREDIVP 0x030C[0] 0x1 0x0
+PLL1_PREDIV 0x0303[2:0] 0x6 0x4
+PLL1_MULTIPLIER {0x0304[1:0], 0x0305[7:0]} 0x2EE 0x2EE
+PLL1_DIV_MIPI 0x0306[1:0] 0x0 0x0
+PLL1_PIX_BITDIV 0x0309[0] 0x0 0x0
+PLL1_SYS_BITDIV 0x0308[0] 0x1 0x1
+PLL2_PREDIVP 0x031A[0] 0x1 0x0
+PLL2_PREDIV 0x0314[2:0] 0x4 0x4
+PLL2_MULTIPLIER {0x0315[1:0], 0x0316[7:0]} 0x140 0x280
+PLL2_SA1_DIV 0x031C[3:0] 0x15 0x15
+PLL2_SRAMDIV 0x0321[4:0] 0x3 0x3
+PLL2_SCLK_DIV1 0x0318[3:0] 0x3 0x3
+PLL2_SCLK_DIV2 0x0317[3:0] 0x2 0x2
+PLL2_DAC_DIV 0x031D[3:0] 0x1 0x1
+PLL_PCLK_DIV 0x3020[3:2] 0x1 0x1
+SCLK – 160 MHz 160 MHz
+PHY_CLK – 1500 MHz 1500 MHz
+MIPI_PCLK – 187.5 MHz 187.5 MHz
+table 2-8 PLL control registers (sheet 3 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 31 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-15
+2.10 serial camera control bus (SCCB) interface
+The Serial Camera Control Bus (SCCB) interface controls the image sensor operation. Refer to the OmniVision 
+Technologies Serial Camera Control Bus (SCCB) Specification for detailed usage of the serial control port.
+In the OV02C10, the SCCB ID is controlled by the SID pin and can be programmed. If SID is low, the sensor’s SCCB 
+address comes from register 0x3003 which has a default value of 0x6C for write (0x6D for read). If SID is high, the 
+sensor’s SCCB address comes from register 0x3004 which has a default value of 0x20 for write (0x21 for read). There 
+is an alternative ID in register 0x3005, which has a default value of 0x42. The alternative ID works on both SID high or 
+low.
+2.10.1 data transfer protocol
+The data transfer of the OV02C10 follows the SCCB protocol.
+2.10.2 message format
+The OV02C10 supports the message format shown in figure 2-8. The repeated START (Sr) condition is not shown in 
+figure 2-9, but is shown in figure 2-10 and figure 2-11.
+figure 2-8 message type
+2.10.3 read / write operation
+The OV02C10 supports four different read operations and two different write operations:
+• a single read from random locations
+• a sequential read from random locations
+• a single read from current location
+• a sequential read from current location
+• single write to random locations
+• sequential write starting from random location
+The sub-address in the sensor automatically increases by one after each read/write operation.
+slave
+addressS R/W A A Asub address [15:8] sub address [7:0] A/A Pdata
+index[15:8]SCCB address index[7:0]
+from slave to master
+from master to slave
+direction depends on operation
+S START condition
+P STOP condition
+Sr repeated START condition
+A acknowledge
+negative acknowledgeA
+message type: 16-bit sub-address, 8-bit data, and 7-bit slave address
+note 1
+note 1
+slave address must be 0x36 for SCCB write address to be 0x6C and for SCCB read address to be 0x6D
+Confidential for Waching Only
+
+===== PAGE 32 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+In a single read from random locations, the master does a dummy write operation to desired sub-address, issues a 
+repeated start condition and then addresses the camera again with a read operation. After acknowledging its slave 
+address, the camera starts to output data onto the SDA line as shown in figure 2-9. The master terminates the read 
+operation by setting a negative acknowledge and stop condition.
+figure 2-9 SCCB single read from random location
+If the host addresses the camera with read operation directly without the dummy write operation, the camera responds 
+by setting the data from last used sub-address to the SDA line as shown in figure 2-10. The master terminates the read 
+operation by setting a negative acknowledge and stop condition.
+figure 2-10 SCCB single read from current location
+The sequential read from a random location is illustrated in figure 2-11. The master does a dummy write to the desired 
+sub-address, issues a repeated start condition after acknowledge from slave and addresses the slave again with read 
+operation. If a master issues an acknowledge after receiving data, it acts as a signal to the slave that the read operation 
+shall continue from the next sub-address. When master has read the last data byte, it issues a negative acknowledge 
+and stop condition.
+figure 2-11 SCCB sequential read from random location
+slave
+addressS 0 A A AAsub address [15:8] sub address [7:0] Sr 1slave address A Pdata
+index Mprevious index value, K index M + 1
+index value M
+slave
+addressS 1 A AS 1slave address data A PA Pdata
+index K + 1 index K + 2previous index value, K
+slave
+addressS 0 A A AAsub address [15:8] sub address [7:0] Sr 1slave address data A A Pdata
+index Mprevious index value, K index M + L - 1 index M + L
+index value M L bytes of data
+Confidential for Waching Only
+
+===== PAGE 33 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-17
+The sequential read from current location is similar to a sequential read from a random location. The only exception is 
+that there is no dummy write operation as shown in figure 2-12. The master terminates the read operation by setting a 
+negative acknowledge and stop condition.
+figure 2-12 SCCB sequential read from current location
+The write operation to a random location is illustrated in figure 2-13. The master issues a write operation to the slave, 
+sets the sub-address and data correspondingly after the slave has acknowledged. The write operation is terminated with 
+a stop condition from the master.
+figure 2-13 SCCB single write to random location
+The sequential write is illustrated in figure 2-14. The slave automatically increments the sub-address after each data 
+byte. The sequential write operation is terminated with stop condition from the master.
+figure 2-14 SCCB sequential write to random location
+slave
+addressS 1 A A Adatadata A Pdata
+index K + 1previous index value, K index K + L - 1 index K + L
+L bytes of data
+slave
+addressS 0 A A Asub address [15:8] sub address [7:0] data P
+index Mprevious index value, K index M + 1
+A/A
+index value M
+slave
+addressS 0 A A A Asub address [15:8] sub address [7:0] data
+index Mprevious index value, K index M + L - 1 index M + L
+data PA/A
+index value M L bytes of data
+Confidential for Waching Only
+
+===== PAGE 34 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+2.10.4 SCCB timing
+figure 2-15 SCCB interface timing
+table 2-10 SCCB interface timing specificationsa
+symbol parameter
+fast mode fast mode plus
+unitmin max min max
+fSCL clock frequency 400 1000b kHz
+tLOW clock low period 1.3 – 0.5 – µs
+tHIGH clock high period 0.6 – 0.26 – µs
+tBUF bus free time before new start 1.3 – 0.5 – µs
+tHD:STA start condition hold time 0.6 – 0.26 – µs
+tSU:STA start condition setup time 0.6 – 0.26 – µs
+tHD:DAT data hold time 0 – 0 – µs
+tSU:DAT data setup time 100 – 50 – ns
+tVD:DAT data valid time – 0.9 – 0.45 µs
+tVD:ACK data valid acknowledge time – 0.9 – 0.45 µs
+SDA
+SCL
+tf
+70%
+30%
+70%
+30%
+70%
+30%
+70%
+30%
+70%
+30%
+70%
+30%
+tf
+tr
+tr tHIGH
+tHD:DA T
+1/fSCL
+tVD:DA T
+tSU:DA T
+tLOW
+ninth clock
+first clock cycle
+tHD:STA
+S
+VIL = 0.3VDD
+VIH = 0.7VDD
+SP
+ninth clock
+SDA
+(cont)
+SCL
+(cont)
+70%
+30%
+tSP tSU:STO
+tVD:ACK
+tSU:STA tHD:STA
+Sr tBUF
+Confidential for Waching Only
+
+===== PAGE 35 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-19
+2.11 group write
+Group write is supported in order to update a group of registers in the same frame. These registers are guaranteed to 
+be written prior to the internal latch at the frame boundary.
+The OV02C10 supports up to two groups that can be recorded in the same frame. These groups share 64 bytes of 
+registers bank and the size of each group is programmable by adjusting the start address.
+tSU:STO stop condition setup time 0.6 – 0.26 – µs
+tr SCCB rise time 20 300 – 120 ns
+tf SCCB fall time 300 120 ns
+tSP pulse width of spikes that must be suppressed by input filter 0 50 0 50 ns
+Cb capacitive load for each bus line – 400 – 550 pF
+a. timing measurement shown at beginning of ri sing edge and/or end of falling edge signifies 30%,
+timing measurement shown in middle of rising/falling edge signifies 50%,
+timing measurement shown at end of rising edge and/or beginning of falling edge signifies 70%
+b. input clock range: 12MHz and 27M Hz; SCCB pull-up resistor: 2Kohm
+table 2-11 group hold control (sheet 1 of 7)
+address register name
+default
+value R/W description
+0x3200 GROUP ADR0 0x00 RW group_adr0
+0x3201 GROUP ADR1 0x04 RW group_adr1
+0x3202 GROUP ADR2 0x08 RW group_adr2
+0x3203 GROUP ADR3 0x0C RW group_adr3
+0x3204 GROUP ADR4 0x10 RW group_adr4
+0x3205 GROUP ADR5 0x14 RW group_adr5
+0x3206 FSIN GRP 0x00 RW
+Bit[7]: re_launch_disable
+Bit[4]: fsin_en
+Bit[3:0]: Start group in FSIN mode
+table 2-10 SCCB interface timing specificationsa
+symbol parameter
+fast mode fast mode plus
+unitmin max min max
+Confidential for Waching Only
+
+===== PAGE 36 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3207 COMBINE LAUNCH CTRL –W
+Bit[7:4]: Launch option select
+0110: Launch at HBLK
+1010: Launch in frame blanking
+1110: Launch directly
+Others: Reserved
+Bit[3]: cmb_lch_grp3
+Combine launch include group3
+Bit[2]: cmb_lch_grp2
+Combine launch include group2
+Bit[1]: cmb_lch_grp1
+Combine launch include group1
+Bit[0]: cmb_lch_grp0
+Combine launch include group0
+table 2-11 group hold control (sheet 2 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 37 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-21
+0x3208 GROUP ACCESS – W
+Bit[7:4]: group_ctrl
+0000: Group hold start
+0001: Group hold end
+0110: Launch at HBLK
+1010: Launch in frame blanking
+1110: Launch directly
+Others: Reserved
+Bit[3:0]: group_id
+0000: Group bank 0, default start from 
+address 9'h000
+0001: Group bank 1, default start from 
+address 9'h040
+0010: Group bank 2, default start from 
+address 9'h080
+0011: Group bank 3, default start from 
+address 9'h0C0
+0100: Group bank 4, default start from 
+address 9'h100
+0101: Group bank 5, default start from 
+address 9'h140
+0110: Group bank 6, default start from 
+address 9'h180
+0111: Group bank 7, default start from 
+address 9'h1A0
+1000: Group bank 8, default start from 
+address 9'h1C0
+1001: Group bank 9, default start from 
+address 9'h1E0
+1010: Group bank 10, default start 
+from address 9'h100
+1011: Group bank 11, default start 
+from address 9'h120
+1100: Group bank 12, default start 
+from address 9'h140
+1101: Group bank 13, default start 
+from address 9'h160
+1110: Group bank 14, default start 
+from address 9'h180
+1111: Group bank 15, default start 
+from address 9'h1A0
+0x3209 GRP0 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group0
+0x320A GRP1 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group1
+0x320B GRP2 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group2
+0x320C GRP3 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group3
+0x320D GRP SWCTRL 0x01 RW
+Bit[7]: Context switch enable
+Bit[6:4]: Auto launch loop number
+Bit[3:0]: Switch back group
+table 2-11 group hold control (sheet 3 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 38 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x320E CONTEXT SW GROUP ACCESS –W
+Bit[7:4]: group_ctrl
+0110: Launch at HBLK
+1010: Launch in frame blanking
+1110: Launch directly
+Others: Reserved
+Bit[3:0]: group_id
+0000: Group bank 0, default start from 
+address 11'h000
+0001: Group bank 1, default start from 
+address 11'h100
+0010: Group bank 2, default start from 
+address 11'h200
+0011: Group bank 3, default start from 
+address 11'h300
+1010: Group bank 10, default start 
+from address 11'h500
+1011: Group bank 11, default start 
+from address 11'h520
+1100: Group bank 12, default start 
+from address 11'h540
+1101: Group bank 13, default start 
+from address 11'h560
+1110: Group bank 14, default start 
+from address 11'h580
+1111: Group bank 15, default start 
+from address 11'h5A0
+Others: Reserved
+0x3210 GROUP LEN0 – W group_len0
+0x3211 GROUP LEN1 – W group_len1
+0x3212 GROUP LEN2 – W group_len2
+0x3213 GROUP LEN3 – W group_len3
+0x3214 GROUP LEN4 – W group_len4
+0x3215 GROUP LEN5 – W group_len5
+0x3216 EMB LINE NUM 0x01 RW Bit[3:0]: emb_line_num
+0x3217 PADDING DATA 0x00 RW Bit[7:0]: padding_data
+table 2-11 group hold control (sheet 4 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 39 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-23
+0x3218 R16 0x00 RW
+Bit[7:6]: emb_line_blk_ctrl
+00: 32 sclk
+01: 64 sclk
+10: 128 sclk
+11: Wait for external trigger signal
+Bit[5]: embline_addr_en
+Bit[4]: r_padding_md2
+0: No dummy data mixing with valid 
+data
+1: Dummy data output with valid data 
+every cycle
+Bit[3]: frame_trig_sel
+0: tc_grp_wr
+1: EOF
+Bit[2]: embline_eof_en
+Bit[1]: embline_sof_en
+Bit[0]: embline_tag_en
+0x3219 TAG DATA 0x55 RW Bit[7:0]: emb_tag
+0x321A GRP ACT – R Indicates Which Group is Active
+0x321C FRAME CNT GRP0 – R frame_cnt_grp0
+0x321D FRAME CNT GRP1 – R frame_cnt_grp1
+0x321E FRAME CNT GRP2 – R frame_cnt_grp2
+0x321F FRAME CNT GRP3 – R frame_cnt_grp3
+0x3220 SRAM TEST 0x11 RW Bit[5:0]: SRAM test
+0x3221 SRAM TEST 0x30 RW
+Bit[6:3]: sram_rm
+Bit[2]: sram_rme
+Bit[1]: sram_test1
+Bit[0]: sram_ls
+0x3222 GAIN LAUNCH CTRL 0x02 RW Bit[1]: default_launch_en Bit[0]: gain_launch_en
+0x3223 GROUP ADR6 0x18 RW group_adr6
+0x3224 GROUP ADR7 0x1A RW group_adr7
+0x3225 GROUP ADR8 0x1C RW group_adr8
+0x3226 GROUP ADR9 0x1E RW group_adr9
+0x3227 GROUP LEN6 – W group_len6
+0x3228 GROUP LEN7 – W group_len7
+0x3229 GROUP LEN8 – W group_len8
+0x322A GROUP LEN9 – W group_len9
+table 2-11 group hold control (sheet 5 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 40 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x322F TC GRP WR CTRL 0x00 RW Bit[7]: r_grp_wr_opt Bit[6:0]: mask_grp_wr_frame_num
+0x3230 GROUP ADR10 0x10 RW group_adr10
+0x3231 GROUP ADR11 0x12 RW group_adr11
+0x3232 GROUP ADR12 0x14 RW group_adr12
+0x3233 GROUP ADR13 0x16 RW group_adr13
+0x3234 GROUP ADR14 0x18 RW group_adr14
+0x3235 GROUP ADR15 0x1A RW group_adr15
+0x3239 GRP10 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group10
+0x323A GRP11 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group11
+0x323B GRP12 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group12
+0x323C GRP13 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group13
+0x323D GRP14 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group14
+0x323E GRP15 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group15
+0x323F AO CTRL 0x01 RW
+Bit[7:4]: ao_grp_sel_man
+Bit[1]: ao_grp_sel_man_en
+Bit[0]: ao_grp_lch_opt
+0x3240 GROUP LEN10 – W group_len10
+0x3241 GROUP LEN11 – W group_len11
+0x3242 GROUP LEN12 – W group_len12
+0x3243 GROUP LEN13 – W group_len13
+0x3244 GROUP LEN14 – W group_len14
+0x3245 GROUP LEN15 – W group_len15
+0x3246 GROUP LEN0 H – W group_len0_h
+0x3247 GROUP LEN1 H – W group_len1_h
+0x3248 GROUP LEN2 H – W group_len2_h
+0x3249 GROUP LEN3 H – W group_len3_h
+0x324A GROUP LEN4 H – W group_len4_h
+0x324B GROUP LEN5 H – W group_len5_h
+0x324C GROUP LEN10 H – W group_len10_h
+0x324D GROUP LEN11 H – W group_len11_h
+table 2-11 group hold control (sheet 6 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 41 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-25
+2.12 hold
+After the groups are configured, users can perform a hold operation to store register settings into the SRAM of each 
+group. The hold of each group starts and ends with control register 0x3208. The lower four bits of register 0x3208 control 
+which group to access, and the upper four bits control the start (0x0: hold start) and end (0x1: hold end) of the hold 
+operation.
+The example setting below shows the sequence to hold group 0:
+6C 3208 00 group 0 hold start
+6C 3800 11 first register into group 0
+6C 3911 22 second register into group 0
+6C 3208 10 group 0 hold end
+2.13 launch
+After the contents of each group are defined in the hold operation, all registers belonging to each group are stored in 
+SRAM and ready to be written into target registers (i.e., launch of that group).
+There are eight launch modes as described into section 2.13.1 to section 2.13.8.
+2.13.1 launch mode 1 – quick manual launch
+Manual launch is enabled by setting register 0x320D to 0.
+Quick manual launch is achieved by writing to control register 0x3208. The value written into this register is 0xEX, the 
+upper 4 bits (0xE) are the quick launch command and the lower 4 bits (0xX) are the group number. For example, if users 
+want to launch group 2, they write the value 0xE2 to register 0x3208, then the contents of group 2 will be written to the 
+target registers immediately after the sensor gets this command through the SCCB. Below is an example of this setting.
+6C 320D 00 manual launch on
+6C 3208 E0 quick manual launch group 2
+0x324E GROUP LEN12 H – W group_len12_h
+0x324F GROUP LEN13 H – W group_len13_h
+0x3250 GROUP LEN14 H – W group_len14_h
+0x3251 GROUP LEN15 H – W group_len15_h
+table 2-11 group hold control (sheet 7 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 42 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+2.13.2 launch mode 2 – delay manual launch
+Delay manual launch is achieved by writing to register 0x3208. The value written into this register is 0xAX, where the 
+upper four bits (0xA) are the delay launch command and the lower four bits (0xX) are the group number. For example, if 
+users want to launch group 11, they just write the value 0xAB to register 0x3208, then the contents of group 11 will be 
+written to the target registers. The difference with mode 1 is that the writing will wait for some internally defined time spot 
+in vertical blanking, and is thus delayed. Below is an example of this setting.
+6C 320D 00 manual launch on
+6C 3208 AB delay manual launch group 11
+2.13.3 launch mode 3 – quick auto launch
+Quick auto launch works like the mode 1, but the difference is it will return to a specified group automatically. This is 
+controlled by the register 0x320D, where bit[7] is context switch mode enable, bit[6:4] is switch loop number and bit[3:0] 
+controls which group to return. 0x3209, 0x320A, 0x320B, 0x320C, 0x3239, 0x323A, 0x323B, 0x323C, 0x323D, and 
+0x323E, which are the frame number of group 0, 1, 2, 3, 10, 11, 12, 13, 14, and 15, respectively, controls how many 
+frames to stay before returning.
+The operation can be better understood with an example of this setting:
+6C 320D 9A Bit[7]: auto switch enable; Bit[6:4]: 1, one loop; Bit[3:0]: a, 
+return to group 10
+6C 3209 04 stay in group 0 for 4 frames
+6C 320A 00 stay in group 1 for 0 frames
+6C 320B 00 stay in group 2 for 0 frames
+6C 320C 00 stay in group 3 for 0 frames
+6C 3239 01 stay in group 10 for 1 frames
+6C 323A 00 stay in group 11 for 0 frames
+6C 323B 00 stay in group 12 for 0 frames
+6C 323C 00 stay in group 13 for 0 frames
+6C 323D 00 stay in group 14 for 0 frames
+6C 323E 00 stay in group 15 for 0 frames
+6C 320E E0 quick auto launch group 0
+In this example, the sensor will quick launch group 0, stay at group 0 for 4 frames, and then return to group 1.
+2.13.4 launch mode 4 – delay auto launch
+Delay auto launch works like mode 2 in the delay launch part and like the mode 3 in the return part.
+The operation can be better understood with an example of this setting:
+6C 320D 9A Bit[7]: auto switch enable; Bit[6:4]: 1, one loop; Bit[3:0]: a, 
+return to group 10
+6C 3209 04 stay in group 0 for 4 frames
+6C 320A 00 skip group 1
+6C 320B 00 skip group 2
+Confidential for Waching Only
+
+===== PAGE 43 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+2-27
+6C 320C 00 skip group 3
+6C 3239 01 stay in group 10 for 1 frames
+6C 323A 00 skip group 11
+6C 323B 00 skip group 12
+6C 323C 00 skip group 13
+6C 323D 00 skip group 14
+6C 323E 00 skip group 15
+6C 320E A0 delay auto launch group 0
+In this example, the sensor will delay launch group 0, stay at group 0 for 4 frames, and then return to group 10.
+2.13.5 launch mode 5 – repeat launch
+Repeat launch is also controlled by 0x320D. The only difference between auto launch is that loop number (0x320D[6:4]) 
+should be set to 0. It can support up to ten groups repeating. Registers 0x3209, 0x320A, 0x320B, and 0x320C, which is 
+the frame number of group 0, 1, 2, and 3, respectively, controls how many frames to stay before jumping to the next one. 
+In this mode, the launch is repeated automatically among the group 0, group 1, group 2, and group 3. If any of the group 
+number is set to be 0, that group is skipped.
+The operation can be better understood with an example of this setting:
+6C 320D 80 Bit[7]: context switch enable, Bit[6:4]: 0 loop
+6C 3209 02 stay 2 frames in group 0
+6C 320A 03 stay 3 frames in group 1
+6C 320B 00 skip group 2
+6C 320C 08 skip group 3
+6C 323A 00 skip group 11
+6C 323B 00 skip group 12
+6C 323C 00 stay 8 frames in group 13
+6C 323D 00 skip group 14
+6C 323E 00 skip group 15
+6C 320E A0 delay auto launch group 0
+In this example, the sensor will delay launch group 0, stay at group 0 for 2 frames, then switch to group 1, staying for 
+three frames, then switch to group 13, staying for eight frames, then switch back to group 0 for 2 frames, group 1 for 3 
+frames, group 13 for 8 frames and so on.
+2.13.6 launch mode 6 – auto/repeat la unch and manual launch combination
+Combine manual launch and auto/repeat launch. During auto/repeat launch, manual launch can be made.
+The operation can be better understood with an example of this setting:
+6C 320D 80 context switch enable, Bit[6:4]: 0 loop
+6C 3209 02 stay 2 frames in group 0
+6C 320A 03 stay 3 frames in group 1
+6C 320B 00 skip group 2
+6C 320C 08 stay 8 frames in group 3
+Confidential for Waching Only
+
+===== PAGE 44 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6C 3239 00 skip group 10
+6C 323A 00 skip group 11
+6C 323B 00 skip group 12
+6C 323C 00 skip group 13
+6C 323D 00 skip group 14
+6C 323E 00 skip group 15
+6C 320E A0 delay auto launch group 0
+6C 3208 A2 delay manual launch group 12
+In this example, the sensor receives delay repeat launch command and delay manual launch command consecutively. 
+When launch trigger comes, the sensor will first delay launch group 12 and right after that, delay launch group 0. Then 
+the sensor will keep switching between group 0, group 1, and group 3.
+2.13.7 launch mode 7 – launch in sleep mode
+By default, during sleep mode, delaying manual launch command or auto/repeat launch command, will be treated as a 
+quick manual launch command or a quick auto/repeat launch command. To disable this mode, set register bit 0x3680[2] 
+to 1'b1 and the setting will be launched in normal delay mode.
+2.13.8 launch mode 8 – delay launch  multiple groups in one frame
+The only difference with mode 2 is that register 0x3208 is written multiple times for multiple groups. In vertical blanking, 
+those groups will be launched one by one.
+The operation can be better understood with an example of this setting:
+6C 320D 00 manual launch on
+6C 3208 A0 delay launch group 0
+6C 3208 A1 delay launch group 1
+6C 3208 A3 delay launch group 3
+Confidential for Waching Only
+
+===== PAGE 45 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+3-1
+3 block level description
+3.1 pixel array structure
+The OV02C10 sensor has an image array of 1936 columns by 1096 rows (2,121,856 pixels).
+The color filters are arranged in a Bayer pattern. The primary color BG/GR array is arranged in line-alternating fashion. 
+Of the 2,121,856 pixels, 2,073,600 (1920x1080) are active pixels and can be output. figure 3-1 shows the sensor output 
+pattern.
+The sensor array design is based on a field integration readout system with line-by-line transfer and an electronic shutter 
+with a synchronous pixel readout scheme.
+Exposure time is controlled by registers {0x3501, 0x3502}. Maximum exposure time is (VTS-15)-row and minimum 
+exposure time is 4-row.
+figure 3-1 sensor output pattern (1920x1080)
+0
+1
+2
+3
+1914
+1919
+1912
+1911
+1915
+1913
+...
+0
+1
+2
+3 
+ 
+...
+7
+ 
+ 
+ 
+8
+9
+10
+11 
+ 
+...
+...
+1071
+ 
+1072
+1073
+1074
+1075
+1079 
+ 
+rows
+columns
+...
+7
+8
+9
+10
+11...
+1080
+active
+lines
+1920
+active
+pixels
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+Confidential for Waching Only
+
+===== PAGE 46 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+3.2 subsampling
+The OV02C10 supports a binning mode to provide a lower resolution output while maintaining the field of view. With 
+binning mode ON, the voltage levels of adjacent pixels (of the same color) are averaged before being sent to the ADC. 
+The OV02C10 supports 2x2 binning, which is illustrated in figure 3-2, where the voltage levels of four adjacent 
+same-color pixels are averaged.
+figure 3-2 example of 2x2 binning
+figure 3-3 example of 2x2 mono binning
+B G
+G R
+B G
+G R B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+four blue pixels
+2x2 binned into 1
+B G B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G B G
+G R
+B G
+G R
+B G
+G R
+B G
+G R
+B G
+four green pixels
+2x2 binned into 1
+four green pixels
+2x2 binned into 1
+four red pixels
+2x2 binned into 1
+B G
+G R
+B G
+G R Y Y
+Y YB G
+G R
+B G
+G R
+B G
+B G
+G R
+B G
+G R
+Y Y
+Y Y
+B G
+G R
+B G
+G R
+B G
+B G
+G R
+B G
+G R
+Y
+Y
+Y
+Y
+B G
+G R
+B G
+G R
+B G
+B G
+G R
+B G
+G R
+Y
+YY
+YB G
+G R
+B G
+G R
+B G
+2x2 CFA pixels 
+binned into 1
+2x2 CFA pixels 
+binned into 1
+2x2 CFA pixels 
+binned into 1
+2x2 CFA pixels 
+binned into 1
+Confidential for Waching Only
+
+===== PAGE 47 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+3-3
+3.3 analog amplifier
+When the column sample/hold circuit has sampled one row of pixels, the pixel data will shift out one-by-one into an 
+analog amplifier.
+3.4 10-bit A/D converters
+The balanced signal is then digitized by the on-chip 10-bit ADC.
+table 3-1 binning-related registers
+address register name
+default
+value R/W description
+0x3820 FORMAT1 0xA0 RW
+Bit[5]: vflip_blc_o
+Bit[4]: vflip_o
+Bit[3]: hmirror_o
+0: Output image is mirrored
+1: Image is normal with correct orientation
+Bit[2]: hbin4_o
+Bit[1]: hbin2_o
+Bit[0]: vbinf_o
+0x3814 X_INC_ODD 0x01 RW Bit[4:0]: Horizontal increase number at odd pixel
+0x3815 X_INC_EVEN 0x01 RW Bit[4:0]: Horizontal increase number at even pixel
+0x3816 Y_INC_ODD 0x01 RW Bit[4:0]: Vertical increase number at odd row
+0x3817 Y_INC_EVEN 0x01 RW Bit[4:0]: Vertical increase number at even row
+0x4501 HBIN_CTRL 0x40 RW
+Bit[5:4]: r_hbin4_opt
+00: Average of four pixels
+01: Summary of four pixels
+10: Select first bin2 pixel
+11: Select last bin2 pixel
+Bit[3:2]: r_hbin2_opt
+00: Average
+01: Summary of four pixels
+10: Select first pixel
+11: Select last pixel
+Confidential for Waching Only
+
+===== PAGE 48 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+THIS PAGE INTENTIONALLY LEFT BLANK
+Confidential for Waching Only
+
+===== PAGE 49 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+4-1
+4 image sensor core digital functions
+4.1 mirror and flip
+The OV02C10 provides mirror and flip readout modes, which respectively reverse the sensor data readout order 
+horizontally and vertically (see figure 4-1).
+figure 4-1 mirror and flip samples
+table 4-1 mirror and flip registers
+address register name
+default
+value R/W description
+0x3820 FORMAT1 0xA0 RW
+Bit[5]: vflip_blc_o
+Bit[4]: vflip_o
+Bit[3]: hmirror_o
+0: Output image is mirrored
+1: Image is normal with correct 
+orientation
+Bit[2]: hbin4_o
+Bit[1]: hbin2_o
+Bit[0]: vbinf_o
+F
+original image
+F
+flipped image
+F
+mirrored image
+F
+mirrored and flipped
+image
+Confidential for Waching Only
+
+===== PAGE 50 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+4.2 image cropping and windowing
+An image cropping area is defined by four parameters, horizontal start (HS), horizontal end (HE), vertical start (VS), and 
+vertical end (VE). By properly setting the parameters, any portion within the sensor array size can output as a visible 
+area. A smaller cropping size may achieve higher frame rate. Windowing is achieved by masking off the pixels outside 
+of the window, defined by h_win_off and v_win_off control; thus, the original timing is not affected.
+figure 4-2 image cropping and windowing
+table 4-2 image cropping and windowing control functions (sheet 1 of 3)
+address register name
+default
+value R/W description
+0x3800 X ADDR START 0x00 RW Bit[7:0]: x_addr_start[15:8] Array horizontal start point high byte
+0x3801 X ADDR START 0x00 RW Bit[7:0]: x_addr_start[7:0] Array horizontal start point low byte
+sensor array vertical output size
+y_addr_starty_addr_end
+isp_y_win
+vertical full size: 1096
+y_output_size
+x_output_size
+sensor array horizontal output size
+horizontal full size: 1936
+isp_x_win
+x_addr_start x_addr_end
+48 black line
+Confidential for Waching Only
+
+===== PAGE 51 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+4-3
+0x3802 Y ADDR START 0x00 RW Bit[7:0]: y_addr_start[15:8] Array vertical start point high byte
+0x3803 Y ADDR START 0x04 RW Bit[7:0]: y_addr_start[7:0] Array vertical start point low byte
+0x3804 X ADDR END 0x07 RW Bit[7:0]: x_addr_end[15:8] Array horizontal end point high byte
+0x3805 X ADDR END 0x8F RW Bit[7:0]: x_addr_end[7:0] Array horizontal end point low byte
+0x3806 Y ADDR END 0x04 RW Bit[7:0]: y_addr_end[15:8] Array vertical end point high byte
+0x3807 Y ADDR END 0x43 RW Bit[7:0]: y_addr_end[7:0] Array vertical end point low byte
+0x3808 X OUTPUT SIZE 0x07 RW Bit[7:0]: x_output_size[15:8] ISP horizontal output width high byte
+0x3809 X OUTPUT SIZE 0x80 RW Bit[7:0]: x_output_size[7:0] ISP horizontal output width low byte
+0x380A Y OUTPUT SIZE 0x04 RW Bit[7:0]: y_output_size[15:8] ISP vertical output height high byte
+0x380B Y OUTPUT SIZE 0x38 RW Bit[7:0]: y_output_size[7:0] ISP vertical output height low byte
+0x380C HTS 0x04 RW Bit[7:0]: HTS[15:8] Total horizontal timing size high byte
+0x380D HTS 0x78 RW Bit[7:0]: HTS[7:0] Total horizontal timing size low byte
+0x380E VTS 0x04 RW
+Bit[7]: Chip debug use only
+Bit[6:0]: VTS[14:8]
+Total vertical timing size high byte
+0x380F VTS 0x8C RW Bit[7:0]: VTS[7:0] Total vertical timing size low byte
+0x3810 ISP X WIN 0x00 RW Bit[7:0]: isp_x_win[15:8] ISP horizontal windowing offset high byte
+0x3811 ISP X WIN 0x08 RW Bit[7:0]: isp_x_win[7:0] ISP horizontal windowing offset low byte
+0x3812 ISP Y WIN 0x00 RW Bit[7:0]: isp_y_win[15:8] ISP vertical windowing offset high byte
+0x3813 ISP Y WIN 0x04 RW Bit[7:0]: isp_x_win[7:0] ISP vertical windowing offset low byte
+0x3814 X INC ODD 0x01 RW Bit[4:0]: x_odd_inc
+table 4-2 image cropping and windowing control functions (sheet 2 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 52 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+4.3 black level calibration (BLC)
+The pixel array contains several optically shielded (black) lines. These black lines are used as reference for black level 
+calibration
+There are two main functions of the BLC:
+• adjusting all normal pixel values bas ed on the values of the black levels
+• applying multiplication to all the pixel values based on MWB gain
+Black level adjustments can be made with registers 0x4002 and 0x4003.
+0x3815 X INC EVEN 0x01 RW Bit[4:0]: x_even_inc
+0x3816 Y INC ODD 0x01 RW Bit[4:0]: y_odd_inc
+0x3817 Y INC EVEN 0x01 RW Bit[4:0]: y_even_inc
+table 4-3 BLC registers (sheet 1 of 5)
+address register name
+default
+value R/W description
+0x4000 BLC CTRL00 0xC1 RW
+Bit[7:4]: avg_weight
+Bit[3]: target_adj_dis
+Bit[2]: cmp_en
+Bit[1]: dither_en
+Bit[0]: mf_en
+0x4001 BLC CTRL01 0xE0 RW
+Bit[7]: gain_trig_beh
+Bit[6]: format_trig_beh
+Bit[5]: kcoef_man_en
+Bit[4]: off_man_en
+Bit[3]: zero_ln_out_en
+Bit[2]: blk_ln_out_en
+Bit[1:0]: byp_mode
+0x4002 BLK LVL TARGET 0x00 RW Bit[1:0]: blk_lvl_target[9:8]
+0x4003 BLK LVL TARGET 0x10 RW Bit[7:0]: blk_lvl_target[7:0]
+0x4004 HWIN OFF 0x00 RW Bit[3:0]: hwin_off[11:8]
+0x4005 HWIN OFF 0x02 RW Bit[7:0]: hwin_off[7:0]
+0x4006 HWIN PAD 0x00 RW Bit[3:0]: hwin_pad[11:8]
+0x4007 HWIN PAD 0x02 RW Bit[7:0]: hwin_pad[7:0]
+table 4-2 image cropping and windowing control functions (sheet 3 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 53 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+4-5
+0x4008 BLC CTRL08 0x00 RW Bit[7:0]: bl_start
+0x4009 BLC CTRL09 0x0B RW Bit[7:0]: bl_end
+0x400A OFF LIM TH 0x02 RW Bit[7:0]: off_lim_th[15:8]
+0x400B OFF LIM TH 0x00 RW Bit[7:0]: off_lim_th[7:0]
+0x400C BLC CTRL0C 0x00 RW Bit[7:0]: cvdn_bl_start
+0x400D BLC CTRL0D 0x00 RW Bit[7:0]: cvdn_bl_end
+0x400E KCOEF MAN 0x00 RW Bit[1:0]: kcoef_man[9:8]
+0x400F KCOEF MAN 0x80 RW Bit[7:0]: kcoef_man[7:0]
+0x4010 BLC CTRL10 0xF0 RW
+Bit[7]: off_trig_en
+Bit[6]: gain_chg_trig_en
+Bit[5]: fmt_chg_trig_en
+Bit[4]: rst_trig_en
+Bit[3]: man_avg_en
+Bit[2]: man_trig
+Bit[1]: off_frz_en
+Bit[0]: off_always_up
+0x4011 BLC CTRL11 0xFF RW
+Bit[6]: off_chg_mf_en
+Bit[5]: fmt_chg_mf_en
+Bit[4]: gain_chg_mf_en
+Bit[3]: rst_mf_mode
+Bit[2]: off_chg_mf_mode
+Bit[1]: fmt_chg_mf_mode
+Bit[0]: gain_chg_mf_mode
+0x4012 BLC CTRL12 0x08 RW Bit[5:0]: rst_trig_fn
+0x4013 BLC CTRL13 0x02 RW Bit[5:0]: fmt_trig_fn
+0x4014 BLC CTRL14 0x02 RW Bit[5:0]: gain_trig_fn
+0x4015 BLC CTRL15 0x02 RW Bit[5:0]: off_trig_fn
+0x4016 OFF TRIG TH 0x00 RW Bit[1:0]: off_trig_th[9:8]
+0x4017 OFF TRIG TH 0x10 RW Bit[7:0]: off_trig_th[7:0]
+0x4020 BLC CTRL20 0x00 RW Bit[5:0]: off_cmp_th000
+0x4021 BLC CTRL21 0x00 RW Bit[5:0]: off_cmp_k000
+0x4022 BLC CTRL22 0x00 RW Bit[5:0]: off_cmp_th001
+0x4023 BLC CTRL23 0x00 RW Bit[5:0]: off_cmp_k001
+0x4024 BLC CTRL24 0x00 RW Bit[5:0]: off_cmp_th010
+0x4025 BLC CTRL25 0x00 RW Bit[5:0]: off_cmp_k010
+table 4-3 BLC registers (sheet 2 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 54 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4026 BLC CTRL26 0x00 RW Bit[5:0]: off_cmp_th011
+0x4027 BLC CTRL27 0x00 RW Bit[5:0]: off_cmp_k011
+0x4028 BLC CTRL28 0x00 RW Bit[5:0]: off_cmp_th100
+0x4029 BLC CTRL29 0x00 RW Bit[5:0]: off_cmp_k100
+0x402A BLC CTRL2A 0x00 RW Bit[5:0]: off_cmp_th101
+0x402B BLC CTRL2B 0x00 RW Bit[5:0]: off_cmp_k101
+0x402C BLC CTRL2C 0x00 RW Bit[5:0]: off_cmp_th110
+0x402D BLC CTRL2D 0x00 RW Bit[5:0]: off_cmp_k110
+0x402E BLC CTRL2E 0x00 RW Bit[5:0]: off_cmp_th111
+0x402F BLC CTRL2F 0x00 RW Bit[5:0]: off_cmp_k111
+0x4030 OFF MAN000 0x00 RW Bit[1:0]: off_man000[9:8]
+0x4031 OFF MAN000 0x00 RW Bit[7:0]: off_man000[7:0]
+0x4032 OFF MAN001 0x00 RW Bit[1:0]: off_man001[9:8]
+0x4033 OFF MAN001 0x00 RW Bit[7:0]: off_man001[7:0]
+0x4034 OFF MAN010 0x00 RW Bit[1:0]: off_man010[9:8]
+0x4035 OFF MAN010 0x00 RW Bit[7:0]: off_man010[7:0]
+0x4036 OFF MAN011 0x00 RW Bit[1:0]: off_man011[9:8]
+0x4037 OFF MAN011 0x00 RW Bit[7:0]: off_man011[7:0]
+0x4038 OFF MAN100 0x00 RW Bit[1:0]: off_man100[9:8]
+0x4039 OFF MAN100 0x00 RW Bit[7:0]: off_man100[7:0]
+0x403A OFF MAN101 0x00 RW Bit[1:0]: off_man101[9:8]
+0x403B OFF MAN101 0x00 RW Bit[7:0]: off_man101[7:0]
+0x403C OFF MAN110 0x00 RW Bit[1:0]: off_man110[9:8]
+0x403D OFF MAN110 0x00 RW Bit[7:0]: off_man110[7:0]
+0x403E OFF MAN111 0x00 RW Bit[1:0]: off_man111[9:8]
+0x403F OFF MAN111 0x00 RW Bit[7:0]: off_man111[7:0]
+0x4040 BLC CTRL40 0x00 RW Bit[1:0]: r_rnd_gain_th[9:8]
+0x4041 BLC CTRL41 0x00 RW Bit[7:0]: r_rnd_gain_th[7:0]
+0x4050 BLC OFFSET000 – R Bit[1:0]: blc_offset000[9:8]
+0x4051 BLC OFFSET000 – R Bit[7:0]: blc_offset000[7:0]
+table 4-3 BLC registers (sheet 3 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 55 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+4-7
+0x4052 BLC OFFSET001 – R Bit[1:0]: blc_offset001[9:8]
+0x4053 BLC OFFSET001 – R Bit[7:0]: blc_offset001[7:0]
+0x4054 BLC OFFSET010 – R Bit[1:0]: blc_offset010[9:8]
+0x4055 BLC OFFSET010 – R Bit[7:0]: blc_offset010[7:0]
+0x4056 BLC OFFSET011 – R Bit[1:0]: blc_offset011[9:8]
+0x4057 BLC OFFSET011 – R Bit[7:0]: blc_offset011[7:0]
+0x4058 BLC OFFSET100 – R Bit[1:0]: blc_offset100[9:8]
+0x4059 BLC OFFSET100 – R Bit[7:0]: blc_offset100[7:0]
+0x405A BLC OFFSET101 – R Bit[1:0]: blc_offset101[9:8]
+0x405B BLC OFFSET101 – R Bit[7:0]: blc_offset101[7:0]
+0x405C BLC OFFSET110 – R Bit[1:0]: blc_offset110[9:8]
+0x405D BLC OFFSET110 – R Bit[7:0]: blc_offset110[7:0]
+0x405E BLC OFFSET111 – R Bit[1:0]: blc_offset111[9:8]
+0x405F BLC OFFSET111 – R Bit[7:0]: blc_offset111[7:0]
+0x4060 Z OFFSET LB – R Bit[7:0]: z_offset_lb[7:0]
+0x4061 Z OFFSET LGB – R Bit[7:0]: z_offset_lgb[7:0]
+0x4062 Z OFFSET LGR – R Bit[7:0]: z_offset_lgr[7:0]
+0x4063 Z OFFSET LR – R Bit[7:0]: z_offset_lr[7:0]
+0x4064 Z OFFSET SB – R Bit[7:0]: z_offset_sb[7:0]
+0x4065 Z OFFSET SGB – R Bit[7:0]: z_offset_sgb[7:0]
+0x4066 Z OFFSET SGR – R Bit[7:0]: z_offset_sgr[7:0]
+0x4067 Z OFFSET SR – R Bit[7:0]: z_offset_sr[7:0]
+0x4068 B OFFSET LB – R Bit[7:0]: b_offset_lb[7:0]
+0x4069 B OFFSET LGB – R Bit[7:0]: b_offset_lgb[7:0]
+0x406A B OFFSET LGR – R Bit[7:0]: b_offset_lgr[7:0]
+0x406B B OFFSET LR – R Bit[7:0]: b_offset_lr[7:0]
+0x406C B OFFSET SB – R Bit[7:0]: b_offset_sb[7:0]
+0x406D B OFFSET SGB – R Bit[7:0]: b_offset_sgb[7:0]
+0x406E B OFFSET SGR – R Bit[7:0]: b_offset_sgr[7:0]
+0x406F B OFFSET SR – R Bit[7:0]: b_offset_sr[7:0]
+table 4-3 BLC registers (sheet 4 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 56 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4070 CTRL70 – RW CTRL70
+0x4071 CTRL71 – RW CTRL71
+0x4077 CTRL77 0x07 RW CTRL77
+0x4078 CTRL78 0x00 RW CTRL78
+0x4079 CTRL79 0x01 RW CTRL79
+0x407A CTRL7A 0x00 RW CTRL7A
+0x407B CTRL7B 0x02 RW CTRL7B
+0x407C CTRL7C 0x00 RW CTRL7C
+0x407D CTRL7D 0x00 RW CTRL7D
+0x407E CTRL7E 0x1F RW CTRL7E
+0x4080 CTRL80 0xFF RW CTRL80
+0x4081 CTRL81 0xFF RW CTRL81
+0x4082 CTRL82 0x02 RW CTRL82
+table 4-3 BLC registers (sheet 5 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 57 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+4-9
+4.4 test pattern
+figure 4-3 color bar
+table 4-4 test pattern register
+address register name
+default
+value R/W description
+0x4503 SYNC_CTRL3 0x00 RW Bit[7]: r_bar_en Bit[1:0]: bar_style
+ 
+ 
+ 
+color bar type 1
+0x4503[1:0]=2'b00
+color bar type 2
+0x4503[1:0]=2'b01
+color bar type 4
+0x4503[1:0]=2'b11
+color bar type 3
+0x4503[1:0]=2'10
+Confidential for Waching Only
+
+===== PAGE 58 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+4.5 strobe flash and frame exposure
+4.5.1 strobe flash control
+The FSIN pin can be used to output the strobe signal. In order to enable FSIN pin output, the sensor must first enter 
+software standby mode (0x0100=0). Upon entering software standby, the strobe signal needs to be routed to the FSIN 
+pin (0x364B[2]=1) and the FSIN pin output can be enabled (0x3002[7]=1). The sensor can now exit software standby to 
+stream images (0x0100=1). The strobe signal is programmable using register 0x3B00[2:0]. It supports both LED and 
+Xenon modes. The polarity of the pulse can be changed. The strobe signal is enabled (turned high/low depending on the 
+pulse’s polarity) by requesting the signal via the SCCB interface. Flash modules are triggered by the rising edge by 
+default or by the falling edge if the signal polarity is changed. The OV02C10 supports the following flashing modes: xenon 
+flash control, LED mode 1, LED mode 2, LED mode 3, and LED mode 4.
+4.5.1.1 xenon flash control
+After a strobe request is submitted, the strobe pulse will be activated at the beginning of the third frame (see 
+figure 4-4). The third frame will be correctly exposed. The pulse width can be changed in Xenon mode between 1H 
+and 4H controlled by register 0x3B00[5:4], where H is one row period.
+figure 4-4 xenon flash mode
+vertical
+blanking
+exposure
+time
+data
+out
+strobe
+request
+strobe
+pulse
+strobe
+pulse
+zoomedrequest here
+1H
+correctly
+exposed
+frame
+Confidential for Waching Only
+
+===== PAGE 59 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+4-11
+4.5.1.2 LED 1 & 2 mode
+In LED 1 & 2 modes, the strobe pulse is active two frames after the strobe request is submitted and the third frame 
+is correctly exposed. The strobe pulse will be activated only one time if the strobe end request is set as shown in 
+figure 4-5. If end request has not been sent, the strobe signal is activated intermittently until the strobe end request 
+is set (see figure 4-6). The strobe width is programmable.
+figure 4-5 LED 1 & 2 mode - one pulse output
+vertical
+blanking
+exposure
+time
+data
+out
+strobe
+request
+strobe
+pulse
+correctly
+exposed
+frame
+number of inserted dummy lines is programmable
+request here
+start end
+Confidential for Waching Only
+
+===== PAGE 60 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+figure 4-6 LED 1 & 2 mode - multiple pulse output
+4.5.1.3 LED 3 mode
+In LED 3 mode, the strobe signal stays active until the strobe end request is sent (see figure 4-7).
+figure 4-7 LED 3 mode
+vertical
+blanking
+exposure
+time
+data
+out
+strobe
+request
+strobe
+pulse
+correctly
+exposed
+frame
+request here
+start
+number of lines is programmable
+exposure
+time
+data
+out
+strobe
+request
+strobe
+signal
+correctly
+exposed
+frame
+request here request here
+start end
+vertical
+blanking
+Confidential for Waching Only
+
+===== PAGE 61 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+4-13
+4.5.1.4 LED 4 mode
+In LED 4 mode, the strobe signal width is controlled by register 0x3B05 (see figure 4-8). Strobe width = 128 × 
+(2^0x3B05[1:0]) × (0x3B05[7:2] + 1) × sclk_period. The maximum value of 0x3B05[7:2] is 6'b111110.
+figure 4-8 LED 4 mode
+table 4-5 strobe control registers (sheet 1 of 2)
+address register name
+default
+value R/W description
+0x3B00 STROBE CTRL 0x00 RW
+Bit[7]: Strobe ON/OFF
+Bit[6]: Strobe polarity 
+0: Active high
+1: Active low
+Bit[5:4]: width_in_xenon
+Bit[2:0]: Strobe mode
+000: Xenon
+001: LED1
+010: LED2
+011: LED3
+100: LED4
+0x3B02 STROBE DMY H 0x00 RW
+Bit[7:0]: strobe_add_dummy[15:8]
+Dummy line number added at strobe 
+high byte
+vertical
+blanking
+exposure
+time
+data
+out
+strobe
+request
+strobe
+pulse
+request herecorrectly
+exposed
+frame
+Confidential for Waching Only
+
+===== PAGE 62 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3B03 STROBE DMY L 0x00 RW
+Bit[7:0]: strobe_add_dummy[7:0]
+Dummy line number added at strobe low 
+byte
+0x3B04 STROBE CTRL 0x00 RW
+Bit[6]: strobe_req option
+Bit[5:4]: start_point_sel
+00: SOF
+01: End of sample
+10: End of precharge
+11: Not defined
+Bit[3]: start_point_sel
+Bit[2]: Strobe repeat enable
+Bit[1:0]: Strobe latency
+00: Strobe generated at next frame
+01: Delay one frame, strobe generated 
+2 frames later
+10: Delay one frame, strobe generated 
+3 frames later
+11: Delay one frame, strobe generated 
+4 frames later
+0x3B05 STROBE WIDTH 0x00 RW
+Bit[7:2]: Strobe pulse width step
+Bit[1:0]: Strobe pulse width gain
+strobe_pulse_width = 
+128×(2^gain)×(step+1)×Tsclk
+table 4-5 strobe control registers (sheet 2 of 2)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 63 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+5-1
+5 image sensor proces sor digital functions
+5.1 ISP general controls
+The main purposes of the ISP top includes:
+• integrate all sub-modules
+• create necessary control signals
+5.2 defective pixel cancellation (DPC)
+The main purpose of the DPC function is to remove white/black defect pixels. If the pixel is defective, DPC will use a 
+value calculated from the neighboring normal pixels to replace it.
+For DPC control, different type of clusters and correction criteria with gain change can be programmed by registers 
+0x5202~0x522B.
+table 5-1 ISP top register
+address register name
+default
+value R/W description
+0x5000 ISP_TOP_0 0xF5 RW
+Bit[6]: ctrl_latch_en
+Bit[5]: win_en
+Bit[4]: dpc_en
+Bit[3]: otp_en
+Bit[2]: awb_en
+Bit[1]: pre_isp_man_en
+Bit[0]: isp_en
+table 5-2 DPC registers (sheet 1 of 3)
+address register name
+default
+value R/W description
+0x5202 DPC_1700_D1_2 0xA3 RW
+Bit[7]: BW option select
+0: BW option can be turned on for all 
+gains
+1: Use gainThres and marginThres 
+to determine BW option (can be 
+turned on when low gain)
+Bit[6]: Enable BW option
+Bit[5]: Enable white/black ratio threshold
+Bit[3]: Enable manual mode
+Bit[2]: Enable cross cluster correction
+Bit[1]: Enable black pixel correction
+Bit[0]: Enable white pixel correction
+Confidential for Waching Only
+
+===== PAGE 64 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x5203 DPC_1700_D1_3 0x4C RW
+Bit[6]: Line data select
+0: Use dummy line data
+1: Last two lines re-use bound data
+Bit[5]: HDR/SBS select
+0: HDR
+1: SBS
+Bit[4]: algorithm_opt
+Bit[3:2]: Edge filling option
+Bit[1:0]: RGB/G/BR select
+00: RGB
+01: G
+10: BR
+11: Not defined
+0x5204 DPC_1700_D1_4 0x04 RW Bit[7:0]: White pixel threshold list[0]
+0x5205 DPC_1700_D1_5 0x04 RW Bit[7:0]: White pixel threshold list[1]
+0x5206 DPC_1700_D1_6 0x04 RW Bit[7:0]: White pixel threshold list[2]
+0x5207 DPC_1700_D1_7 0x04 RW Bit[7:0]: White pixel threshold list[3]
+0x5208 DPC_1700_D1_8 0x04 RW Bit[7:0]: Bl ack pixel threshold list[0]
+0x5209 DPC_1700_D1_9 0x04 RW Bit[7:0]: Bl ack pixel threshold list[1]
+0x520A DPC_1700_D1_10 0x04 RW Bit[7:0]: Bl ack pixel threshold list[2]
+0x520B DPC_1700_D1_11 0x04 RW Bit[7:0]: Black pixel threshold list[3]
+0x520D DPC_1700_D1_13 0x03 RW Bit[7:0]: Gain control point[0]
+0x520E DPC_1700_D1_14 0x08 RW Bit[7:0]: Gain control point[1]
+0x520F DPC_1700_D1_15 0x0C RW Bit[7:0]: Gain control point[2]
+0x5210 DPC_1700_D1_16 0x00 RW Bit[3:0]: Max allowed defect pixel list[0]
+0x5211 DPC_1700_D1_17 0x00 RW Bit[3:0]: Max allowed defect pixel list[1]
+0x5212 DPC_1700_D1_18 0x01 RW Bit[3:0]: Max allowed defect pixel list[2]
+0x5213 DPC_1700_D1_19 0x02 RW Bit[3:0]: Max allowed defect pixel list[3]
+0x5214 DPC_1700_D1_20 0x08 RW Bit[7:0]: White couplet defect pixel correction gain threshold
+0x5215 DPC_1700_D1_21 0x08 RW Bit[3:0]: White couplet defect pixel correction gain margin
+0x5216 DPC_1700_D1_22 0x08 RW Bit[7:0]: Black couplet defect pixel correction gain threshold
+0x5217 DPC_1700_D1_23 0x08 RW Bit[3:0]: Black couplet defect pixel correction gain margin
+table 5-2 DPC registers (sheet 2 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 65 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+5-3
+5.3 window cut (WINC)
+The main purpose of the WINC module is to make the image size to be real size by removing offset.
+0x5219 DPC_1700_D1_25 0x08 RW Bit[3:0]: White couplet threshold ratio
+0x521A DPC_1700_D1_26 0x08 RW Bit[3:0]: Bl ack couplet threshold ratio
+0x521B DPC_1700_D1_27 0xFF RW Bit[7:0]: Saturation threshold
+0x5226 DPC_1700_D1_38 0x08 RW Bit[3:0]: Gain margin threshold for BW option
+0x5227 DPC_1700_D1_39 0x08 RW Bit[7:0]: Gain threshold for BW option
+0x5228 DPC_1700_D1_40 0x33 RW Bit[7:4]: White ratio threshold list[0] Bit[3:0]: White ratio threshold list[1]
+0x5229 DPC_1700_D1_41 0x33 RW Bit[7:4]: White ratio threshold list[2] Bit[3:0]: White ratio threshold list[3]
+0x522A DPC_1700_D1_42 0x33 RW Bit[7:4]: Black ratio threshold list[0] Bit[3:0]: Black ratio threshold list[1]
+0x522B DPC_1700_D1_43 0x33 RW Bit[7:4]: Black ratio threshold list[2] Bit[3:0]: Black ratio threshold list[3]
+0x522C DPC_1700_D1_44 – R Bit[7:0]: dpc_sw_ver[15:8]
+0x522D DPC_1700_D1_45 – R Bit[7:0]: dpc_sw_ver[7:0]
+0x522E DPC_1700_D1_46 – R Bit[7:0]: dpc_hw_ver[15:8]
+0x522F DPC_1700_D1_47 – R Bit[7:0]: dpc_hw_ver[7:0]
+table 5-3 WINC registers (sheet 1 of 2)
+address register name
+default
+value R/W description
+0x5800 WINDOW_1020_0 0x00 RW Bit[2:0]: Window X start[10:8]
+0x5801 WINDOW_1020_1 0x00 RW Bit[7:0]: Window X start[7:0]
+0x5802 WINDOW_1020_2 0x00 RW Bit[2:0]: Window Y start[10:8]
+0x5803 WINDOW_1020_3 0x00 RW Bit[7:0]: Window Y start[7:0]
+0x5804 WINDOW_1020_4 0x02 RW Bit[2:0]: Window width[10:8]
+0x5805 WINDOW_1020_5 0x80 RW Bit[7:0]: Window width[7:0]
+0x5806 WINDOW_1020_6 0x01 RW Bit[2:0]: Window height[10:8]
+table 5-2 DPC registers (sheet 3 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 66 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+5.4 manual white balance gain
+The RAW R/G/B values of a gray object vary with the spectrum of the illumination and the sensor spectral response. The 
+illumination spectrum, usually described by "color temperature", is the surface temperature of the black body radiating 
+equivalent spectrum. In the real world, the light color temperature ranges from very low (reddish) to very high (bluish) 
+value. For example, the color temperature of an incandescent lamp is around 2850K, while the color temperature of an 
+overcast day is around 6500K.
+To make sure that a gray image is truly gray, the sensor needs to adjust the gain for each color channel according to the 
+color temperature. The process is called white balance (WB).
+White balanced gain is enabled by default and can be disabled by register 0x5000[2]. The manual white balance (MWB), 
+controlled by register 0x5100~0x5105, provides gain for R, G, and B channels. Each channel gain is 10-bit. 0x100 is 1x 
+gain. Maximum 4x gain is 0x3FF.
+White balance gain does not have internal latch function. Once it is set, it will take effect immediately
+0x5807 WINDOW_1020_7 0xE0 RW Bit[7:0]: Window height[7:0]
+0x5808 WINDOW_1020_8 0x00 RW
+Bit[2]: Flip enable
+Bit[1]: Mirror enable
+Bit[0]: Manual window enable
+0x5810 WINDOW_1020_16 – RW Bit[2:0]: px_cnt[10:8]
+0x5811 WINDOW_1020_17 – RW Bit[7:0]: px_cnt[7:0]
+0x5812 WINDOW_1020_18 – RW Bit[2:0]: ln_cnt[10:8]
+0x5813 WINDOW_1020_19 – RW Bit[7:0]: ln_cnt[7:0]
+0x5814 WINDOW_1020_20 – R Bit[7:0]: ro_version[15:8]
+0x5815 WINDOW_1020_21 – R Bit[7:0]: ro_version[7:0]
+table 5-4 MWB gain registers (sheet 1 of 2)
+address register name
+default
+value R/W description
+0x5100 AWB_GAIN_2210_0 0x01 RW Bit[1:0]: Red AWB gain2.8 precision[9:8]
+0x5101 AWB_GAIN_2210_1 0x00 RW Bit[7:0]: Red AWB gain2.8 precision[7:0]
+0x5102 AWB_GAIN_2210_2 0x01 RW Bit[1:0]: Green AWB gain2.8 precision[9:8]
+0x5103 AWB_GAIN_2210_3 0x00 RW Bit[7:0]: Green AWB gain2.8 precision[7:0]
+table 5-3 WINC registers (sheet 2 of 2)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 67 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+5-5
+5.5 pre_ISP
+Pre_ISP provides the following functions:
+• test pattern (color bar) for ISP data path
+For test mode (register bit 0x5080[7] = 1'b1), the pre_ISP offers four color bar patterns controlled by register bits 
+0x5080[5:4].
+figure 5-1 pre_ISP test patterns
+0x5104 AWB_GAIN_2210_4 0x01 RW Bit[1:0]: Blue AWB gain2.8 precision[9:8]
+0x5105 AWB_GAIN_2210_5 0x00 RW Bit[7:0]: Blue AWB gain2.8 precision[7:0]
+0x5110 AWB_GAIN_2210_16 – R Bit[7:0]: ro_version[15:8]
+0x5111 AWB_GAIN_2210_17 – R Bit[7:0]: ro_version[7:0]
+table 5-4 MWB gain registers (sheet 2 of 2)
+address register name
+default
+value R/W description
+color bar (0x5080[5:4] = 2’b00) color bar (0x5080[5:4] = 2’b01)
+color bar (0x5080[5:4] = 2’b10) color bar (0x5080[5:4] = 2’b11)
+Confidential for Waching Only
+
+===== PAGE 68 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+table 5-5 PRE_ISP registers
+address register name
+default
+value R/W description
+0x5080 PRE_ISP_2020_0 0x40 RW
+Bit[7]: test_en
+Bit[6]: win_cut_en
+Bit[5:4]: bar_style
+Bit[2:0]: ln_intr_cnt[10:8]
+0x5081 PRE_ISP_2020_1 0x01 RW Bit[7:0]: ln_intr_cnt[7:0]
+0x5082 PRE_ISP_2020_2 0x00 RW Bit[2:0]: man_x_offset[10:8]
+0x5083 PRE_ISP_2020_3 0x00 RW Bit[7:0]: man_x_offset[7:0]
+0x5084 PRE_ISP_2020_4 0x00 RW Bit[2:0]: man_y_offset[10:8]
+0x5085 PRE_ISP_2020_5 0x00 RW Bit[7:0]: man_y_offset[7:0]
+0x5086 PRE_ISP_2020_6 0x00 RW
+Bit[4]: mirror_opt
+Bit[3]: end_man_en
+Bit[2:0]: man_x_end[10:8]
+0x5087 PRE_ISP_2020_7 0x00 RW Bit[7:0]: man_x_end[7:0]
+0x5088 PRE_ISP_2020_8 – R Bit[7:0]: ro_version[15:8]
+0x5089 PRE_ISP_2020_9 – R Bit[7:0]: ro_version[7:0]
+Confidential for Waching Only
+
+===== PAGE 69 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-1
+6 register tables
+The following tables provide descriptions of the device control registers contained in the OV02C10. For all register 
+enable/disable bits, ENABLE = 1 and DISABLE = 0. The device slave addresses are 0x6C for write and 0x6D for read 
+(when SID=1, 0x20 for write and 0x21 for read).
+6.1 system [0x0100, 0x0103]
+6.2 PLL [0x0300 ~ 0x0330]
+table 6-1 system registers
+address register name
+default
+value R/W description
+0x0100 MODE SELECT 1’b0 RW
+Bit[7:1]: Not used
+Bit[0]: Streaming
+0: software_standby
+1: Streaming
+0x0103 SOFTWARE RESET – W
+Bit[7:1]: Not used
+Bit[0]: software_reset
+0: Off
+1: On
+table 6-2 PLL registers (sheet 1 of 3)
+address register name
+default
+value R/W description
+0x0300 PLL1 CTRL1 0x70 RW
+Bit[7]: pll1_r_bp_vco_sync
+Bit[6:4]: pll1_r_cntck
+Bit[3]: pll1_r_dither_en
+Bit[2:0]: pll1_pre_clk_div
+0x0301 PLL1 CTRL2 0x00 RW
+Bit[7]: pll1_r_divs
+Bit[6]: pll1_pre_clk_divp
+Bit[5]: pll1_r_div_rst_sync_en
+Bit[4]: pll1_r_sscg_en
+Bit[3]: pll1_r_bias_ext
+Bit[2]: pll1_r_divpix
+Bit[1]: pll1_r_ssc_3xfast
+Bit[0]: pll1_r_en_extI
+0x0302 PLL1 CTRL3 0x00 RW
+Bit[7]: pll1_rst
+Bit[6:4]: pll1_cp
+Bit[3]: pll1_bypass
+Bit[2:0]: pll1_r_divmipi
+Confidential for Waching Only
+
+===== PAGE 70 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x0303 PLL1 CTRL4 0x06 RW
+Bit[7:4]: pll1_vt_sys_clk_div
+Bit[3:2]: Not used
+Bit[1:0]: pll1_vt_pix_clk_div
+0x0304 PLL1 CTRL5 0x02 RW Bit[7:0]: pll1_r_loopdiv[7:0]
+0x0305 PLL1 CTRL6 0xEE RW Bit[7:2]: Not used Bit[1:0]: pll1_r_loopdiv[9:8]
+0x0306 PLL1 CTRL7 0x70 RW Bit[7:0]: pll1_r_dsm[7:0]
+0x0307 PLL1 CTRL8 0x00 RW Bit[7:0]: pll1_r_dsm[15:8]
+0x0308 PLL1 CTRL9 0x00 RW Bit[7:4]: Not used Bit[3:0]: pll1_r_dsm[19:16]
+0x0309 PLL1 CTRL10 0x10 RW Bit[7:4]: Not used Bit[3:0]: pll1_r_cntstep[3:0]
+0x030A PLL1 CTRL11 0x00 RW
+Bit[7:6]: Not used
+Bit[5]: pll1_r_frac_en
+Bit[4]: pll1_r_lock_det_en
+Bit[3:2]: pll1_r_precision
+Bit[1:0]: pll1_r_cnt_ref
+0x030B~
+0x0313 RSVD – – Reserved
+0x0314 PLL2 CTRL1 0x04 RW Bit[7:3]: Not used Bit[2:0]: pll2_pre_div
+0x0315 PLL2 CTRL2 0x01 RW Bit[7:2]: Not used Bit[1:0]: pll2_r_divp[9:8]
+0x0316 PLL2 CTRL3 0x40 RW Bit[7:0]: pll2_r_divp[7:0]
+0x0317 PLL2 CTRL4 0x02 RW Bit[7:4]: Not used Bit[3:0]: pll2_r_divs
+0x0318 PLL2 CTRL5 0x03 RW Bit[7:4]: Not used Bit[3:0]: pll2_r_divsp
+0x0319 PLL2 CTRL6 0x01 RW Bit[7:3]: Not used Bit[2:0]: pll2_r_cp
+0x031A PLL2 CTRL7 0x01 RW pll2_predivp
+0x031B PLL2 CTRL8 0x00 RW
+Bit[7]: pll2_r_bp_vco_sync
+Bit[6]: pll2_r_sel_bak_divs
+Bit[5]: pll2_r_sel_bak_sa1
+Bit[4:3]: pll2_cnt_ref
+Bit[2:1]: pll2_precision
+Bit[0]: pll2_lock_det_en
+table 6-2 PLL registers (sheet 2 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 71 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-3
+6.3 system control [0x3000 ~ 0x3041]
+0x031C PLL2 CTRL9 0x0F RW
+Bit[7]: Not used
+Bit[6]: pll2_r_bias_ext
+Bit[5]: pll2_r_sa1_clk_sel
+Bit[4:0]: pll2_r_divsa1
+0x031D PLL2 CTRL10 0x01 RW
+Bit[7:5]: Reserved
+Bit[4]: pll2_byp 
+Bit[3:0]: pll2_r_divdac
+0x031E MIPI BIT CONTROL 0x09 RW
+Bit[7:1]: Not used
+Bit[0]: mipi_bit_ctrl
+0: 8-bit
+1: 10-bit
+0x031F
+PLL SMOOTHLY 
+CHANGE VCO 
+CONTROL
+0x00 RW
+Bit[7:3]: Not used
+Bit[2]: r_pll3_lat_en
+Bit[1]: r_pll2_lat_en
+Bit[0]: r_pll1_lat_en
+0x0320 PLL2 CTRL11 0x15 RW
+Bit[7:5]: Not used
+Bit[4]: pll2_div_rst_sync_en
+Bit[3:0]: pll2_div_sram
+0x0321 PLL2 CTRL12 0x03 RW Bit[7:1]: Not used Bit[0]: pll2_rst_o
+0x0322~
+0x032F RSVD – – Reserved
+0x0330
+PLL SMOOTHLY 
+CHANGE VCO 
+CONTROL
+–W Bit[7:1]: Not used Bit[0]: Change PLL VCO trigger
+table 6-3 system control registers (sheet 1 of 8)
+address register name
+default
+value R/W description
+0x3000~
+0x3001 NOT USED – – Not Used
+0x3002 PAD OEN2 0x21 RW Bit[7]: io_fsin_oen Bit[6:0]: Not used
+0x3003 SCCB ID 0x6C RW Bit[7:0]: SCCB ID
+0x3004 SCCB ID BACKUP 0x20 RW Bit[7:0]: backup_sccb_id (used when p_sid_i = 1)
+table 6-2 PLL registers (sheet 3 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 72 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3005 SCCB ID2 0x42 RW Bit[7:0]: SCCB ID2
+0x3006~
+0x3007 NOT USED – – Not Used
+0x3008 PAD OUT2 0x00 RW
+Bit[7]: io_fsin_o
+Bit[6]: Not used
+Bit[5]: io_sda_o
+Bit[4:0]: Not used
+0x300A CHIP ID 0x56 R Bit[7:0]: chip_id[23:16]
+0x300B CHIP ID 0x02 R Bit[7:0]: chip_id[15:8]
+0x300C CHIP ID 0x03 RW Bit[7:0]: chip_id[7:0]
+0x300E PAD SEL0 0x00 RW Bit[7:5]: Not used Bit[4:0]: r_pad_share_sdo_opt
+0x300F PAD SEL1 0x00 RW Bit[7:5]: Not used Bit[4:0]: r_pad_share_sck_opt
+0x3010 PAD SEL2 0x00 RW
+Bit[7:6]: Not used
+Bit[5]: io_sda_sel
+Bit[4:0]: r_pad_share_fsin_opt
+0x3011 WAKE UP WAIT TIME 0x65 RW Bit[7:4]: Analog wake up wait time option Bit[3:0]: Digital wake up wait time option
+0x3012 CLK GATE MASK 0x20 RW
+Bit[7]: clk_gate_mask_sclk_blc
+Bit[6]: clk_gate_mask_srmclk_sync
+Bit[5]: clk_gate_mask_sclk_sync
+Bit[4]: clk_gate_mask_tclk_sync
+Bit[3]: clk_gate_mask_ser_clk_phy
+Bit[2]: clk_gate_mask_sclk_win
+Bit[1]: clk_gate_mask_srmclk_sync_fifo
+Bit[0]: clk_gate_mask_sclk_ac
+0x3013 CLK GATE MASK 0x00 RW
+Bit[7]: clk_gate_mask_pclk_lvds
+Bit[6]: clk_gate_mask_sclk_aec
+Bit[5]: clk_gate_mask_srmclk_psram
+Bit[4]: clk_gate_mask_sclk_mipi
+Bit[3]: clk_gate_mask_pclk_dvp
+Bit[2]: clk_gate_mask_sclk_vfifo
+Bit[1]: clk_gate_mask_sclk_tpm
+Bit[0]: clk_gate_mask_sclk_isp
+table 6-3 system control registers (sheet 2 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 73 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-5
+0x3014 FREX RST MASK0 0x00 RW
+Bit[7]: frex_mask_src
+Bit[6]: frex_mask_syncfifo
+Bit[5]: frex_mask_win
+Bit[4]: frex_mask_mipi_phy
+Bit[3]: frex_mask_sync_tclk
+Bit[2]: frex_mask_sync_sclk
+Bit[1]: frex_mask_sync_srclk
+Bit[0]: frex_mask_blc
+0x3015 PUMP CLK DIV 0x00 RW
+Bit[7]: Not used
+Bit[6:4]: Npump clock div
+000: /2
+001: /4
+010: /8
+011: /16
+100: /32
+Others: Disable pump_clk
+Bit[3]: Not used
+Bit[2:0]: Ppump clock div
+000: /2
+001: /4
+010: /8
+011: /16
+100: /32
+Others: Disable pump_clk
+0x3016 MIPI SC CTRL 0x12 RW
+Bit[7:5]: mipi_lane_mode
+00: One lane mode
+01: Two lane mode
+1x: Not defined
+Bit[4]: mipi_en
+0: DVP enable
+1: MIPI enable
+Bit[3:2]: r_phy_pd_mipi
+Bit[1]: phy_rst option
+1: Reset PHY when rst_sync
+Bit[0]: lane_dis option
+1: Disable lanes when pd_mipi
+0x3017 FREX RST MASK1 0x00 RW
+Bit[7]: frex_mask_isp
+Bit[6]: frex_mask_tpm
+Bit[5]: frex_mask_vfifo
+Bit[4]: frex_mask_vfifo_sclk
+Bit[3]: frex_mask_dvp
+Bit[2]: frex_mask_mipi
+Bit[1]: frex_mask_mipi_sclk
+Bit[0]: frex_mask_psram
+table 6-3 system control registers (sheet 3 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 74 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3018 CLKRST0 0x96 RW
+Bit[7]: tclk_tc
+Bit[6]: sclk_ac
+Bit[5]: Not used
+Bit[4]: srmclk/s clk_sync_fifo
+Bit[3]: rst_tc
+Bit[2]: rst_ac
+Bit[1]: rst_src
+Bit[0]: rst_syncfifo
+0x3019 CLKRST1 0x3C RW
+Bit[7]: tclk_frex
+Bit[6]: tclk_stb
+Bit[5]: tclk_psv_ctrl
+Bit[4]: sclk_win
+Bit[3]: rst_frex
+Bit[2]: rst_stb
+Bit[1]: rst_psv_ctrl
+Bit[0]: rst_win
+0x301A CLKRST2 0x70 RW
+Bit[7]: ser_clk_phy
+Bit[6]: tclk_sync
+Bit[5]: sclk_sync
+Bit[4]: srmclk_sync
+Bit[3]: mipi_phy_rst_o
+Bit[2]: rst_sync_tclk
+Bit[1]: rst_sync_sclk
+Bit[0]: rst_sync_srclk
+0x301B CLKRST3 0xD2 RW
+Bit[7]: sclk_blc
+Bit[6]: sclk_isp
+Bit[5]: sclk_tpm
+Bit[4]: sclk_vfifo
+Bit[3]: rst_blc
+Bit[2]: rst_isp
+Bit[1]: rst_tpm
+Bit[0]: rst_vfifo
+0x301C CLKRST4 0x78 RW
+Bit[7]: pclk_dvp
+Bit[6]: sclk/pclk_mipi
+Bit[5]: srmclk_psram
+Bit[4]: sclk_efuse
+Bit[3]: rst_dvp
+Bit[2]: rst_mipi
+Bit[1]: rst_psram
+Bit[0]: rst_efuse
+table 6-3 system control registers (sheet 4 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 75 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-7
+0x301D CLKRST5 0x5A RW
+Bit[7]: srmclk_asram_tst
+Bit[6]: sclk_grp
+Bit[5]: sclk_bist
+Bit[4]: sclk_aec
+Bit[3]: rst_asrm_tst
+Bit[2]: rst_grp
+Bit[1]: rst_bist
+Bit[0]: rst_aec
+0x301E CLKRST6 0x1E RW
+Bit[7]: Not used
+Bit[6]: pclk_lvds
+Bit[5]: sclk_gt
+Bit[4]: tclk_gain_swp
+Bit[3]: rst_sd
+Bit[2]: rst_lvds
+Bit[1]: rst_gt
+Bit[0]: rst_gain_swp
+0x301F CLKRST7 0x4B RW
+Bit[7]: sclk_fc
+Bit[6]: sclk_isp_fc
+Bit[5]: sclk_dpcm
+Bit[4]: sclk_testmode
+Bit[3]: rst_fc
+Bit[2]: rst_isp_fc
+Bit[1]: rst_dpcm
+Bit[0]: rst_testmode
+0x3020 CLOCK SEL 0x97 RW
+Bit[7:6]: Not used
+Bit[5]: sccb_pgm_id_en
+Bit[4]: sccb_id2_nack
+Bit[3:2]: pclk_sel
+Bit[1]: pclk_inv
+Reverse pclk
+Bit[0]: sclk2x_sel
+0x3021 MISC CTRL 0x23 RW
+Bit[7]: Not used
+Bit[6]: Sleep no latch option
+1: No latch
+Bit[5]: fst_stby_ctr
+0: Software standby enters at v_blk
+1: Software standby enters at l_blk
+Bit[4:3]: Not used
+Bit[2]: gpio_pclk_en
+Bit[1]: frex_ef_sel
+Bit[0]: Not used
+table 6-3 system control registers (sheet 5 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 76 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3022 MIPI SC CTRL 1 0x01 RW
+Bit[7:4]: mipi_bit_sel
+0100: 8-bit mode
+0101: 10-bit mode
+0110: 12-bit mode
+Others: Not defined
+Bit[3]: mipi_lvds_mode_o
+Bit[2]: spi_mode_o
+Bit[1]: Not used
+Bit[0]: pd_mipi enable when rst_sync
+0x3023 CTRL23 0x00 RW CTRL23
+0x3024 CLKRST8 0xAF RW
+Bit[7]: Not used
+Bit[6]: sclk_ao_ctrl
+Bit[5]: sclk_pll
+Bit[4]: pclk/serclk_spi
+Bit[3]: rst_ao_clk
+Bit[2]: rst_ao_ctrl
+Bit[1]: rst_osc_calib
+Bit[0]: rst_spi
+0x3025 CLKRST9 0xF0 RW
+Bit[7]: tclk_snr_ctrl
+Bit[6]: tclk_psadd
+Bit[5]: tclk_snr_state
+Bit[4]: sclk_arb
+Bit[3]: rst_snr_ctrl
+Bit[2]: rst_psadd
+Bit[1]: rst_snr_state
+Bit[0]: rst_arb
+0x3026 CLKRST10 0xB4 RW
+Bit[7]: Not used
+Bit[6]: tclk_mfhdr
+Bit[5]: pad_clk_mipi
+Bit[4]: pad_clk_pll
+Bit[3]: Not used
+Bit[2]: rst_mfhdr
+Bit[1:0]: Not used
+0x3027 CLKRST11 0xE1 RW
+Bit[7]: pad_clk_pvt
+Bit[6]: pad_clk_sc
+Bit[5]: pad_clk_sccb
+Bit[4]: pad_clk_tpm
+Bit[3:0]: Not used
+0x3028 CTRL28 0xBC RW CTRL28
+0x3029 FREX RST MASK2 0x00 RW
+Bit[7]: frex_mask_aec
+Bit[6]: frex_mask_lvds
+Bit[5]: frex_mask_gain_swp
+Bit[4]: frex_mask_spi
+Bit[3:0]: Not used
+table 6-3 system control registers (sheet 6 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 77 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-9
+0x302A SUB ID – R Bit[7:4]: Process Bit[3:0]: Version
+0x302B CTRL2B 0xFF RW CTRL2b
+0x302C CLK GATE MASK 0xC0 RW
+Bit[7]: clk_gate_mask_tclk_psadd
+Bit[6]: clk_gate_mask_tclk_snr_ctrl
+Bit[5]: clk_gate_mask_pclk_spi
+Bit[4]: clk_gate_mask_ser_clk_spi
+Bit[3]: clk_gate_mask_sclk_testmode
+Bit[2]: clk_gate_mask_sclk_dpcm
+Bit[1]: clk_gate_mask_sclk_isp_fc
+Bit[0]: clk_gate_mask_sclk_fc
+0x302D CLK GATE MASK 0x01 RW Bit[7:1]: Not used Bit[0]: clk_gate_mask_tclk_snr_state
+0x302E CTRL2E 0x00 RW CTRL2E
+0x302F CTRL2F 0x00 RW CTRL2F
+0x3030 CTRL30 0x00 RW CTRL30
+0x3031 CTRL31 0x00 RW CTRL31
+0x3032 CTRL32 0x00 RW CTRL32
+0x3033 CTRL33 0x00 RW CTRL33
+0x3034 CTRL34 – RW CTRL34
+0x3035 CTRL35 – RW CTRL35
+0x3036 CTRL36 – RW CTRL36
+0x3037 CTRL37 0x05 RW CTRL37
+0x3038 ESD WATCHDOG CTRL0 0xC2 RW
+Bit[7]: r_phy_error_en
+Bit[6]: r_href_detect_en
+Bit[5:4]: Not used
+Bit[3:0]: r_timer_threshold
+0x3039 ESD WATCHDOG CTRL1 0x08 RW Bit[7:0]: r_href_threshold
+0x303A SC LP CTRL 0 0x12 RW
+Bit[7]: r_auto_sleep_en
+Bit[6]: r_gpio_sel
+Bit[5]: r_wake_up_pol
+Bit[4]: r_aslp_repeat
+Bit[3]: r_als_wake_up_en
+Bit[2]: r_fsin_wake_up_en
+Bit[1]: r_auto_sleep_en
+Bit[0]: Not used
+0x303B SC LP CTRL 1 0x80 RW Bit[7:0]: r_sleep_period[7:0]
+table 6-3 system control registers (sheet 7 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 78 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.4 SCCB [0x3100 ~ 0x3108]
+6.5 group hold [0x3200 ~ 0x3251]
+0x303C SC LP CTRL 2 0x4F RW Bit[7:0]: r_sleep_period[15:8]
+0x303D SC LP CTRL 3 0x12 RW Bit[7:0]: r_sleep_period[23:16]
+0x303E SC LP CTRL 4 0x00 RW Bit[7:0]: r_sleep_period[31:24]
+0x303F SC LP CTRL 5 0x03 RW Bit[7:0]: r_frame_on_num
+0x3040 GPIO IN – R
+Bit[7]: p_y_i[11]
+GPIO1
+Bit[6]: p_y_i[10]
+GPIO2
+Bit[5]: p_y_i[9]
+GPIO3
+Bit[4]: p_y_i[4]
+Bit[3:0]: p_y_i[3:0]
+0x3041 SC LP CTRL 6 0x04 RW Bit[7:4]: Not used Bit[3:0]: r_fsin_glitch_filter_num
+table 6-4 SCCB registers
+address register name
+default
+value R/W description
+0x3100~
+0x3108 SCCB REGISTERS – – SCCB Registers
+table 6-5 group hold registers (sheet 1 of 7)
+address register name
+default
+value R/W description
+0x3200 GROUP ADR0 0x00 RW group_adr0
+0x3201 GROUP ADR1 0x04 RW group_adr1
+0x3202 GROUP ADR2 0x08 RW group_adr2
+0x3203 GROUP ADR3 0x0C RW group_adr3
+table 6-3 system control registers (sheet 8 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 79 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-11
+0x3204 GROUP ADR4 0x10 RW group_adr4
+0x3205 GROUP ADR5 0x14 RW group_adr5
+0x3206 FSIN GRP 0x00 RW
+Bit[7]: re_launch_disable
+Bit[6:5]: Not used
+Bit[4]: fsin_en
+Bit[3:0]: Start group in FSIN mode
+0x3207 COMBINE LAUNCH CTRL –W
+Bit[7:4]: Launch option select
+0110: Launch at HBLK
+1010: Launch in frame blanking
+1110: Launch directly
+Others: Reserved
+Bit[3]: cmb_lch_grp3
+Combine launch include group3
+Bit[2]: cmb_lch_grp2
+Combine launch include group2
+Bit[1]: cmb_lch_grp1
+Combine launch include group1
+Bit[0]: cmb_lch_grp0
+Combine launch include group0
+table 6-5 group hold registers (sheet 2 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 80 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3208 GROUP ACCESS – W
+Bit[7:4]: group_ctrl
+0000: Group hold start
+0001: Group hold end
+0110: Launch at HBLK
+1010: Launch in frame blanking
+1110: Launch directly
+Others: Reserved
+Bit[3:0]: group_id
+0000: Group bank 0, default start from 
+address 9'h000
+0001: Group bank 1, default start from 
+address 9'h040
+0010: Group bank 2, default start from 
+address 9'h080
+0011: Group bank 3, default start from 
+address 9'h0C0
+0100: Group bank 4, default start from 
+address 9'h100
+0101: Group bank 5, default start from 
+address 9'h140
+0110: Group bank 6, default start from 
+address 9'h180
+0111: Group bank 7, default start from 
+address 9'h1A0
+1000: Group bank 8, default start from 
+address 9'h1C0
+1001: Group bank 9, default start from 
+address 9'h1E0
+1010: Group bank 10, default start from 
+address 9'h100
+1011: Group bank 11, default start from 
+address 9'h120
+1100: Group bank 12, default start from 
+address 9'h140
+1101: Group bank 13, default start from 
+address 9'h160
+1110: Group bank 14, default start from 
+address 9'h180
+1111: Group bank 15, default start from 
+address 9'h1A0
+0x3209 GRP0 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group0
+0x320A GRP1 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group1
+0x320B GRP2 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group2
+0x320C GRP3 PERIOD 0x00 RW Bit[7:0]: Frames for staying in Group3
+0x320D GRP SWCTRL 0x01 RW
+Bit[7]: Context switch enable
+Bit[6:4]: Auto launch loop number
+Bit[3:0]: Switch back group
+table 6-5 group hold registers (sheet 3 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 81 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-13
+0x320E CONTEXT SW GROUP ACCESS –W
+Bit[7:4]: group_ctrl
+0110: Launch at HBLK
+1010: Launch in frame blanking
+1110: Launch directly
+Others: Reserved
+Bit[3:0]: group_id
+0000: Group bank 0, default start from 
+address 11'h000
+0001: Group bank 1, default start from 
+address 11'h100
+0010: Group bank 2, default start from 
+address 11'h200
+0011: Group bank 3, default start from 
+address 11'h300
+1010: Group bank 10, default start from 
+address 11'h500
+1011: Group bank 11, default start from 
+address 11'h520
+1100: Group bank 12, default start from 
+address 11'h540
+1101: Group bank 13, default start from 
+address 11'h560
+1110: Group bank 14, default start from 
+address 11'h580
+1111: Group bank 15, default start from 
+address 11'h5A0
+Others: Reserved
+0x320F NOT USED – – Not Used
+0x3210 GROUP LEN0 – W group_len0
+0x3211 GROUP LEN1 – W group_len1
+0x3212 GROUP LEN2 – W group_len2
+0x3213 GROUP LEN3 – W group_len3
+0x3214 GROUP LEN4 – W group_len4
+0x3215 GROUP LEN5 – W group_len5
+0x3216 EMB LINE NUM 0x01 RW Bit[7:4]: Not used Bit[3:0]: emb_line_num
+0x3217 PADDING DATA 0x00 RW Bit[7:0]: padding_data
+table 6-5 group hold registers (sheet 4 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 82 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3218 R16 0x0 RW
+Bit[7:6]: emb_line_blk_ctrl
+00: 32 sclk
+01: 64 sclk
+10: 128 sclk
+11: Wait for external trigger signal
+Bit[5]: embline_addr_en
+Bit[4]: r_padding_md2
+0: No dummy data mixing with valid 
+data
+1: Dummy data output with valid data 
+every cycle
+Bit[3]: frame_trig_sel
+0: tc_grp_wr
+1: EOF
+Bit[2]: embline_eof_en
+Bit[1]: embline_sof_en
+Bit[0]: embline_tag_en
+0x3219 TAG DATA 0x55 RW Bit[7:0]: emb_tag
+0x321A GRP ACT – R Indicates Which Group is Active
+0x321B NOT USED – – Not Used
+0x321C FRAME CNT GRP0 – R frame_cnt_grp0
+0x321D FRAME CNT GRP1 – R frame_cnt_grp1
+0x321E FRAME CNT GRP2 – R frame_cnt_grp2
+0x321F FRAME CNT GRP3 – R frame_cnt_grp3
+0x3220 SRAM TEST 0x11 RW Bit[7:6]: Not used Bit[5:0]: SRAM test
+0x3221 SRAM TEST 0x30 RW
+Bit[7]: Not used
+Bit[6:3]: sram_rm
+Bit[2]: sram_rme
+Bit[1]: sram_test1
+Bit[0]: sram_ls
+0x3222 GAIN LAUNCH CTRL 0x02 RW
+Bit[7:2]: Not used
+Bit[1]: default_launch_en
+Bit[0]: gain_launch_en
+0x3223 GROUP ADR6 0x18 RW group_adr6
+0x3224 GROUP ADR7 0x1A RW group_adr7
+0x3225 GROUP ADR8 0x1C RW group_adr8
+0x3226 GROUP ADR9 0x1E RW group_adr9
+0x3227 GROUP LEN6 – W group_len6
+table 6-5 group hold registers (sheet 5 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 83 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-15
+0x3228 GROUP LEN7 – W group_len7
+0x3229 GROUP LEN8 – W group_len8
+0x322A GROUP LEN9 – W group_len9
+0x322B~
+0x322E RSVD – – Reserved
+0x322F TC GRP WR CTRL 0x0 RW Bit[7]: r_grp_wr_opt Bit[6:0]: mask_grp_wr_frame_num
+0x3230 GROUP ADR10 0x10 RW group_adr10
+0x3231 GROUP ADR11 0x12 RW group_adr11
+0x3232 GROUP ADR12 0x14 RW group_adr12
+0x3233 GROUP ADR13 0x16 RW group_adr13
+0x3234 GROUP ADR14 0x18 RW group_adr14
+0x3235 GROUP ADR15 0x1A RW group_adr15
+0x3236~
+0x3238 RSVD – – Reserved
+0x3239 GRP10 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group10
+0x323A GRP11 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group11
+0x323B GRP12 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group12
+0x323C GRP13 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group13
+0x323D GRP14 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group14
+0x323E GRP15 PERIOD 0x00 RW Bit[7:0]: Frames for staying in group15
+0x323F AO CTRL 0x01 RW
+Bit[7:4]: ao_grp_sel_man
+Bit[3:2]: Reserved
+Bit[1]: ao_grp_sel_man_en
+Bit[0]: ao_grp_lch_opt
+0x3240 GROUP LEN10 – W group_len10
+0x3241 GROUP LEN11 – W group_len11
+0x3242 GROUP LEN12 – W group_len12
+0x3243 GROUP LEN13 – W group_len13
+0x3244 GROUP LEN14 – W group_len14
+0x3245 GROUP LEN15 – W group_len15
+0x3246 GROUP LEN0 H – W group_len0_h
+table 6-5 group hold registers (sheet 6 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 84 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.6 ANA [0x3600 ~ 0x366F]
+6.7 sensor top [0x3700 ~ 0x37FF]
+0x3247 GROUP LEN1 H – W group_len1_h
+0x3248 GROUP LEN2 H – W group_len2_h
+0x3249 GROUP LEN3 H – W group_len3_h
+0x324A GROUP LEN4 H – W group_len4_h
+0x324B GROUP LEN5 H – W group_len5_h
+0x324C GROUP LEN10 H – W group_len10_h
+0x324D GROUP LEN11 H – W group_len11_h
+0x324E GROUP LEN12 H – W group_len12_h
+0x324F GROUP LEN13 H – W group_len13_h
+0x3250 GROUP LEN14 H – W group_len14_h
+0x3251 GROUP LEN15 H – W group_len15_h
+table 6-6 ANA registers
+address register name
+default
+value R/W description
+0x3600~
+0x366F ANA REG – – Analog Control Registers
+table 6-7 sensor top registers
+address register name
+default
+value R/W description
+0x3700~
+0x37FF SENSOR_TOP – – Sensor Top Registers
+table 6-5 group hold registers (sheet 7 of 7)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 85 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-17
+6.8 timing control [0x3800 ~ 0x3844]
+6.9 power saving mode (PSV) [0x3C00 ~ 0x3C2D]
+table 6-8 timing control registers
+address register name
+default
+value R/W description
+0x3800~
+0x3844 TIMING_CTRL – – Timing Control Registers
+table 6-9 PSV registers (sheet 1 of 8)
+address register name
+default
+value R/W description
+0x3C00 PSV CTRL 0x0B RW
+Bit[7:4]: Not used
+Bit[3]: psv_auto_on_dis
+0: PSV mode auto enabled if VTS 
+> threshold
+1: Disable PSV auto on mode 
+(only depends on 
+r_psv_mode_en)
+Bit[2]: r_psv_mode_en
+Bit[1:0]: Not used
+0x3C01 AUTO SLEEP CTRL 0x00 RW
+Bit[7:5]: Reserved
+Bit[4]: stream_clk_allon
+Bit[3:0]: Not used
+0x3C02~
+0x3C05 RSVD – – Reserved
+0x3C06 R STREAM ST OFFS 0x08 RW  r_stream_st_offs
+0x3C07 R PCHG ST OFFS 0x08 RW  r_pchg_st_offs
+0x3C08 R CLK WINP OFF 0x05 RW  r_clk_winp_off
+0x3C09 R STRM REAR OFFS 0x02 RW  r_strm_rear_offs
+0x3C0A R PCHG REAR OFFS 0x02 RW  r_pchg_rear_offs
+0x3C0B NOT USED – – Not Used
+0x3C0C PSV AUTO ON THRESH 0x10 RW Bit[7:0]: psv_auto_on_thresh[15:8]
+0x3C0D PSV AUTO ON THRESH 0x00 RW Bit[7:0]: psv_auto_on_thresh[7:0]
+Confidential for Waching Only
+
+===== PAGE 86 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3C0E VBLANK THRESH 0xFF RW
+Bit[7:0]: vblank_thresh
+No psv_mode if vblanking is less than 
+threshold
+0x3C0F~
+0x3C15 RSVD – – Reserved
+0x3C16 SLAVE SNR CTRL 0x00 RW
+Bit[7:3]: Not used
+Bit[2]: slave_strm_off_no_retime
+Bit[1]: slave_strm_on_no_retime
+Bit[0]: slave_strm_off
+0x3C17 SLAVE SNR STRM CHG P 0x08 RW
+Time Point Control for Slave Sensor Stream 
+ON/OFF
+Internal Time Point is tc_r = VTS - register 0x3C17
+0x3C18~
+0x3C1F RSVD – – Reserved
+0x3C20 PSV PD CTRL20 0x00 RW
+Bit[7:6]: psv_rst_pll2_ctrl
+Bit[5:4]: psv_rst_pll1_ctrl
+Bit[3:2]: psv_pd_mipi
+Bit[1:0]: psv_mipi_phy_rst
+0x3C21 ASP PD MAN0 0x08 RW
+Bit[7]: ASP manual power down (fixed 
+value) for VDAC
+Bit[6]: ASP manual power down (fixed 
+value) for VREF
+Bit[5]: ASP manual power down (fixed 
+value) for RAMP_DAC
+Bit[4]: ASP manual power down (fixed 
+value) for XDEC
+Bit[3]: ASP manual power down (fixed 
+value) for CBAR
+Bit[2]: ASP manual power down (fixed 
+value) for VLN
+Bit[1]: ASP manual power down (fixed 
+value) for DCOMP
+Bit[0]: ASP manual power down (fixed 
+value) for ASRAM
+table 6-9 PSV registers (sheet 2 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 87 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-19
+0x3C22 ASP PD MAN1 0x40 RW
+Bit[7]: ASP manual power down (fixed 
+value) for PWC_BUF
+Bit[6]: ASP manual power down (fixed 
+value) for NPUMP3
+Bit[5]: ASP manual power down (fixed 
+value) for NPUMP1
+Bit[4]: ASP manual power down (fixed 
+value) for PPUMP
+Bit[3]: ASP manual power down (fixed 
+value) for PWC_BG
+Bit[2]: ASP manual power down (fixed 
+value) for RAMP_BUF
+Bit[1]: ASP manual power down (fixed 
+value) for PWC_VREF
+Bit[0]: ASP manual power down (fixed 
+value) for PUMP
+0x3C23 NOT USED – – Not Used
+table 6-9 PSV registers (sheet 3 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 88 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3C24 ASP PD CTRL0 0x15 RW
+Bit[7:6]: asp_pd_sig3_timing_option for 
+CBAR
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[5:4]: asp_pd_sig2_timing_option for VLN
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[3:2]: asp_pd_sig1_timing_option for 
+DCOMP
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[1:0]: asp_pd_sig0_timing_option for 
+ASRAM
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+table 6-9 PSV registers (sheet 4 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 89 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-21
+0x3C25 ASP PD CTRL1 0x44 RW
+Bit[7:6]: asp_pd_sig7_timing_option for 
+VDAC
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[5:4]: asp_pd_sig6_timing_option for VREF
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[3:2]: asp_pd_sig5_timing_option for 
+RAMP_DAC
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[1:0]: asp_pd_sig4_timing_option for 
+XDEC
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+table 6-9 PSV registers (sheet 5 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 90 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x3C26 ASP PD CTRL2 0x10 RW
+Bit[7:6]: asp_pd_sig11_timing_option for 
+PWC_BG
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[5:4]: asp_pd_sig10_timing_option for 
+RAMP_BUF
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[3:2]: asp_pd_sig9_timing_option for 
+PWC_VREF
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[1:0]: asp_pd_sig8_timing_option for 
+PUMP
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+table 6-9 PSV registers (sheet 6 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 91 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-23
+0x3C27 ASP PD CTRL3 0x00 RW
+Bit[7:6]: asp_pd_sig15_timing_option for 
+PWC_BUF
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[5:4]: asp_pd_sig14_timing_option for 
+NPUMP3
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[3:2]: asp_pd_sig13_timing_option for 
+NPUMP1
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+Bit[1:0]: asp_pd_sig12_timing_option for 
+PPUMP
+00: Controlled by register (fixed 
+value)
+01: Power down in stream blanking
+10: Power down in stream and 
+PCHG common blanking
+11: Power down from stream end to 
+PCHG start
+0x3C28~
+0x3C29 NOT USED – – Not Used
+0x3C2A PD PSV TIMING DIS0 0xAA RW
+Bit[7]: pd_cbar_timing_dis
+Bit[6]: pd_cbar_psv_dis
+Bit[5]: pd_vln_timing_dis
+Bit[4]: pd_vln_psv_dis
+Bit[3]: pd_dcomp_timing_dis
+Bit[2]: pd_dcomp_psv_dis
+Bit[1]: pd_sram_timing_dis
+Bit[0]: pd_sram_psv_dis
+table 6-9 PSV registers (sheet 7 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 92 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.10 BLC [0x4000 ~ 0x4082]
+0x3C2B PD PSV TIMING DIS1 0xAA RW
+Bit[7]: pd_dac_timing_dis
+Bit[6]: pd_dac_psv_dis
+Bit[5]: pd_vref_timing_dis
+Bit[4]: pd_vref_psv_dis
+Bit[3]: pd_ramp_dac_timing_dis
+Bit[2]: pd_ramp_dac_psv_dis
+Bit[1]: pd_xdec_timing_dis
+Bit[0]: pd_xdec_psv_dis
+0x3C2C PD PSV TIMING DIS2 0xAA RW
+Bit[7]: pd_pwc_bg_timing_dis
+Bit[6]: pd_pwc_bg_psv_dis
+Bit[5]: pd_rampbuf_timing_dis
+Bit[4]: pd_rampbuf_psv_dis
+Bit[3]: pd_pwc_vref_timing_dis
+Bit[2]: pd_pwc_vref_psv_dis
+Bit[1]: pd_pump_timing_dis
+Bit[0]: pd_pump_psv_dis
+0x3C2D PD PSV TIMING DIS3 0xAA RW
+Bit[7]: pd_pwc_buf_timing_dis
+Bit[6]: pd_pwc_buf_psv_dis
+Bit[5]: pd_npump3_timing_dis
+Bit[4]: pd_npump3_psv_dis
+Bit[3]: pd_npump1_timing_dis
+Bit[2]: pd_npump1_psv_dis
+Bit[1]: pd_ppump_timing_dis
+Bit[0]: pd_ppump_psv_dis
+table 6-10 BLC registers (sheet 1 of 6)
+address register name
+default
+value R/W description
+0x4000 BLC CTRL00 0xC1 RW
+Bit[7:4]: avg_weight
+Bit[3]: target_adj_dis
+Bit[2]: cmp_en
+Bit[1]: dither_en
+Bit[0]: mf_en
+0x4001 BLC CTRL01 0xE0 RW
+Bit[7]: gain_trig_beh
+Bit[6]: format_trig_beh
+Bit[5]: kcoef_man_en
+Bit[4]: off_man_en
+Bit[3]: zero_ln_out_en
+Bit[2]: blk_ln_out_en
+Bit[1:0]: byp_mode
+table 6-9 PSV registers (sheet 8 of 8)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 93 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-25
+0x4002 BLK LVL TARGET 0x00 RW Bit[7:2]: Not used Bit[1:0]: blk_lvl_target[9:8]
+0x4003 BLK LVL TARGET 0x10 RW Bit[7:0]: blk_lvl_target[7:0]
+0x4004 HWIN OFF 0x00 RW Bit[7:4]: Not used Bit[3:0]: hwin_off[11:8]
+0x4005 HWIN OFF 0x02 RW Bit[7:0]: hwin_off[7:0]
+0x4006 HWIN PAD 0x00 RW Bit[7:4]: Not used Bit[3:0]: hwin_pad[11:8]
+0x4007 HWIN PAD 0x02 RW Bit[7:0]: hwin_pad[7:0]
+0x4008 BLC CTRL08 0x00 RW Bit[7:0]: bl_start
+0x4009 BLC CTRL09 0x0B RW Bit[7:0]: bl_end
+0x400A OFF LIM TH 0x02 RW Bit[7:0]: off_lim_th[15:8]
+0x400B OFF LIM TH 0x00 RW Bit[7:0]: off_lim_th[7:0]
+0x400C BLC CTRL0C 0x00 RW Bit[7:0]: cvdn_bl_start
+0x400D BLC CTRL0D 0x00 RW Bit[7:0]: cvdn_bl_end
+0x400E KCOEF MAN 0x00 RW Bit[7:2]: Not used Bit[1:0]: kcoef_man[9:8]
+0x400F KCOEF MAN 0x80 RW Bit[7:0]: kcoef_man[7:0]
+0x4010 BLC CTRL10 0xF0 RW
+Bit[7]: off_trig_en
+Bit[6]: gain_chg_trig_en
+Bit[5]: fmt_chg_trig_en
+Bit[4]: rst_trig_en
+Bit[3]: man_avg_en
+Bit[2]: man_trig
+Bit[1]: off_frz_en
+Bit[0]: off_always_up
+0x4011 BLC CTRL11 0xFF RW
+Bit[7]: Not used
+Bit[6]: off_chg_mf_en
+Bit[5]: fmt_chg_mf_en
+Bit[4]: gain_chg_mf_en
+Bit[3]: rst_mf_mode
+Bit[2]: off_chg_mf_mode
+Bit[1]: fmt_chg_mf_mode
+Bit[0]: gain_chg_mf_mode
+0x4012 BLC CTRL12 0x08 RW Bit[7:6]: Not used Bit[5:0]: rst_trig_fn
+0x4013 BLC CTRL13 0x02 RW Bit[7:6]: Not used Bit[5:0]: fmt_trig_fn
+table 6-10 BLC registers (sheet 2 of 6)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 94 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4014 BLC CTRL14 0x02 RW Bit[7:6]: Not used Bit[5:0]: gain_trig_fn
+0x4015 BLC CTRL15 0x02 RW Bit[7:6]: Not used Bit[5:0]: off_trig_fn
+0x4016 OFF TRIG TH 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_trig_th[9:8]
+0x4017 OFF TRIG TH 0x10 RW Bit[7:0]: off_trig_th[7:0]
+0x4018~
+0x401F RSVD – – Reserved
+0x4020 BLC CTRL20 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th000
+0x4021 BLC CTRL21 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k000
+0x4022 BLC CTRL22 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th001
+0x4023 BLC CTRL23 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k001
+0x4024 BLC CTRL24 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th010
+0x4025 BLC CTRL25 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k010
+0x4026 BLC CTRL26 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th011
+0x4027 BLC CTRL27 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k011
+0x4028 BLC CTRL28 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th100
+0x4029 BLC CTRL29 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k100
+0x402A BLC CTRL2A 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th101
+0x402B BLC CTRL2B 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k101
+0x402C BLC CTRL2C 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th110
+0x402D BLC CTRL2D 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k110
+table 6-10 BLC registers (sheet 3 of 6)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 95 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-27
+0x402E BLC CTRL2E 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_th111
+0x402F BLC CTRL2F 0x00 RW Bit[7:6]: Not used Bit[5:0]: off_cmp_k111
+0x4030 OFF MAN000 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man000[9:8]
+0x4031 OFF MAN000 0x00 RW Bit[7:0]: off_man000[7:0]
+0x4032 OFF MAN001 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man001[9:8]
+0x4033 OFF MAN001 0x00 RW Bit[7:0]: off_man001[7:0]
+0x4034 OFF MAN010 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man010[9:8]
+0x4035 OFF MAN010 0x00 RW Bit[7:0]: off_man010[7:0]
+0x4036 OFF MAN011 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man011[9:8]
+0x4037 OFF MAN011 0x00 RW Bit[7:0]: off_man011[7:0]
+0x4038 OFF MAN100 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man100[9:8]
+0x4039 OFF MAN100 0x00 RW Bit[7:0]: off_man100[7:0]
+0x403A OFF MAN101 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man101[9:8]
+0x403B OFF MAN101 0x00 RW Bit[7:0]: off_man101[7:0]
+0x403C OFF MAN110 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man110[9:8]
+0x403D OFF MAN110 0x00 RW Bit[7:0]: off_man110[7:0]
+0x403E OFF MAN111 0x00 RW Bit[7:2]: Not used Bit[1:0]: off_man111[9:8]
+0x403F OFF MAN111 0x00 RW Bit[7:0]: off_man111[7:0]
+0x4040 BLC CTRL40 0x00 RW Bit[7:2]: Not used Bit[1:0]: r_rnd_gain_th[9:8]
+0x4041 BLC CTRL41 0x00 RW Bit[7:0]: r_rnd_gain_th[7:0]
+0x4042~
+0x404F RSVD – – Reserved
+0x4050 BLC OFFSET000 – R Bit[7:2]: Not used Bit[1:0]: blc_offset000[9:8]
+table 6-10 BLC registers (sheet 4 of 6)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 96 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4051 BLC OFFSET000 – R Bit[7:0]: blc_offset000[7:0]
+0x4052 BLC OFFSET001 – R Bit[7:2]: Not used Bit[1:0]: blc_offset001[9:8]
+0x4053 BLC OFFSET001 – R Bit[7:0]: blc_offset001[7:0]
+0x4054 BLC OFFSET010 – R Bit[7:2]: Not used Bit[1:0]: blc_offset010[9:8]
+0x4055 BLC OFFSET010 – R Bit[7:0]: blc_offset010[7:0]
+0x4056 BLC OFFSET011 – R Bit[7:2]: Not used Bit[1:0]: blc_offset011[9:8]
+0x4057 BLC OFFSET011 – R Bit[7:0]: blc_offset011[7:0]
+0x4058 BLC OFFSET100 – R Bit[7:2]: Not used Bit[1:0]: blc_offset100[9:8]
+0x4059 BLC OFFSET100 – R Bit[7:0]: blc_offset100[7:0]
+0x405A BLC OFFSET101 – R Bit[7:2]: Not used Bit[1:0]: blc_offset101[9:8]
+0x405B BLC OFFSET101 – R Bit[7:0]: blc_offset101[7:0]
+0x405C BLC OFFSET110 – R Bit[7:2]: Not used Bit[1:0]: blc_offset110[9:8]
+0x405D BLC OFFSET110 – R Bit[7:0]: blc_offset110[7:0]
+0x405E BLC OFFSET111 – R Bit[7:2]: Not used Bit[1:0]: blc_offset111[9:8]
+0x405F BLC OFFSET111 – R Bit[7:0]: blc_offset111[7:0]
+0x4060 Z OFFSET LB – R Bit[7:0]: z_offset_lb[7:0]
+0x4061 Z OFFSET LGB – R Bit[7:0]: z_offset_lgb[7:0]
+0x4062 Z OFFSET LGR – R Bit[7:0]: z_offset_lgr[7:0]
+0x4063 Z OFFSET LR – R Bit[7:0]: z_offset_lr[7:0]
+0x4064 Z OFFSET SB – R Bit[7:0]: z_offset_sb[7:0]
+0x4065 Z OFFSET SGB – R Bit[7:0]: z_offset_sgb[7:0]
+0x4066 Z OFFSET SGR – R Bit[7:0]: z_offset_sgr[7:0]
+0x4067 Z OFFSET SR – R Bit[7:0]: z_offset_sr[7:0]
+0x4068 B OFFSET LB – R Bit[7:0]: b_offset_lb[7:0]
+0x4069 B OFFSET LGB – R Bit[7:0]: b_offset_lgb[7:0]
+0x406A B OFFSET LGR – R Bit[7:0]: b_offset_lgr[7:0]
+table 6-10 BLC registers (sheet 5 of 6)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 97 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-29
+0x406B B OFFSET LR – R Bit[7:0]: b_offset_lr[7:0]
+0x406C B OFFSET SB – R Bit[7:0]: b_offset_sb[7:0]
+0x406D B OFFSET SGB – R Bit[7:0]: b_offset_sgb[7:0]
+0x406E B OFFSET SGR – R Bit[7:0]: b_offset_sgr[7:0]
+0x406F B OFFSET SR – R Bit[7:0]: b_offset_sr[7:0]
+0x4070 CTRL70 – RW CTRL70
+0x4071 CTRL71 – RW CTRL71
+0x4072~
+0x4076 RSVD – – Reserved
+0x4077 CTRL77 0x07 RW CTRL77
+0x4078 CTRL78 0x00 RW CTRL78
+0x4079 CTRL79 0x01 RW CTRL79
+0x407A CTRL7A 0x00 RW CTRL7A
+0x407B CTRL7B 0x02 RW CTRL7B
+0x407C CTRL7C 0x00 RW CTRL7C
+0x407D CTRL7D 0x00 RW CTRL7D
+0x407E CTRL7E 0x1F RW CTRL7E
+0x407F RSVD – – Reserved
+0x4080 CTRL80 0xFF RW CTRL80
+0x4081 CTRL81 0xFF RW CTRL81
+0x4082 CTRL82 0x02 RW CTRL82
+table 6-10 BLC registers (sheet 6 of 6)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 98 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.11 MIPI [0x4800 ~ 0x4891]
+table 6-11 MIPI registers (sheet 1 of 10)
+address register name
+default
+value R/W description
+0x4800 MIPI CTRL00 0x04 RW
+Bit[7]: r_sc_valid_opt_o (mipi_hs_only)
+1: MIPI always in high speed mode
+Bit[6]: Not used
+Bit[5]: gate_sc_en
+0: Clock lane is free running
+1: Gate clock lane when there is no 
+packet to transmit
+Bit[4]: line_sync_en
+0: Do not send line short packet for 
+each line
+1: Send line short packet for each 
+line
+Bit[2]: pclk_inv_o
+1: mipi_pclk_o is reverse of internal 
+PCLK
+Bit[1]: first_bit
+Change clk_lane first bit
+0: Output 0x55
+1: Output 0xAA
+Bit[0]: LPX_select for PCLK domain
+0: Auto calculate t_lpx_p, unit pclk2x 
+cycle
+1: Use lpx_p_min[7:0]
+0x4801 RSVD – – Reserved
+Confidential for Waching Only
+
+===== PAGE 99 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-31
+0x4802 MIPI CTRL02 0x00 RW
+Bit[7]: hs_prepare_sel
+0: Auto calculate t_hs_prepare, unit 
+pclk2x
+1: Use hs_prepare_min_o[7:0]
+Bit[6]: clk_prepare_sel
+0: Auto calculate t_clk_prepare, unit 
+pclk2x
+1: Use clk_prepare_min_o[7:0]
+Bit[5]: clk_post_sel
+0: Auto calculate t_clk_post, unit 
+pclk2x
+1: Use clk_post_min_o[7:0]
+Bit[4]: clk_trail_sel
+0: Auto calculate t_clk_trail, unit 
+pclk2x
+1: Use clk_trail_min_o[7:0]
+Bit[3]: hs_exit_sel
+0: Auto calculate t_hs_exit, unit 
+pclk2x
+1: Use hs_exit_min_o[7:0]
+Bit[2]: hs_zero_sel
+0: Auto calculate t_hs_zero, unit 
+pclk2x
+1: Use hs_zero_min_o[7:0]
+Bit[1]: hs_trail_sel
+0: Auto calculate t_hs_trail, unit 
+pclk2x
+1: Use hs_trail_min_o[7:0]
+Bit[0]: clk_zero_sel
+0: Auto calculate t_clk_zero, unit 
+pclk2x
+1: Use clk_zero_min_o[7:0]
+0x4803 MIPI CTRL03 0x10 RW
+Bit[7:5]: Not used
+Bit[4]: fifo_rd_spd_o
+Bit[3]: manu_ofset_o
+t_perio manu offset SMIA
+Bit[2]: r_manu_half2one
+t_period half to 1 SMIA
+Bit[1:0]: Not used
+0x4804 RSVD – – Reserved
+0x4805 MIPI CTRL05 0x00 RW
+Bit[7:4]: Not used
+Bit[3]: lpda_retim_manu_o
+Bit[2]: lpda_retim_sel_o
+1: Manual
+Bit[1]: lpck_retim_manu_o
+Bit[0]: lpck_retim_sel_o
+1: Manual
+table 6-11 MIPI registers (sheet 2 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 100 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4806 MIPI CTRL06 0x00 RW
+Bit[7:4]: Not used
+Bit[3]: mipi_remot_rst
+Bit[2]: ulps_en
+Bit[1]: ulps_man_en
+Bit[0]: tx_lsb_first
+0: High bit first
+1: Low power transmit low bit first
+0x4807 MIPI CTRL07 0x03 RW Bit[7:4]: Not used Bit[3:0]: sw_t_lpx
+0x4808~
+0x480F RSVD – – Reserved
+0x4810 FCNT MAX 0xFF RW
+Bit[7:0]: fcnt_max[15:8]
+High byte of max frame counter of frame 
+sync short packet
+0x4811 FCNT MAX 0xFF RW
+Bit[7:0]: fcnt_max[7:0]
+Low byte of max frame counter of frame 
+sync short packet
+0x4812 RSVD – – Reserved
+0x4813 MIPI CTRL13 0x00 RW
+Bit[7:3]: Not used
+Bit[2]: vc_sel
+Input VC or register VC
+Bit[1:0]: VC
+Virtual channel of MIPI
+0x4814 MIPI CTRL14 0x2A RW
+Bit[7]: Not used
+Bit[6]: lpkt_dt_sel
+0: Use mipi_dt
+1: Use dt_man_o as long packet data
+Bit[5:0]: dt_man
+Manual data type
+0x4815 MIPI CTRL15 0x40 RW
+Bit[7]: clk_lane_pn_swap_o
+Bit[6:4]: clk_lane_swap_o
+Bit[3]: lane0_pn_swap_o
+Bit[2:0]: lane0_swap_o
+0x4816 MIPI CTRL16 0x12 RW
+Bit[7]: lane1_pn_swap_o
+Bit[6:4]: lane1_swap_o
+Bit[3]: lane2_pn_swap_o
+Bit[2:0]: lane2_swap_o
+0x4817 MIPI CTRL17 0x30 RW
+Bit[7]: lane3_pn_swap_o
+Bit[6:4]: lane3_swap_o
+1203 end
+Bit[3:0]: Not used
+table 6-11 MIPI registers (sheet 3 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 101 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-33
+0x4818 HS ZERO MIN 0x00 RW
+Bit[7:2]: Not used
+Bit[1:0]: hs_zero_min[9:8]
+High byte of minimum value of hs_zero, 
+unit ns
+0x4819 HS ZERO MIN 0x70 RW
+Bit[7:0]: hs_zero_min[7:0]
+Low byte of minimum value of hs_zero
+hs_zero_real = hs_zero_min_o + 
+Tui*ui_hs_zero_min_o
+0x481A HS TRAIL MIN 0x00 RW
+Bit[7:2]: Not used
+Bit[1:0]: hs_trail_min[9:8]
+High byte of minimum value of hs_trail, 
+unit ns
+0x481B HS TRAIL MIN 0x3C RW
+Bit[7:0]: hs_trail_min[7:0]
+Low byte of minimum value of hs_trail
+hs_trail_real = hs_trail_min_o + 
+Tui*ui_hs_trail_min_o
+0x481C CLK ZERO MIN 0x01 RW
+Bit[7:2]: Not used
+Bit[1:0]: clk_zero_min[9:8]
+High byte of minimum value of clk_zero, 
+unit ns
+0x481D CLK ZERO MIN 0x2C RW
+Bit[7:0]: clk_zero_min[7:0]
+Low byte of minimum value of clk_zero
+clk_zero_real = clk_zero_min_o + 
+Tui*ui_clk_zero_min_o
+0x481E CLK PREPARE MAX 0x5F RW Bit[7:0]: clk_prepare_max[7:0] Maximum value of clk_prepare, unit ns
+0x481F CLK PREPARE MIN 0x26 RW
+Bit[7:0]: clk_prepare_min[7:0]
+Minimum value of clk_prepare
+clk_prepare_real = clk_prepare_min_o 
++ Tui*ui_clk_prepare_min_o
+0x4820 CLK POST MIN 0x00 RW
+Bit[7:2]: Not used
+Bit[1:0]: clk_post_min[9:8]
+High byte of minimum value of clk_post, 
+unit ns
+0x4821 CLK POST MIN 0x3C RW
+Bit[7:0]: clk_post_min[7:0]
+Low byte of minimum value of clk_post
+clk_post_real = clk_post_min_o + 
+Tui*ui_clk_post_min_o
+0x4822 CLK TRAIL MIN 0x00 RW
+Bit[7:2]: Not used
+Bit[1:0]: clk_trail_min[9:8]
+High byte of minimum value of clk_trail, 
+unit ns
+table 6-11 MIPI registers (sheet 4 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 102 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4823 CLK TRAIL MIN 0x3C RW
+Bit[7:0]: clk_trail_min[7:0]
+Low byte of minimum value of clk_trail
+clk_trail_real = clk_trail_min_o + 
+Tui*ui_clk_trail_min_o
+0x4824 LPX P MIN 0x00 RW
+Bit[7:2]: Not used
+Bit[1:0]: lpx_p_min[9:8]
+High byte of minimum value of lpx_p, 
+unit ns
+0x4825 LPX P MIN 0x32 RW
+Bit[7:0]: lpx_p_min[7:0]
+Low byte of minimum value of lpx_p
+lpx_p_real = lpx_p_min_o + 
+Tui*ui_lpx_p_min_o
+0x4826 HS PREPARE MIN 0x32 RW Bit[7:0]: hs_prepare_min[7:0] Minimum value of hs_prepare, unit ns
+0x4827 HS PREPARE MAX 0x55 RW
+Bit[7:0]: hs_prepare_max[7:0]
+Maximum value of hs_prepare
+hs_prepare_real = hs_prepare_max_o 
++ Tui*ui_hs_prepare_max_o
+0x4828 HS EXIT MIN 0x00 RW
+Bit[7:2]: Not used
+Bit[1:0]: hs_exit_min[9:8]
+High byte of minimum value of hs_exit, 
+unit ns
+0x4829 HS EXIT MIN 0x64 RW
+Bit[7:0]: hs_exit_min[7:0]
+Low byte of minimum value of hs_exit
+hs_exit_real = hs_exit_min_o + 
+Tui*ui_hs_exit_min_o
+0x482A UI HS ZERO MIN 0x06 RW
+Bit[7:6]: Not used
+Bit[5:0]: ui_hs_zero_min[5:0]
+Minimum UI value of hs_zero, unit UI
+0x482B UI HS TRAIL MIN 0x04 RW
+Bit[7:6]: Not used
+Bit[5:0]: ui_hs_trail_min[5:0]
+Minimum UI value of hs_trail, unit UI
+0x482C UI CLK ZERO MIN 0x00 RW
+Bit[7:6]: Not used
+Bit[5:0]: ui_clk_zero_min[5:0]
+Minimum UI value of clk_zero, unit UI
+0x482D UI CLK PREPARE 0x00 RW
+Bit[7:4]: ui_clk_prepare_max
+Maximum UI value of clk_prepare, unit 
+UI
+Bit[3:0]: ui_clk_prepare_min
+Minimum UI value of clk_prepare, unit 
+UI
+table 6-11 MIPI registers (sheet 5 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 103 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-35
+0x482E UI CLK POST MIN 0x34 RW
+Bit[7:6]: Not used
+Bit[5:0]: ui_clk_post_min[5:0]
+Minimum UI value of clk_post, unit UI
+0x482F UI CLK TRAIL MIN 0x00 RW
+Bit[7:6]: Not used
+Bit[5:0]: ui_clk_trail_min[5:0]
+Minimum UI value of clk_trail, unit UI
+0x4830 UI LPX P MIN 0x00 RW
+Bit[7:6]: Not used
+Bit[5:0]: ui_lpx_p_min[5:0]
+Minimum UI value of lpx_p (pclk2x 
+domain), unit UI
+0x4831 UI HS PREPARE 0x64 RW
+Bit[7:4]: ui_hs_prepare_max
+Maximum UI value of hs_prepare, unit 
+UI
+Bit[3:0]: ui_hs_prepare_min
+Minimum UI value of hs_prepare, unit UI
+0x4832 UI HS EXIT MIN 0x00 RW
+Bit[7:6]: Not used
+Bit[5:0]: ui_hs_exit_min[5:0]
+Minimum UI value of hs_exit, unit UI
+0x4833 MIPI PKT STAR SIZE 0x10 RW Bit[7:6]: Not used Bit[5:0]: mipi_pkt_star_size[5:0]
+0x4834~
+0x4836 RSVD – – Reserved
+0x4837 PCLK PERIOD 0x0A RW
+Bit[7:0]: pclk_period[7:0]
+Period of pclk2x, pclk_div = 1, and 1 bit 
+decimal
+0x4838 MIPI LP GPIO0 0x00 RW
+Bit[7]: lp_sel0
+0: Auto generate mipi_lp_dir0_o
+1: Use lp_dir_man0 to be 
+mipi_lp_dir0_o
+Bit[6]: lp_dir_man0
+0: Input
+1: Output
+Bit[5]: lp_p0_o
+Bit[4]: lp_n0_o
+Bit[3]: lp_sel1
+0: Auto generate mipi_lp_dir1_o
+1: Use lp_dir_man1 to be 
+mipi_lp_dir1_o
+Bit[2]: lp_dir_man1
+0: Input
+1: Output
+Bit[1]: lp_p1_o
+Bit[0]: lp_n1_o
+table 6-11 MIPI registers (sheet 6 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 104 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4839 MIPI LP GPIO1 0x00 RW
+Bit[7]: lp_sel2
+0: Auto generate mipi_lp_dir2_o
+1: Use lp_dir_man2 to be 
+mipi_lp_dir2_o
+Bit[6]: lp_dir_man2
+0: Input
+1: Output
+Bit[5]: lp_p2_o
+Bit[4]: lp_n2_o
+Bit[3]: lp_sel3
+0: Auto generate mipi_lp_dir3_o
+1: Use lp_dir_man3 to be 
+mipi_lp_dir3_o
+Bit[2]: lp_dir_man3
+0: Input
+1: Output
+Bit[1]: lp_p3_o
+Bit[0]: lp_n3_o
+0x483A~
+0x483B RSVD – – Reserved
+0x483C MIPI CTRL3C 0x02 RW
+Bit[7:4]: Not used
+Bit[3:0]: t_clk_pre
+Unit pclk2x cycle
+0x483D MIPI LP GPIO4 0x00 RW
+Bit[7]: lp_ck_sel0
+0: Auto generate mipi_ck_lp_dir0_o
+1: Use lp_ck_dir_man0 to be 
+mipi_ck_lp_dir0_o
+Bit[6]: lp_ck_dir_man0
+0: Input
+1: Output
+Bit[5]: lp_ck_p0_o
+Bit[4]: lp_ck_n0_o
+Bit[3]: lp_ck_sel1
+0: Auto generate mipi_ck_lp_dir1_o
+1: Use lp_ck_dir_man1 to be 
+mipi_ck_lp_dir1_o
+Bit[2]: lp_ck_dir_man1
+0: Input
+1: Output
+Bit[1]: lp_ck_p1_o
+Bit[0]: lp_ck_n1_o
+0x483E FCNT RD – R Bit[7:0]: fcnt_rd[15:8]
+0x483F FCNT RD – R Bit[7:0]: fcnt_rd[7:0]
+0x4840~
+0x4849 RSVD – – Reserved
+table 6-11 MIPI registers (sheet 7 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 105 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-37
+0x484A SEL MIPI CTRL4A 0x7F RW
+Bit[7:6]: Not used
+Bit[5]: slp_lp_pon_man_o
+Set for power up
+Bit[4]: slp_lp_pon_da
+Bit[3]: slp_lp_pon_ck
+Bit[2]: mipi_slp_man_st
+MIPI bus status manual control enable 
+in sleep mode
+Bit[1]: clk_lane_state
+Bit[0]: data_lane_state
+0x484B SMIA OPTION 0x03 RW
+Bit[7:4]: Not used
+Bit[3]: r_scramble_en
+Bit[2]: r_scrm_prbs_en
+Bit[1]: clk_start_sel_o
+0: Clock starts after SOF
+1: Clock starts after reset
+Bit[0]: sof_sel_o
+0: Frame starts after HREF occurs
+1: Frame starts after SOF
+0x484C SEL MIPI CTRL4C 0x00 RW
+Bit[7:4]: Not used
+Bit[3]: smia_fcnt_i select
+Bit[2]: prbs_enable
+Bit[1]: hs_test_only
+MIPI high speed only test mode enable
+Bit[0]: set_frame_cnt_0
+Set frame count to inactive mode (keep 
+0)
+0x484D TEST PATTERN DATA 0xB6 RW Bit[7:0]: Data lane test pattern[7:0]
+0x484E FE DLY 0x10 RW Bit[7:0]: r_fe_dly_o Last packet to frame end delay / 2
+0x484F TEST PATTERN CK DATA 0x55 RW Bit[7:0]: clk_test_pattern_reg
+0x4850 SEL MIPI CTRL50 0x00 RW
+Bit[7:2]: Not used
+Bit[1]: color_bar_test_1frame
+Bit[0]: color_bar_test_en
+0x4851 SEL MIPI STAT51 – R
+Bit[7:2]: Not used
+Bit[1]: color_bar_test_result
+Bit[0]: color_bar_test_done
+0x4852 SEL MIPI STAT52 – R Bit[7:0]: color_bar_test_crc[15:8]
+0x4853 SEL MIPI STAT53 – R Bit[7:0]: color_bar_test_crc[7:0]
+0x4854 SEL MIPI CTRL54 0x00 RW Bit[7:0]: color_bar_test_golden[15:8]
+0x4855 SEL MIPI CTRL55 0x00 RW Bit[7:0]: color_bar_test_golden[7:0]
+table 6-11 MIPI registers (sheet 8 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 106 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4856 RSVD – – Reserved
+0x4857 SEL MIPI CTRL57 0x05 RW
+Bit[7]: r_rst_ulps_en_o
+Bit[6:4]: padclk_div_sel_o
+Bit[3:0]: ulps_wakeup_o[11:8]
+0x4858 SEL MIPI CTRL58 0xDC RW Bit[7:0]: ulps_wakeup_o[7:0]
+0x4859 SEL MIPI CTRL59 0xFA RW Bit[7:0]: ulps_entry_delay_o[7:0] 1203 end
+0x485A~
+0x487F RSVD – – Reserved
+0x4880 NON RISC 0 0x00 RW
+Bit[7]: Not used
+Bit[6]: mipi_pclk_debug_o
+Bit[5:3]: mipi_ck_skew_o
+Bit[2]: mipi_dis_clk_lane_o
+Bit[1:0]: Not used
+0x4881 NON RISC 1 0x00 RW
+Bit[7:5]: mipi_d0_skew_o
+Bit[4:3]: mipi_d0_dis_data_lane_o
+Bit[2:0]: Not used
+0x4882 RSVD – – Reserved
+0x4883 NON RISC 3 0x00 RW
+Bit[7]: Not used
+Bit[6:4]: mipi_iref_o
+Bit[3]: Not used
+Bit[2:0]: mipi_pgm_vcm_o
+0x4884 NON RISC 4 0x08 RW
+Bit[7]: Not used
+Bit[6]: mipi_validsel_o
+Bit[5]: mipi_pgm_bp_hs_en_lat_o
+Bit[4:2]: mipi_pgm_lptx
+Bit[1]: mipi_self_bias_lswing_o
+Bit[0]: mipi_self_bias_o
+0x4885 NON RISC 5 0x00 RW Bit[7:4]: Not used Bit[3:0]: mipi_sel_drv_o
+0x4886 NOT USED – – Not Used
+0x4887 NON RISC 7 0x11 RW Bit[7]: mipi_hsen_skew_o Bit[6:0]: Not used
+0x4888 NON RISC 8 0x10 RW
+Bit[7]: Not used
+Bit[6]: mipi_lp_sr_o
+Bit[5]: mipi_open_term_en_o
+Bit[4:0]: Not used
+0x4889~
+0x488F RSVD – – Reserved
+table 6-11 MIPI registers (sheet 9 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 107 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-39
+6.12 ISPFC [0x4900 ~ 0x4903]
+0x4890 NON RISC 10 0x00 RW
+Bit[7:3]: Not used
+Bit[2]: pll_mipiclk_debug_o
+Bit[1:0]: mipi_bit_sel_o
+0x4891 NON RISC 11 0x00 RW
+Bit[7:6]: Not used
+Bit[5:4]: r_mipi_d1_skew_o
+Bit[3:2]: r_mipi_slew_ctrl_o
+Bit[1:0]: r_mipi_ck_slew_ctrl_o
+table 6-12 ISPFC registers
+address register name
+default
+value R/W description
+0x4900 R0 0x00 RW
+Bit[7:4]: Not used
+Bit[3]: sof_after_line0
+Bit[2]: fcnt_eof_sel
+Bit[1]: fcnt_mask_dis
+Bit[0]: fcnt_reset
+0x4901 R1 0x00 RW Bit[7:4]: Not used Bit[3:0]: frame_on_number
+0x4902 R2 0x00 RW Bit[7:4]: Not used Bit[3:0]: frame_off_number
+0x4903 R3 0x00 RW
+Bit[7]: zero_line_mask_dis
+Bit[6]: rblue_mask_dis
+Bit[5]: data_mask_dis
+Bit[4]: valid_mask_dis
+Bit[3]: href_mask_dis
+Bit[2]: eof_mask_dis
+Bit[1]: sof_mask_dis
+Bit[0]: all_mask_dis
+table 6-11 MIPI registers (sheet 10 of 10)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 108 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.13 strobe control [0x3B00, 0x3B02 ~ 0x3B05]
+table 6-13 strobe control registers
+address register name
+default
+value R/W description
+0x3B00 RSTRB 0x00 RW
+Bit[7]: Strobe ON/OFF
+Bit[6]: Strobe polarity
+0: Active high
+1: Active low
+Bit[5:4]: width_in_xenon
+Bit[3]: Reserved
+Bit[2:0]: Mode
+000: Xenon
+001: LED1
+010: LED2
+011: LED3
+100: LED4
+0x3B02 STROBE_ADD_DUMMY 0x00 RW
+Bit[7:0]: strobe_add_dummy[15:8]
+Dummy line number added at 
+strobe high byte
+0x3B03 STROBE_ADD_DUMMY 0x00 RW
+Bit[7:0]: strobe_add_dummy[7:0]
+Dummy line number added at 
+strobe low byte
+0x3B04 STROBE_CTL1 0x00 RW
+Bit[7]: Reserved
+Bit[6]: strobe_req_option
+Bit[5:4]: start_point_sel
+00: SOF
+01: end_of_sample
+10: end_of_precharge
+11: Not defined
+Bit[3]: strobe_md4_repeat
+Bit[2]: strobe_repeat_enable
+Bit[1:0]: strobe_lantency
+00: Strobe generated at next 
+frame
+01: Delay one frame, strobe 
+generated 2 frames later
+10: Delay one frame, strobe 
+generated 3 frames later
+11: Delay one frame, strobe 
+generated 4 frames later
+0x3B05 STROBE_WIDTH 0x00 RW
+Bit[7:2]: strobe_pulse_width_step
+Bit[1:0]: strobe_pulse_width_gain
+strobe_pulse width =
+128*(2^gain)*(step+1)*sclk_period
+Confidential for Waching Only
+
+===== PAGE 109 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-41
+6.14 TPM [0x4D00 ~ 0x4D23]
+table 6-14 TPM registers (sheet 1 of 2)
+address register name
+default
+value R/W description
+0x4D00 R_TPM_SLOPE_H 0x05 RW Bit[7:0]: r_tpm_slope[15:8]
+0x4D01 R_TPM_SLOPE_L 0x19 RW Bit[7:0]: r_tpm_slope[7:0]
+0x4D02 R_TPM_OFFSET_3 0xFD RW Bit[7:0]: r_tpm_offset[31:24]
+0x4D03 R_TPM_OFFSET_2 0xD1 RW Bit[7:0]: r_tpm_offset[23:16]
+0x4D04 R_TPM_OFFSET_1 0xFF RW Bit[7:0]: r_tpm_offset[15:8]
+0x4D05 R_TPM_OFFSET_0 0xFF RW Bit[7:0]: r_tpm_offset[7:0]
+0x4D06 R_DIV 0x08 RW Bit[7:4]: Reserved Bit[3:0]: r_div[3:0]
+0x4D07 R_CNT 0x07 RW Bit[7:3]: Reserved Bit[2:0]: r_cnt_bit[2:0]
+0x4D08 R_CLK_RE 1'b0 RW Bit[7:1]: Reserved Bit[0]: r_clk_re[0]
+0x4D09 R_STALL 1'b0 RW Bit[7:1]: Reserved Bit[0]: r_stall[0]
+0x4D0A R_OTP_CTRL_EN 1'b0 RW Bit[7:1]: Reserved Bit[0]: r_otp_ctrl_en[0]
+0x4D0B R_SOF_UPDATE_EN 1'b0 RW Bit[7:1]: Reserved Bit[0]: r_sof_update_en[0]
+0x4D0C R_SHIFT 0x05 RW Bit[7:5]: Reserved Bit[4:0]: r_shift_bit[4:0]
+0x4D0D R_PD_TPM_SNR 1'b0 RW Bit[7:1]: Reserved Bit[0]: r_pd_tpm_snr[0]
+0x4D0E R_DIV_SEL 1'b0 RW Bit[7:1]: Reserved Bit[0]: r_div_sel[0]
+0x4D0F R_MUL_DIV_SEL 1'b0 RW Bit[7:1]: Reserved Bit[0]: r_mul_div_sel[0]
+0x4D10 R_TPM_MIN 0x00 RW Bit[7:0]: r_tpm_min[7:0]
+0x4D11 R_TPM_MAX 0xFF RW Bit[7:0]: r_tpm_max[7:0]
+0x4D12 TPM_CTRL_12 0x00 W
+Writing ’1’ to register bit 0x4D12[0] will trigger 
+temperature calculation, then registers 0x4D13 
+and 0x4D14 will be latched temperature value
+0x4D13 TPM_CTRL_13 0x00 R Latched Temperature Value, Integer Part
+Confidential for Waching Only
+
+===== PAGE 110 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.15 2-wire serial interface [0x4C00 ~ 0x4C09]
+0x4D14 R_TPM_DEC_RDOUT 0x00 RW Bit[7:0]: r_tpm_dec_rdout[7:0]
+0x4D15 R_TPM_INT 0x00 RW Bit[7:0]: r_tpm_int[7:0]
+0x4D16 R_TPM_DEC 0x00 RW Bit[7:0]: r_tpm_dec[7:0]
+0x4D17 R_DB_NUM 0x00 RW Bit[7:0]: r_db_num[7:0]
+0x4D18 R_DB_REAL_H 0x00 RW Bit[7:0]: r_db_real[15:8]
+0x4D19 R_DB_REAL_L 0x00 RW Bit[7:0]: r_db_real[7:0]
+0x4D1A R_TPM_ABS_3 0x00 RW Bit[7:0]: r_tpm_abs[31:24]
+0x4D1B R_TPM_ABS_2 0x00 RW Bit[7:0]: r_tpm_abs[23:16]
+0x4D1C R_TPM_ABS_1 0x00 RW Bit[7:0]: r_tpm_abs[15:8]
+0x4D1D R_TPM_ABS_0 0x00 RW Bit[7:0]: r_tpm_abs[7:0]
+0x4D1E R_TPM_ADD_ABS_3 0x00 RW Bit[7:0]: r_tpm_add_abs[31:24]
+0x4D1F R_TPM_ADD_ABS_2 0x00 RW Bit[7:0]: r_tpm_add_abs[23:16]
+0x4D20 R_TPM_ADD_ABS_1 0x00 RW Bit[7:0]: r_tpm_add_abs[15:8]
+0x4D21 R_TPM_ADD_ABS_0 0x00 RW Bit[7:0]: r_tpm_add_abs[7:0]
+0x4D22 R_TPM_ADD_H 0x00 RW Bit[7:0]: r_tpm_add[15:8]
+0x4D23 R_TPM_ADD_L 0x00 RW Bit[7:0]: r_tpm_add[7:0]
+table 6-15 2-wire serial interface registers
+address register name
+default
+value R/W description
+0x4C00~
+0x4C09 SERIAL_INTFC_REG – – 2-wire Serial Interface Registers
+table 6-14 TPM registers (sheet 2 of 2)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 111 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-43
+6.16 AEC_CFG_REG [0x3503 ~ 0x353F]
+table 6-16 AEC_CFG_REG registers (sheet 1 of 2)
+address register name
+default
+value R/W description
+0x3501 EXPO_COARSE 0x00 RW Bit[7:0]: expo_coarse[15:8]
+0x3502 EXPO_COARSE 0x00 RW Bit[7:0]: expo_coarse[7:0]
+0x3503 NON RISC 3 0xA8 RW
+Bit[7]: agc_manual_en
+Bit[6]: digi_gain_delay_1frame
+Bit[5]: format_change_update_en
+Bit[4]: gain_delay_1frame
+Bit[3]: aec_manual_en
+Bit[2]: expo_fine_delay_1frame
+Bit[1]: expo_coarse_delay_1frame
+Bit[0]: expo_change_delay_1frame
+0x3504 NON RISC 4 0x08 RW
+Bit[7]: real_gain_as_snr_gain
+Bit[6]: isp_real_gain_blc
+Bit[5]: digi_gain_by_mwb
+Bit[4]: gain_delay_by_expo_change
+Bit[3]: initial_update_en
+Bit[2]: dig_gain_all_channel_same
+Bit[1]: vdl_sync_en
+Bit[0]: Not used
+0x3505~
+0x3507 RSVD – – Reserved
+0x3508 GAIN_COARSE 0x01 RW Bit[7]: Not used Bit[6:0]: gain_coarse[6:0]
+0x3509 GAIN_COARSE 0x00 RW Bit[7:1]: gain_fine Bit[0]: Not used
+0x350A NON RISC A 0x01 RW Bit[7:4]: Not used Bit[3:0]: dig_gain_coarse_b[3:0]
+0x350B NON RISC B 0x00 RW Bit[7:0]: dig_gain_fine_b[9:2]
+0x350C NON RISC C 0x00 RW Bit[7:6]: dig_gain_fine_b[1:0] Bit[5:0]: Not used
+0x350D NON RISC D 0x00 RW Bit[7:2]: Not used Bit[1:0]: snr_gain_map
+0x350E~
+0x351A RSVD – – Reserved
+0x351B NON RISC 1B – R Bit[7:0 ]: expo_coarse_cur[23:16]
+0x351C NON RISC 1C – R Bit[7 :0]: expo_coarse_cur[15:8]
+0x351D NON RISC 1D – R Bit[7 :0]: expo_coarse_cur[7:0]
+Confidential for Waching Only
+
+===== PAGE 112 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x351E NON RISC 1E – R Bit[7]: Not used Bit[6:0]: gain_coarse_cur_use[6:0]
+0x351F NON RISC 1F – R Bit[7:1]: gain_fine_cur_use[6:0] Bit[0]: Not used
+0x3520 NON RISC 20 – R Bit[7]: Not used Bit[6:0]: gain_coarse_cur_org[6:0]
+0x3521 NON RISC 21 – R Bit[7:1]: gain_fine_cur_org[6:0] Bit[0]: Not used
+0x3522 NON RISC 22 – R Bit[7]: Not used Bit[6:0]: snr_gain_coarse_cur[6:0]
+0x3523 NON RISC 23 – R Bit[7:1]: snr_gain_fine_cur[6:0] Bit[0]: Not used
+0x3524 NON RISC 24 – R Bit[7:4]: Not used Bit[3:0]: cur_dig_gain_coarse_b[3:0]
+0x3525 NON RISC 25 – R Bit[7:0]: cur_dig_gain_fine_b[9:2]
+0x3526 NON RISC 26 – R Bit[7:6]: cur_dig_gain_fine_b[1:0] Bit[5:0]: Not used
+0x3527 NON RISC 27 – R Bit[7]: Not used Bit[6:0]: real_gain_blc_coarse[6:0]
+0x3528 NON RISC 28 – R Bit[7:4]: real_gain_blc_fine[3:0] Bit[3:0]: Not used
+0x3529 NON RISC 29 – R Bit[7:3]: Not used Bit[2:0]: real_gain_isp_coarse[10:8]
+0x352A NON RISC 2A – R Bit[7:0]: real_gain_isp_coarse[7:0]
+0x352B NON RISC 2B – R Bit[7:4]: real_gain_isp_fine[3:0] Bit[3:0]: Not used
+0x352C~
+0x352D RSVD – – Reserved
+0x353E NON RISC 3E 0x00 RW
+Bit[7:5]: Not used
+Bit[4]: sig_gain_en
+Bit[3]: sig_gain_man_en
+Bit[2:0]: sig_gain_man
+0x353F NON RISC 3F 0x80 RW Bit[7:0]: ideal_low_sig_gain
+table 6-16 AEC_CFG_REG registers (sheet 2 of 2)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 113 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-45
+6.17 AO_CTRL_TOP [0x4F00 ~ 0x4F18]
+table 6-17 AO_CTRL_TOP registers (sheet 1 of 3)
+address register name
+default
+value R/W description
+0x4F00 NON RISC 0 0x00 RW Bit[7:1]: Not used Bit[0]: ao_mode_en
+0x4F01 NON RISC 1 0x3C RW
+Bit[7:6]: Not used
+Bit[5:4]: ao_tc_rst_auto_o
+Bit[3]: ao_grp_lch_auto
+Bit[2]: ao_osc_calib_auto
+Bit[1]: ao_mipi_lblk_slp
+Bit[0]: ao_ent_man_en
+0x4F02 NON RISC 2 0x00 RW Bit[7:1]: Not used Bit[0]: ao_ent_man
+0x4F03 NON RISC 3 0x00 RW Bit[7:0]: ao_clk_sw_time[15:8]
+0x4F04 NON RISC 4 0x10 RW Bit[7:0]: ao_clk_sw_time[7:0]
+0x4F05 NON RISC 5 0x03 RW
+Bit[7:6]: Not used
+Bit[5]: ao_mipi_slp_dis
+Bit[4]: grp_lch_byp
+Bit[3]: osc_calib_byp
+Bit[2]: mipi_slp_byp
+Bit[1]: osc_calib_always
+Bit[0]: grp_lch_always
+0x4F06 NON RISC 6 0x00 RW
+Bit[7:4]: ao_grp_sel
+Bit[3]: Not used
+Bit[2]: ao_p_clk_sw_man_en
+Bit[1]: ao_p_clk_sw_man
+Bit[0]: ao_p_clk_gate_byp
+0x4F07 NON RISC 7 0x01 RW
+Bit[7:6]: Not used
+Bit[5:4]: ao_pre_div_o
+Bit[3]: Not used
+Bit[2:0]: ao_pad_clk_sel_o
+0x4F08 NON RISC 8 0x55 RW
+Bit[7]: Not used
+Bit[6:4]: ao_sclk_sel_o
+Bit[3]: Not used
+Bit[2:0]: ao_pclk_sel_o
+0x4F09 NON RISC 9 0x13 RW
+Bit[7]: Not used
+Bit[6:4]: ao_ser_clk_sel_o
+Bit[3]: Not used
+Bit[2:0]: ao_srclk_sel_o
+Confidential for Waching Only
+
+===== PAGE 114 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x4F0A NON RISC A 0x25 RW
+Bit[7]: Not used
+Bit[6:4]: ao_sa1_clk_sel_o
+Bit[3]: Not used
+Bit[2:0]: ao_pump_clk_sel_o
+0x4F0B NON RISC B 0x10 RW
+Bit[7]: Not used
+Bit[6:4]: ao_daclk_sel_o
+Bit[3]: ao_daclk_en_o
+Bit[2:0]: ao_clk_source_sel_o
+0x4F0C NON RISC C 0x00 RW
+Bit[7]: pad_clk_disable
+Bit[6]: sclk_disable
+Bit[5]: pclk_disable
+Bit[4]: ser_clk_disable
+Bit[3]: srclk_disable
+Bit[2]: sa1_clk_disable
+Bit[1]: pump_clk_disable
+Bit[0]: daclk_disable
+0x4F0D NON RISC D 0x00 RW
+Bit[7]: pad_clk_sw_man_en
+Bit[6]: sclk_sw_man_en
+Bit[5]: pclk_sw_man_en
+Bit[4]: ser_clk_sw_man_en
+Bit[3]: srclk_sw_man_en
+Bit[2]: sa1_clk_sw_man_en
+Bit[1]: pump_clk_sw_man_en
+Bit[0]: daclk_sw_man_en
+0x4F0E NON RISC E 0x00 RW
+Bit[7]: pad_clk_sw_man
+Bit[6]: sclk_sw_man
+Bit[5]: pclk_sw_man
+Bit[4]: ser_clk_sw_man
+Bit[3]: srclk_sw_man
+Bit[2]: sa1_clk_sw_man
+Bit[1]: pump_clk_sw_man
+Bit[0]: daclk_sw_man
+0x4F0F NON RISC F 0x00 RW
+Bit[7]: pad_clk_gate_byp
+Bit[6]: sclk_gate_byp
+Bit[5]: pclk_gate_byp
+Bit[4]: ser_clk_gate_byp
+Bit[3]: srclk_gate_byp
+Bit[2]: sa1_clk_gate_byp
+Bit[1]: pump_clk_gate_byp
+Bit[0]: daclk_gate_byp
+table 6-17 AO_CTRL_TOP registers (sheet 2 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 115 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-47
+6.18 SENSOR_TIMING [0x3900 ~ 0x39E1]
+6.19 ISP_TOP [0x5000 ~ 0x5047]
+0x4F10 NON RISC 10 0x00 RW
+Bit[7]: pad_clk_psv_dis_auto
+Bit[6]: sclk_psv_dis_auto
+Bit[5]: pclk_psv_dis_auto
+Bit[4]: ser_clk_psv_dis_auto
+Bit[3]: srclk_psv_dis_auto
+Bit[2]: sa1_clk_psv_dis_auto
+Bit[1]: pump_clk_psv_dis_auto
+Bit[0]: daclk_psv_dis_auto
+0x4F11~
+0x4F17 RSVD – – Reserved
+0x4F18 NON RISC 18 – R Bit[7:0]: ao_state
+table 6-18 SENSOR_TIMING registers
+address register name
+default
+value R/W description
+0x3900~
+0x39E1 SENSOR_TIMING – – Sensor Timing Registers
+table 6-19 ISP_TOP registers (sheet 1 of 5)
+address register name
+default
+value R/W description
+0x5000 ISP_TOP_0 0xF5 RW
+Bit[7]: pre_isp_en
+Bit[6]: ctrl_latch_en
+Bit[5]: win_en
+Bit[4]: dpc_en
+Bit[3]: otp_en
+Bit[2]: awb_en
+Bit[1]: pre_isp_man_en
+Bit[0]: isp_en
+0x5001 ISP_TOP_1 0x50 RW
+Bit[7:6]: sof_sel
+Bit[5:4]: eof_sel
+Bit[3:0]: win_in_sel
+table 6-17 AO_CTRL_TOP registers (sheet 3 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 116 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x5002 ISP_TOP_2 0x00 RW
+Bit[7]: man_flip
+Bit[6]: man_mirror
+Bit[5]: man_flip_en
+Bit[4]: man_mirror_en
+Bit[3:2]: man_cfa_ptn
+Bit[1]: man_cfa_ptn_en
+Bit[0]: man_size_en
+0x5003 ISP_TOP_3 0x00 RW
+Bit[7]: man_bw_hbin2
+Bit[6]: man_bw_vbin2
+Bit[5]: man_x_bin2
+Bit[4]: man_y_bin2
+Bit[3]: man_bw_bin_en
+Bit[2]: man_bin_en
+Bit[1]: man_xy_inc_en
+Bit[0]: man_xy_addr_en
+0x5004 ISP_TOP_4 0x40 RW
+Bit[7]: man_win_ctrl_en
+Bit[6]: digi_gain_work_en
+Bit[5]: man_digi_gain_en
+Bit[4]: man_real_gain_en
+Bit[3]: man_gain_en
+Bit[2]: man_expo_en
+Bit[1]: man_blc_en
+Bit[0]: man_pipe_en
+0x5005 ISP_TOP_5 0x00 RW
+Bit[7]: man_bw_mode_en
+Bit[6]: man_bw_mode
+Bit[5:0]: Reserved
+0x5006 ISP_TOP_6 0x00 RW
+Bit[7]: Reserved
+Bit[6]: For chip always on mode
+Bit[5:3]: Not used
+Bit[2:0]: man_hsize[10:8]
+0x5007 ISP_TOP_7 0x00 RW Bit[7:0]: man_hsize[7:0]
+0x5008 ISP_TOP_8 0x00 RW
+Bit[7]: Reserved
+Bit[6]: dis_ck_gt_dpc
+Bit[5]: dis_ck_gt_otp
+Bit[4]: dis_ck_gt_awbg
+Bit[3]: dis_ck_gt_top
+Bit[2]: dis_ck_gt_all
+Bit[1]: dis_ck_gt_pre_isp
+Bit[0]: Reserved
+0x5009 ISP_TOP_9 0x00 RW
+Bit[7:2]: Reserved
+Bit[1]: man_x_bin8
+Bit[0]: man_y_bin8
+0x500A ISP_TOP_10 0x00 RW Bit[7:3]: Reserved Bit[2:0]: man_x_addr_start[10:8]
+table 6-19 ISP_TOP registers (sheet 2 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 117 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-49
+0x500B ISP_TOP_11 0x00 RW Bit[7:0]: man_x_addr_start[7:0]
+0x500C ISP_TOP_12 0x00 RW Bit[7:3]: Reserved Bit[2:0]: man_y_addr_start[10:8]
+0x500D ISP_TOP_13 0x00 RW Bit[7:0]: man_y_addr_start[7:0]
+0x500E ISP_TOP_14 0x05 RW Bit[7:3]: Reserved Bit[2:0]: man_x_addr_end[10:8]
+0x500F ISP_TOP_15 0x0F RW Bit[7:0]: man_x_addr_end[7:0]
+0x5010 ISP_TOP_16 0x03 RW Bit[7:3]: Reserved Bit[2:0]: man_y_addr_end[10:8]
+0x5011 ISP_TOP_17 0x7F RW Bit[7:0]: man_y_addr_end[7:0]
+0x5012 ISP_TOP_18 0x05 RW Bit[7:3]: Reserved Bit[2:0]: man_x_output_size[10:8]
+0x5013 ISP_TOP_19 0x0F RW Bit[7:0]: man_x_output_size[7:0]
+0x5014 ISP_TOP_20 0x03 RW Bit[7:3]: Reserved Bit[2:0]: man_y_output_size[10:8]
+0x5015 ISP_TOP_21 0x7F RW Bit[7:0]: man_y_output_size[7:0]
+0x5016 ISP_TOP_22 0x00 RW Bit[7:3]: Reserved Bit[2:0]: man_x_output_offset[10:8]
+0x5017 ISP_TOP_23 0x00 RW Bit[7:0]: man_x_output_offset[7:0]
+0x5018 ISP_TOP_24 0x00 RW Bit[7:3]: Reserved Bit[2:0]: man_y_output_offset[10:8]
+0x5019 ISP_TOP_25 0x00 RW Bit[7:0]: man_y_output_offset[7:0]
+0x501A ISP_TOP_26 0x11 RW Bit[7:4]: man_x_even_inc Bit[3:0]: man_x_odd_inc
+0x501B ISP_TOP_27 0x11 RW Bit[7:4]: man_y_even_inc Bit[3:0]: man_y_odd_inc
+0x501C ISP_TOP_28 0x00 RW Bit[7:2]: Reserved Bit[1:0]: man_blc[9:8]
+0x501D ISP_TOP_29 0x10 RW Bit[7:0]: man_blc[7:0]
+0x501E ISP_TOP_30 0x00 RW
+Bit[7:6]: Reserved
+Bit[5]: man_x_bin4
+Bit[4]: man_y_bin4
+Bit[3:1]: man_digi_gain
+Bit[0]: man_real_gain[8]
+0x501F ISP_TOP_31 0x10 RW Bit[7:0]: man_real_gain[7:0]
+table 6-19 ISP_TOP registers (sheet 3 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 118 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x5020 ISP_TOP_32 0x00 RW Bit[7:0]: man_expo[15:8]
+0x5021 ISP_TOP_33 0x10 RW Bit[7:0]: man_expo[7:0]
+0x5022 ISP_TOP_34 0x00 RW Bit[7:3]: Reserved Bit[2:0]: man_real_digi_gain[10:8]
+0x5023 ISP_TOP_35 0x10 RW Bit[7:0]: man_real_digi_gain[7:0]
+0x5024 ISP_TOP_36 – R
+Bit[7]: flip
+Bit[6]: mirror
+Bit[5]: x_bin2
+Bit[4]: y_bin2
+Bit[3]: bw_hbin2
+Bit[2]: bw_vbin2
+Bit[1:0]: BLC[9:8]
+0x5025 ISP_TOP_37 – R Bit[7:0]: BLC[7:0]
+0x5026 ISP_TOP_38 – R Bit[7:3]: Reserved Bit[2:0]: x_start_addr[10:8]
+0x5027 ISP_TOP_39 – R Bit[7:0]: x_start_addr[7:0]
+0x5028 ISP_TOP_40 – R Bit[7:3]: Reserved Bit[2:0]: x_end_addr[10:8]
+0x5029 ISP_TOP_41 – R Bit[7:0]: x_end_addr[7:0]
+0x502A ISP_TOP_42 – R Bit[7:3]: Reserved Bit[2:0]: y_start_addr[10:8]
+0x502B ISP_TOP_43 – R Bit[7:0]: y_start_addr[7:0]
+0x502C ISP_TOP_44 – R Bit[7:3]: Reserved Bit[2:0]: y_end_addr[10:8]
+0x502D ISP_TOP_45 – R Bit[7:0]: y_end_addr[7:0]
+0x502E ISP_TOP_46 – R Bit[7:3]: Reserved Bit[2:0]: x_output_offset[10:8]
+0x502F ISP_TOP_47 – R Bit[7:0]: x_output_offset[7:0]
+0x5030 ISP_TOP_48 – R Bit[7:3]: Reserved Bit[2:0]: x_output_size[10:8]
+0x5031 ISP_TOP_49 – R Bit[7:0]: x_output_size[7:0]
+0x5032 ISP_TOP_50 – R Bit[7:3]: Reserved Bit[2:0]: y_output_offset[10:8]
+0x5033 ISP_TOP_51 – R Bit[7:0]: y_output_offset[7:0]
+0x5034 ISP_TOP_52 – R Bit[7:3]: Reserved Bit[2:0]: y_output_size[10:8]
+table 6-19 ISP_TOP registers (sheet 4 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 119 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-51
+0x5035 ISP_TOP_53 – R Bit[7:0]: y_output_size[7:0]
+0x5036 ISP_TOP_54 – R Bit[7:4]: x_even_inc Bit[3:0]: x_odd_inc
+0x5037 ISP_TOP_55 – R Bit[7:4]: y_even_inc Bit[3:0]: y_odd_inc
+0x5038 ISP_TOP_56 – R
+Bit[7:6]: Reserved
+Bit[5:3]: digi_gain
+Bit[2:0]: real_gain[10:8]
+0x5039 ISP_TOP_57 – R Bit[7:0]: real_gain[7:0]
+0x503A ISP_TOP_58 – R Bit[7:0]: expo[15:8]
+0x503B ISP_TOP_59 – R Bit[7:0]: expo[7:0]
+0x503C ISP_TOP_60 – R Bit[7:3]: Reserved Bit[2:0]: isp_input_hsize[10:8]
+0x503D ISP_TOP_61 – R Bit[7:0]: isp_input_hsize[7:0]
+0x503E ISP_TOP_62 – R
+Bit[7]: Reserved
+Bit[6:5]: isp_output_cfa_ptn
+Bit[4:3]: isp_input_cfa_ptn
+Bit[2:0]: isp_input_vsize[10:8]
+0x503F ISP_TOP_63 – R Bit[7:0]: isp_input_vsize[7:0]
+0x5040 ISP_TOP_64 0x00 RW Bit[2:0]: man_vsize[10:8]
+0x5041 ISP_TOP_65 0x00 RW Bit[7:0]: man_vsize[7:0]
+0x5042 ISP_TOP_66 0x00 RW Bit[7:4]: man_valid_num Bit[3:0]: man_dmy_ratio
+0x5043 ISP_TOP_67 0x00 RW
+Bit[7:2]: Reserved
+Bit[1]: man_dummy_en
+Bit[0]: man_dmy_disable
+0x5044 ISP_TOP_68 0x00 RW Bit[7:0]: man_nvalid_cnt[15:8]
+0x5045 ISP_TOP_69 0x00 RW Bit[7:0]: man_nvalid_cnt[7:0]
+0x5046 ISP_TOP_70 0x00 RW Bit[7:0]: man_hblank_cnt[15:8]
+0x5047 ISP_TOP_71 0x00 RW Bit[7:0]: man_hblank_cnt[7:0]
+table 6-19 ISP_TOP registers (sheet 5 of 5)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 120 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.20 AWB_GAIN [0x5100 ~ 0x5111]
+6.21 DPC [0x5202 ~ 0x522F]
+table 6-20 AWB_GAIN registers
+address register name
+default
+value R/W description
+0x5100 AWB_GAIN_2210_0 0x01 RW Bit[7:2]: Reserved Bit[1:0]: Red AWB gain2.8 precision[9:8]
+0x5101 AWB_GAIN_2210_1 0x00 RW Bit[7:0]: Red AWB gain2.8 precision[7:0]
+0x5102 AWB_GAIN_2210_2 0x01 RW Bit[7:2]: Reserved Bit[1:0]: Green AWB gain2.8 precision[9:8]
+0x5103 AWB_GAIN_2210_3 0x00 RW Bit[7:0]: Green AWB gain2.8 precision[7:0]
+0x5104 AWB_GAIN_2210_4 0x01 RW Bit[7:2]: Reserved Bit[1:0]: Blue AWB gain2.8 precision[9:8]
+0x5105 AWB_GAIN_2210_5 0x00 RW Bit[7:0]: Blue AWB gain2.8 precision[7:0]
+0x5106~
+0x510F RSVD – – Reserved
+0x5110 AWB_GAIN_2210_16 – R Bit[7:0]: ro_version[15:8]
+0x5111 AWB_GAIN_2210_17 – R Bit[7:0]: ro_version[7:0]
+table 6-21 DPC registers (sheet 1 of 3)
+address register name
+default
+value R/W description
+0x5202 DPC_1700_D1_2 0xA3 RW
+Bit[7]: BW option select
+0: BW option can be turned on for all 
+gains
+1: Use gainThres and marginThres 
+to determine BW option (can be 
+turned on when low gain)
+Bit[6]: Enable BW option
+Bit[5]: Enable white/black ratio threshold
+Bit[4]: Reserved
+Bit[3]: Enable manual mode
+Bit[2]: Enable cross cluster correction
+Bit[1]: Enable black pixel correction
+Bit[0]: Enable white pixel correction
+Confidential for Waching Only
+
+===== PAGE 121 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-53
+0x5203 DPC_1700_D1_3 0x4C RW
+Bit[7]: Reserved
+Bit[6]: Line data select
+0: Use dummy line data
+1: Last two lines re-use bound data
+Bit[5]: HDR/SBS select
+0: HDR
+1: SBS
+Bit[4]: algorithm_opt
+Bit[3:2]: Edge filling option
+Bit[1:0]: RGB/G/BR select
+00: RGB
+01: G
+10: BR
+11: Not defined
+0x5204 DPC_1700_D1_4 0x04 RW Bit[7:0]: White pixel threshold list[0]
+0x5205 DPC_1700_D1_5 0x04 RW Bit[7:0]: White pixel threshold list[1]
+0x5206 DPC_1700_D1_6 0x04 RW Bit[7:0]: White pixel threshold list[2]
+0x5207 DPC_1700_D1_7 0x04 RW Bit[7:0]: White pixel threshold list[3]
+0x5208 DPC_1700_D1_8 0x04 RW Bit[7:0]: Bl ack pixel threshold list[0]
+0x5209 DPC_1700_D1_9 0x04 RW Bit[7:0]: Bl ack pixel threshold list[1]
+0x520A DPC_1700_D1_10 0x04 RW Bit[7:0]: Bl ack pixel threshold list[2]
+0x520B DPC_1700_D1_11 0x04 RW Bit[7:0]: Bl ack pixel threshold list[3]
+0x520D DPC_1700_D1_13 0x03 RW Bit[7:0]: Gain control point[0]
+0x520E DPC_1700_D1_14 0x08 RW Bit[7:0]: Gain control point[1]
+0x520F DPC_1700_D1_15 0x0C RW Bit[7:0]: Gain control point[2]
+0x5210 DPC_1700_D1_16 0x00 RW Bit[7:4]: Reserved Bit[3:0]: Max allowed defect pixel list[0]
+0x5211 DPC_1700_D1_17 0x00 RW Bit[7:4]: Reserved Bit[3:0]: Max allowed defect pixel list[1]
+0x5212 DPC_1700_D1_18 0x01 RW Bit[7:4]: Reserved Bit[3:0]: Max allowed defect pixel list[2]
+0x5213 DPC_1700_D1_19 0x02 RW Bit[7:4]: Reserved Bit[3:0]: Max allowed defect pixel list[3]
+0x5214 DPC_1700_D1_20 0x08 RW Bit[7:0]: White couplet defect pixel correction gain threshold
+0x5215 DPC_1700_D1_21 0x08 RW
+Bit[7:4]: Reserved
+Bit[3:0]: White couplet defect pixel correction 
+gain margin
+table 6-21 DPC registers (sheet 2 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 122 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+0x5216 DPC_1700_D1_22 0x08 RW Bit[7:0]: Black couplet defect pixel correction gain threshold
+0x5217 DPC_1700_D1_23 0x08 RW
+Bit[7:4]: Reserved
+Bit[3:0]: Black couplet defect pixel correction 
+gain margin
+0x5218 RSVD – – Reserved
+0x5219 DPC_1700_D1_25 0x08 RW Bit[7:4]: Reserved Bit[3:0]: White couplet threshold ratio
+0x521A DPC_1700_D1_26 0x08 RW Bit[7:4]: Reserved Bit[3:0]: Black couplet threshold ratio
+0x521B DPC_1700_D1_27 0xFF RW Bit[7:0]: Saturation threshold
+0x521C~
+0x5225 RSVD – – Reserved
+0x5226 DPC_1700_D1_38 0x08 RW Bit[7:4]: Reserved Bit[3:0]: Gain margin threshold for BW option
+0x5227 DPC_1700_D1_39 0x08 RW Bit[7:0]: Gain threshold for BW option
+0x5228 DPC_1700_D1_40 0x33 RW Bit[7:4]: White ratio threshold list[0] Bit[3:0]: White ratio threshold list[1]
+0x5229 DPC_1700_D1_41 0x33 RW Bit[7:4]: White ratio threshold list[2] Bit[3:0]: White ratio threshold list[3]
+0x522A DPC_1700_D1_42 0x33 RW Bit[7:4]: Black ratio threshold list[0] Bit[3:0]: Black ratio threshold list[1]
+0x522B DPC_1700_D1_43 0x33 RW Bit[7:4]: Black ratio threshold list[2] Bit[3:0]: Black ratio threshold list[3]
+0x522C DPC_1700_D1_44 – R Bit[7:0]: dpc_sw_ver[15:8]
+0x522D DPC_1700_D1_45 – R Bit[7:0]: dpc_sw_ver[7:0]
+0x522E DPC_1700_D1_46 – R Bit[7:0]: dpc_hw_ver[15:8]
+0x522F DPC_1700_D1_47 – R Bit[7:0]: dpc_hw_ver[7:0]
+table 6-21 DPC registers (sheet 3 of 3)
+address register name
+default
+value R/W description
+Confidential for Waching Only
+
+===== PAGE 123 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+6-55
+6.22 WINDOW [0x5800 ~ 0x5815]
+table 6-22 WINDOW registers
+address register name
+default
+value R/W description
+0x5800 WINDOW_1020_0 0x00 RW Bit[7:3]: Reserved Bit[2:0]: Window X start[10:8]
+0x5801 WINDOW_1020_1 0x00 RW Bit[7:0]: Window X start[7:0]
+0x5802 WINDOW_1020_2 0x00 RW Bit[7:3]: Reserved Bit[2:0]: Window Y start[10:8]
+0x5803 WINDOW_1020_3 0x00 RW Bit[7:0]: Window Y start[7:0]
+0x5804 WINDOW_1020_4 0x02 RW Bit[7:3]: Reserved Bit[2:0]: Window width[10:8]
+0x5805 WINDOW_1020_5 0x80 RW Bit[7:0]: Window width[7:0]
+0x5806 WINDOW_1020_6 0x01 RW Bit[7:3]: Reserved Bit[2:0]: Window height[10:8]
+0x5807 WINDOW_1020_7 0xE0 RW Bit[7:0]: Window height[7:0]
+0x5808 WINDOW_1020_8 0x00 RW
+Bit[7:3]: Reserved
+Bit[2]: Flip enable
+Bit[1]: Mirror enable
+Bit[0]: Manual window enable
+0x5809~
+0x580F RSVD – – Reserved
+0x5810 WINDOW_1020_16 – RW Bit[7:3]: Reserved Bit[2:0]: px_cnt[10:8]
+0x5811 WINDOW_1020_17 – RW Bit[7:0]: px_cnt[7:0]
+0x5812 WINDOW_1020_18 – RW Bit[7:3]: Reserved Bit[2:0]: ln_cnt[10:8]
+0x5813 WINDOW_1020_19 – RW Bit[7:0]: ln_cnt[7:0]
+0x5814 WINDOW_1020_20 – R Bit[7:0]: ro_version[15:8]
+0x5815 WINDOW_1020_21 – R Bit[7:0]: ro_version[7:0]
+Confidential for Waching Only
+
+===== PAGE 124 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+6.23 PRE_ISP [0x5080 ~ 0x5089]
+table 6-23 PRE_ISP registers
+address register name
+default
+value R/W description
+0x5080 PRE_ISP_2020_0 0x40 RW
+Bit[7]: test_en
+Bit[6]: win_cut_en
+Bit[5:4]: bar_style
+Bit[3]: Not used
+Bit[2:0]: ln_intr_cnt[10:8]
+0x5081 PRE_ISP_2020_1 0x01 RW Bit[7:0]: ln_intr_cnt[7:0]
+0x5082 PRE_ISP_2020_2 0x00 RW Bit[7:3]: Reserved Bit[2:0]: man_x_offset[10:8]
+0x5083 PRE_ISP_2020_3 0x00 RW Bit[7:0]: man_x_offset[7:0]
+0x5084 PRE_ISP_2020_4 0x00 RW Bit[7:3]: Reserved Bit[2:0]: man_y_offset[10:8]
+0x5085 PRE_ISP_2020_5 0x00 RW Bit[7:0]: man_y_offset[7:0]
+0x5086 PRE_ISP_2020_6 0x00 RW
+Bit[7:5]: Reserved
+Bit[4]: mirror_opt
+Bit[3]: end_man_en
+Bit[2:0]: man_x_end[10:8]
+0x5087 PRE_ISP_2020_7 0x00 RW Bit[7:0]: man_x_end[7:0]
+0x5088 PRE_ISP_2020_8 – R Bit[7:0]: ro_version[15:8]
+0x5089 PRE_ISP_2020_9 – R Bit[7:0]: ro_version[7:0]
+Confidential for Waching Only
+
+===== PAGE 125 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+7-1
+7 operating specifications
+7.1 absolute maximum ratings
+7.2 functional temperature
+table 7-1 absolute maximum ratings
+parameter absolute maximum ratinga
+a. exceeding the absolute maximum ratings shown above invalidates all AC and DC electric al specifications and may
+result in permanent damage to the device. Exposure to  absolute maximum rated c onditions for extended periods
+may affect device reliability.
+ambient storage temperature -40°C to +125°C
+supply voltage (with respect to ground)
+VDD-A 4.5V
+VDD-D 3V
+VDD-IO 4.5V
+all input/output voltages (with respect to ground) -0.3V to V DD-IO + 1V
+I/O current on any input or output pin ± 200 mA
+peak solder temperature (10 second dwell time) 245°C
+table 7-2 functional temperature
+parameter range
+operating temperature (for applications up to 30 fps)a
+a. sensor functions but image quality may be noticeably different at temperatures outside of stable image range
+-30°C to +85°C junction temperature
+stable image temperatureb
+b. image quality remains stable throughout this temperature range
+0°C to +60°C junction temperature
+Confidential for Waching Only
+
+===== PAGE 126 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+7.3 DC characteristics
+note Active 
+current/standby current 
+are estimated data and 
+are subject to change 
+with actual chip 
+measurement.
+table 7-3 DC characteristics (-30°C < TJ < 85°C)
+symbol parameter min typ maxa
+a. maximum active current is measured under typical supply voltage
+unit
+supply
+VDD-A supply voltage (analog) 2.7 2.8 3.0 V
+VDD-D
+supply voltage (digital core for MIPI 
+1-lane up to 1500 Mbps/lane or MIPI 
+2-lane up to 800 Mbps/lane)
+1.14 1.2 1.26 V
+VDD-IO supply voltage (digital I/O) 1.7 1.8 1.9 V
+IDD-A
+active (operating) currentb
+b. DVDD is provided by the external regulat or. DVDD and EVDD are tied together. DOVDD = 1.8V
+24.7 29 mA
+IDD-IO 0.78 0.9 mA
+IDD-D c
+c. data is based on ISP ON
+37.4 48 mA
+IDDS-SCCB
+standby currentd
+d. standby current is measured at room  temperature with external clock off
+ 0.25 2.1 mA
+IDDS-XSHUTDN 15µ A
+digital inputs (typical conditions: AVDD = 2.8V, DVDD = 1.2V, DOVDD = 1.8V)
+VIL input voltage LOW 0.54 V
+VIH input voltage HIGH 1.26 V
+CIN input capacitor 10 pF
+digital outputs (standard loading 25 pF)
+VOH output voltage HIGH 1.62 V
+VOL output voltage LOW 0.18 V
+serial interface inputs
+VIL e
+e. based on DOVDD = 1.8V
+SCL and SDA -0.5 0 0.54 V
+VIH e SCL and SDA 1.28 1.8 3.0 V
+Confidential for Waching Only
+
+===== PAGE 127 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+7-3
+7.4 timing characteristics
+figure 7-1 reference clock input timing diagram
+table 7-4 timing characteristics
+symbol parameter min typ max unit
+oscillator and clock input
+fXVCLK frequency (XVCLK)a
+a. for input clock range 6~27 MHz, the OV02C10 can tolera te input clock period jitter up to 600ps peak-to-peak
+62 4 2 7 M Hz
+TPERIOD period (XVCLK) 37.0 41.7 166.7 ns
+TLOW low level width (XVCLK) 0.35×T PERIOD 0.65×TPERIOD ns
+THIGH high level width (XVCLK) 0.35×T PERIOD 0.65×TPERIOD ns
+0.3 x VDOVDD
+THIGH
+TLOW
+VIH
+VIL
+TPERIOD
+0.7 x VDOVDD
+time
+Confidential for Waching Only
+
+===== PAGE 128 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+THIS PAGE INTENTIONALLY LEFT BLANK
+Confidential for Waching Only
+
+===== PAGE 129 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+8-1
+8 mechanical specifications
+8.1 physical specifications
+figure 8-1 package specifications
+table 8-1 package dimensions (sheet 1 of 2)
+parameter symbol min typ max unit
+package body dimension x A 3111 3136 3161 µm
+package body dimension y B 1860 1885 1910 µm
+package height C 581 641 701 µm
+ball height C1 80 110 140 µm
+package body thickness C2 496 531 566 µm
+thickness from top glass surface to wafer C3 326.5 346.5 366.5 µm
+image plane height C4 249.5 294.5 339.5 µm
+cover glass + BPR thickness C5 286.5 301.5 316.5 µm
+air gap between sensor and glass C6 41 45 49 µm
+ball diameter D 170 200 230 µm
+total pin count N 21
+bottom view
+glass
+C3
+C1
+Cside view
+C6
+C4
+C2
+C5
+die
+12 4 6 357 8 9
+A
+B
+D
+C
+E
+top view
+A
+B
+87 5 3 64 2 19
+center of BGA (die) =
+center of the package
+A
+B
+D
+C
+E
+J10
+J11
+J12
+J7
+J6
+J5
+J3 
+J2
+J1
+S1
+J4
+J9
+S2
+J8
+Confidential for Waching Only
+
+===== PAGE 130 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+pins pitch x-axis
+J1/J2/J3 315 µm
+J4/J5 200 µm
+J6/J7/J8 315 µm
+pins pitch y-axis
+J9 410 µm
+J10 310 µm
+J11 250 µm
+J12 350 µm
+edge-to-pin center distance along x S1 393 423 453 µm
+edge-to-pin center distance along y S2 252.5 282.5 312.5 µm
+table 8-1 package dimensions (sheet 2 of 2)
+parameter symbol min typ max unit
+Confidential for Waching Only
+
+===== PAGE 131 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+8-3
+8.2 IR reflow specifications
+figure 8-2 IR reflow ramp rate requirements
+note
+The OV02C10 uses a 
+lead free package.
+time (sec)
+soaking
+reflow
+cooling
+temperature (°C)
+0
+20
+40
+60
+80
+100
+120
+140
+160
+180
+200
+520
+480
+440
+400
+360
+320
+280
+500
+460
+420
+380
+340
+300
+260
+240
+220
+540
+0.0
+220.0
+240.0
+260.0
+200.0
+180.0
+140.0
+160.0
+120.0
+100.0
+80.0
+60.0
+40.0
+20.0
+ramp up
+tL
+Tmax
+Tmin
+T0
+TP
+TL
+TF
+note OmniVision 
+recommends CSP 
+packages use underfill 
+as a part of camera 
+assembly process
+table 8-2 reflow conditionsab
+a. maximum number of reflow cycles = 3
+b. N2 gas reflow or control O2 gas PPM<500 as recommended
+zone description exposure
+ramp up A (T0 to Tmin) heating from room temperature to 150°C temperature slope ≤ 3°C per second
+soaking heating from 150°C to 200°C 90 ~ 150 seconds
+ramp up B (tL to Tp) heating from 217°C to 245°C temperature slope ≤ 3°C per second
+peak temperature maximum temperature in SMT 245°C +0/-5°C (duration max 30 sec)
+reflow (tL to TL) temperature higher than 217°C 30 ~ 120 seconds
+ramp down A (Tp to TL) cooling from 245°C to 217°C temperature slope ≤ 3°C per second
+ramp down B (TL to Tf) cooling from 217°C to room temperature temperature slope ≤ 2°C per second
+T0 to Tp room temperature to peak temperature ≤ 8 minutes
+Confidential for Waching Only
+
+===== PAGE 132 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+8.3 PCB and SMT design recommendations
+In general, OmniVision recommends circular non-solder mask defined (NSMD) PCB land pads, 90% ± 10% (80% ~ 
+100%) of package's ball pad opening, with a teardrop design (see figure 8-3) for trace to pad connections to minimize 
+risk of cracking at the trace pad interface.
+8.3.1 PCB design recommendations
+• please refer to table 8-3 for device specific PCB NSMD land pad size recommendations
+• solder mask clearance around PCB NSMD land pads shoul d be a minimum of 75 µm; for applications requiring a 
+clearance that is less than this recommended clearance, consult with PCB supplier
+• high performance FR4 with high Tg and low CTE is recommended
+• refer to IPC-7351B (Generic Requirements for Surfac e Mount Design and Land Pattern standard) for additional 
+details regarding any other PCB design considerations
+figure 8-3 NSMD PCB land pad with tear drop example
+8.3.2 SMT design recommendations
+• stencil design should follow IP C stencil guideline IPC-7525B
+• stencil: laser cut with electro-polishing
+• solder material: SAC305
+• stencil opening: 90~100% of PCB pad size
+• solder paste: type 4 (20 µm to 38 µm) or finer solder sphere particle size, ROL 0
+• SMT reflow profile: refer to solder paste datasheet and reflow profile
+table 8-3 ball pad opening size and recommended PCB NSMD ball pad size
+device name
+package
+type package size
+CSP/BGA ball 
+pad opening size
+recommended PCB 
+NSMD ball pad size
+OV02C10 CSP 3.136 mm × 1.885 mm 200 µm 180 µm ± 20 µm
+D
+W
+pad
+pad
+PCB
+solder mask
+solder mask
+solder ball
+A
+75 µm
+Confidential for Waching Only
+
+===== PAGE 133 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+9-1
+9 optical specifications
+9.1 sensor array center
+figure 9-1 sensor array center
+figure 9-2 final image output
+this drawing is not to scale and is for reference only.
+as most optical assemblies mirror the image, the chip is typically mounted as above
+with the first pixel at the bottom left corner.
+note 1
+note 2
+A1 A3 A9A5
+OV02C10
+A7
+array center
+(-7.097 µm, 0 µm)
+package center
+(0 µm, 0 µm)
+first pixel readout
+(-1087.385 µm, -611.568 µm)
+2160.576 µm
+1223.136 µm
+sensor array
+pin #A1
+OV02C10 sensorfirst pixel
+F
+original image
+F
+output image
+A1 A3 A9A5
+OV02C10
+A7F
+sensor array
+Confidential for Waching Only
+
+===== PAGE 134 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+9.2 lens chief ray angle (CRA)
+figure 9-3 chief ray angle (CRA)
+table 9-1 CRA versus image height plot
+field (%) image height (mm) CRA (degrees)
+0.00 0.000 0.00
+0.10 0.124 5.29
+0.20 0.248 10.56
+0.30 0.372 15.58
+0.40 0.496 20.34
+0.50 0.621 24.78
+0.60 0.745 28.68
+0.70 0.869 31.69
+0.80 0.993 33.48
+0.90 1.117 33.98
+1.00 1.241 33.79
+0.000
+0.124
+0.248
+0.372
+0.496
+0.621
+0.745
+0.869
+0.993
+1.117
+1.241
+0.0
+10.0
+25.0
+30.0
+20.0
+5.0
+15.0
+35.0
+CRA
+image height (mm)
+CRA (degrees)
+Confidential for Waching Only
+
+===== PAGE 135 =====
+07.06.2022 PRODUCT SPECIFICATION proprietary to OmniVision Technologies
+rev-1
+revision history
+version 1.0 02.03.2022
+• initial release
+version 1.01 02.25.2022
+• in figure 1-1, moved balls of row C and row D down
+• in figure 8-1, moved balls of row C and D in top view and bottom view down
+• in figure 9-1, moved balls of row C and row D down
+• in figure 9-2, moved balls of row C and row D in package drawing down
+version 2.0 04.29.2022
+• changed datasheet from Preliminary Spec ification to Product Specification
+• in ordering information, removed "-Z" from ordering part number and added ordering part number 
+OV02C10-A21A-001A-Z engineering sample
+• in key specifications, changed active power r equirements to 115.4 mW, changed standby power 
+requirements to 0.25 mA, and changed XSHUTDN power requirements to 1 µA
+• in section 2.9.2, changed first sentence of first pa ragraph to "...clock from a 6~27 MHz input clock."
+• in table 3-1, added binary value sele ctions 0 and 1 for register bit 0x3820[3]
+• in table 4-1, added binary value sele ctions 0 and 1 for register bit 0x3820[3]
+• in table 7-3, changed typ and max values for I DD-A to 24.7 mA and 29 mA, respectively, changed 
+typ and max values for IDD-IO to 0.78 mA and 0.9 mA, respectively, changed typ and max values for 
+IDD-D to 37.4 mA and 48 mA, respectively, changed typ and max values for IDDS-SCCB to 0.25 mA 
+and 2.1 mA, respectively, and changed typ and max values for IDDS-XSHUTDN to 1 µA and 5 µA, 
+respectively
+• in figure 8-1, moved J11 callout down to row D
+version 2.01 07.06.2022
+• in section 2.3, added second sentence "The horizontal size of the format must be a multiple of 8."
+Confidential for Waching Only
+
+===== PAGE 136 =====
+color CMOS 2 megapixel (1920x1080) image sensor with PureCel®Plus-S technologyOV02C10
+proprietary to OmniVision Technologies PRODUCT SPECIFICATION version 2.01
+THIS PAGE INTENTIONALLY LEFT BLANK
+Confidential for Waching Only
+
+===== PAGE 137 =====
+Future in Sight®
+website:  www.ovt.com
+OmniVision Technologies, Inc.
+UNITED STATES
+4275 Burton Drive
+Santa Clara, CA 95054
+tel: +1 408 567 3000
+Chicago +1 847 508 0217
+Detroit +1 248 919 6900
+Optics Division +1 303 449 5593
+UNITED KINGDOM
+Hants +44 1252 761601
+GERMANY
+Munich +49 89 6381 9988
+CHINA
+Shanghai + 86 21 6175 9888
++86 21 6154 8000
+Beijing + 86 10 8642 4200
+Shenzhen + 86 755 8435 9733
+Wuhan +86 27 5975 7800
+Xian +86 29 8885 2537
+INDIA
+Bangalore +91 80 4112 8966
+KOREA
+Seoul + 82 2 3472 3769
+JAPAN
+Yokohama +81 45 478 7977
+Kyoto +81 75 708 5352
+NORWAY
+Oslo +47 2295 8100
+SINGAPORE +65 6933 1933
+TAIWAN
+Taipei +886 2 2657 9800
+Hsin-chu +886 3 5656688
+Confidential for Waching Only

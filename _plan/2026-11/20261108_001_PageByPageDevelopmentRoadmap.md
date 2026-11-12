@@ -1,7 +1,7 @@
 # 범용 HMI 시작 프로젝트: 페이지 단위 개발 로드맵
 
-작성: 2026-11-08. 갱신: 2026-11-11. 상태: `in_progress` (S01~S07 `complete`,
-S08 `blocked` (실기기 접근 대기), S09 `pending`, S10 `blocked` (D4 실기기 접근 대기)).
+작성: 2026-11-08. 갱신: 2026-11-12. 상태: `in_progress` (S01~S07 `complete`,
+S08 `in_progress` (C0.5 camera frame 검증), S09~S10 `complete`).
 
 ## 1. 재편 결론
 
@@ -40,9 +40,9 @@ S08 `blocked` (실기기 접근 대기), S09 `pending`, S10 `blocked` (D4 실기
 | S05 | `sd-storage` | `complete` | `_plan/2026-11/20261108_015_SdUsbMscPage.md` | SD 상태, 전역 앱 잠금과 PC USB MSC 접근 |
 | S06 | `wav-sounds` | `complete` | `_plan/2026-11/20261108_016_RegisteredWavPage.md` | 목록·progress·pause/resume 실기기 수용과 사용자 승인 완료 |
 | S07 | `wifi-ap-web` | `complete` | `_plan/2026-11/20261108_018_WifiApWebControlPage.md` | AP+STA·두 QR·웹/HMI 4스위치 동기화와 사용자 승인 완료 |
-| S08 | `camera-gallery` | `blocked` (C0 실기기 확인 대기) | `_plan/2026-11/20261108_017_CameraGalleryPage.md` | 촬영·SD 저장·보기·삭제, C0.5 통과 시 5-point 얼굴 특징점 |
-| S09 | `interfaces-info` | `pending` | `_plan/2026-11/20261108_019_InterfaceOverviewPage.md` | RS485·GPIO·PWM·USB·storage·update 8항목 목록→상세 안내와 중립 core |
-| S10 | `date-time` | `blocked` (D4 실기기 접근 대기) | `_plan/2026-11/20261111_001_DateTimeRtcPage.md` | RTC·수동 설정·SNTP 기반과 화면, 202609 기초설정1 비교 반영 |
+| S08 | `camera-gallery` | `in_progress` (C0.5 camera frame 검증) | `_plan/2026-11/20261108_017_CameraGalleryPage.md` | 촬영·SD 저장·보기·삭제, C0.5 통과 시 5-point 얼굴 특징점 |
+| S09 | `interfaces-info` | `complete` | `_plan/2026-11/20261108_019_InterfaceOverviewPage.md` | RS485·GPIO·PWM·USB·storage·update 8항목 목록→상세 안내와 중립 core, 실기기 수용 완료 |
+| S10 | `date-time` | `complete` | `_plan/2026-11/20261111_001_DateTimeRtcPage.md` | 수동 설정·SNTP 기반과 화면 완료, 실제 RTC 활성화는 별도 후속 |
 
 S04는 공통 STA 상태·Windows fixture·HMI adapter와 Wi-Fi 설정 UI, 지연 scan, 목록→선택→입력,
 검색 spinner, 터치 보정, 인증 실패 재입력과 연결 AP 강조까지 구현했다. 2026-11-09 사용자가
@@ -65,13 +65,22 @@ build, A0/A0.5 실기기 data path 근거를 통과했고 2026-11-11 사용자 �
 `complete`로 닫았다. 출시 전 장시간 휴대폰 회귀는 전역 G3와 README 수동 체크리스트에서
 별도로 수행한다.
 
+S09는 202609의 RS485·GPIO·PWM 경계를 domain-neutral 비소유 port로 정리하고 USB CDC
+command 계약과 안전한 firmware update core를 추가했다. 한 page 안에서 여덟 항목을
+목록→상세로 탐색하며 storage/MSC/asset updater와 update 기반의 사용법·미구현 범위를
+설명한다. Windows 59/59, 도구 58/58, isolation과 HMI compile-only가 통과했고 최종 HMI는
+RAM 88,080 bytes, flash 1,635,650 bytes다. 실제 장치 동작을 가장하는 control은 없다.
+2026-11-12 사용자가 실기기에서 S09를 확인하고 완료를 승인해 I6와 S09를 `complete`로
+닫았다.
+
 S10은 날짜 계산·동기화 core, Windows 가상 시계, HMI system clock/SNTP adapter와
 `date-time` page를 구현했다. 202609 기초설정1과 비교해 초 편집·실시간 초 진행·연도 경계를
 반영하고 상태 항목별 구획과 하단 안내의 좌측·상하 중앙 정렬을 보정했다. Windows 49/49,
 도구 58/58, isolation과 HMI
-compile이 통과했고 1024×600 Windows 화면도 확인했다. 실제 RTC register adapter는 칩 호환성을 확인하기 전까지
-비활성화했다. 현재 사용자가 다른 장소에 있어 보드 revision·RTC·CR1220·SNTP·LCD/touch
-수용을 할 수 없으므로 D4만 `blocked`로 남긴다.
+compile이 통과했고 1024×600 Windows 화면도 확인했다. 2026-11-12 사용자가 실기기에서
+네트워크 기반 날짜·시각 갱신을 확인하고 S10 완료를 승인했다. 실제 RTC register adapter는
+칩 호환성을 확인하기 전까지 비활성 상태를 유지하며, RTC·CR1220·전원 유지 수용은
+`_plan/2026-11/20261112_001_RtcHardwareEnablement.md`의 별도 후속 작업으로 분리했다.
 
 ## 3. 202609 재사용 판정
 
@@ -114,8 +123,8 @@ compile이 통과했고 1024×600 Windows 화면도 확인했다. 실제 RTC reg
 - S07은 현재 ESP-Hosted 버전에서 AP data path가 확인되지 않으면 A0에서 `blocked`로 둔다.
 - S08은 camera sensor·pin·clock·driver가 확인되지 않으면 C0에서 `blocked`로 둔다.
 - S09는 안내 page이므로 실제 RS485/I/O/USB command 동작을 완료 조건으로 요구하지 않는다.
-- S10은 RTC 칩·register 호환 근거가 없으면 실제 adapter를 비활성 상태로 유지하고 D4
-  실기기 수용을 `blocked`로 둔다.
+- S10 완료 뒤에도 RTC 칩·register 호환 근거가 없으면 실제 adapter를 비활성 상태로 유지하고
+  `_plan/2026-11/20261112_001_RtcHardwareEnablement.md`에서 별도로 수용한다.
 
 ## 6. 전체 완료 정의
 

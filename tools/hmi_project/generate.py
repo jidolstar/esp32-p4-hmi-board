@@ -11,7 +11,7 @@ from pathlib import Path
 from .manifest import Profile, ProfileRegistry, SUPPORTED_HOSTS
 from .pages import check_page_source_isolation, load_page_registry
 
-GENERATOR_VERSION = 23
+GENERATOR_VERSION = 26
 
 MODULE_INPUTS = {
     "audio": {
@@ -32,6 +32,10 @@ MODULE_INPUTS = {
     "i18n": {
         "sources": ("modules/i18n/src/locale.cpp", "modules/i18n/src/format.cpp"),
         "include_dirs": ("modules/i18n/include",),
+    },
+    "interfaces": {
+        "sources": ("modules/interfaces/src/capability.cpp",),
+        "include_dirs": ("modules/interfaces/include",),
     },
     "settings": {
         "sources": ("modules/settings/src/level_settings.cpp",),
@@ -70,6 +74,21 @@ MODULE_INPUTS = {
             "modules/ui/src/virtual_keyboard.cpp",
         ),
         "include_dirs": ("modules/ui/include",),
+    },
+    "update": {
+        "sources": (
+            "modules/update/src/types.cpp",
+            "modules/update/src/json_view.cpp",
+            "modules/update/src/manifest.cpp",
+            "modules/update/src/artifact_download.cpp",
+            "modules/update/src/durable_record.cpp",
+            "modules/update/src/install_journal.cpp",
+            "modules/update/src/asset_lifecycle.cpp",
+            "modules/update/src/asset_store.cpp",
+            "modules/update/src/boot_coordinator.cpp",
+            "modules/update/src/engine.cpp",
+        ),
+        "include_dirs": ("modules/update/include",),
     },
 }
 
@@ -176,6 +195,9 @@ def resolve_profile_inputs(
             page_descriptors.append(
                 {
                     "id": page.data["id"],
+                    "dashboard_title_key": page.data.get(
+                        "dashboard_title_key", page.data["title_key"]
+                    ),
                     "title_key": page.data["title_key"],
                     "description_key": page.data["description_key"],
                     "order": page.data["order"],
@@ -543,6 +565,7 @@ def _page_registry_source(resolved: dict) -> str:
             + ", ".join(
                 (
                     _cpp_string(page["id"]),
+                    _cpp_string(page["dashboard_title_key"]),
                     _cpp_string(page["title_key"]),
                     _cpp_string(page["description_key"]),
                     str(page["order"]),

@@ -46,6 +46,7 @@ except ImportError:  # Direct script execution from the repository root.
 GENERATOR_VERSION = 2
 ROLE_ORDER = (
     "page_title",
+    "card_title",
     "body",
     "field_label",
     "placeholder",

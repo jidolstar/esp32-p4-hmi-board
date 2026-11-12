@@ -46,7 +46,7 @@ class TypographyGenerationTest(unittest.TestCase):
         inputs = load_inputs(self.owner.catalogs, self.owner.typography)
         self.assertEqual(set(inputs.catalogs["ko-KR"]), set(inputs.catalogs["en-US"]))
         self.assertEqual(set(inputs.catalogs["ko-KR"]), set(inputs.roles))
-        self.assertEqual(321, len(inputs.roles))
+        self.assertEqual(404, len(inputs.roles))
 
     def test_same_input_renders_identical_bytes(self) -> None:
         self.assertEqual(render_outputs(self.owner), render_outputs(self.owner))

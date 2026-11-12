@@ -5,14 +5,14 @@
 | Profile | 목적 | 현재 화면 |
 | --- | --- | --- |
 | `main` | 새 응용 기능을 시작하는 최소 앱 | 외부 자산 없는 실행·입력 진단 화면 |
-| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage·등록 WAV·Wi-Fi AP/Web·날짜/시간 page |
+| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage·등록 WAV·Wi-Fi AP/Web·날짜/시간·인터페이스/업데이트 안내 page |
 
 `sample-suite`의 Dashboard는 생성된 page descriptor만 사용한다. 현재 활성 page 하나만 만들며 page 구현끼리 참조하지 않는다. 한·영 i18n과 키보드 입력의 기반은 `_plan/2026-11/20261107_004_BilingualI18nAndTextInput.md`, 완성된 입력 UX와 검증 기준은 `_plan/2026-11/20261108_010_TextInputUxCompletion.md`에 기록돼 있다.
 
 `wifi`(STA 설정), `sd-storage`(PC USB MSC 접근), `wav-sounds`(등록 음원 재생),
-`wifi-ap-web`(QR·웹 4-switch)과 `date-time`(수동 설정·SNTP 상태)까지 구현돼 있다. 남은 page는
-`camera-gallery`(촬영·저장·보기·삭제)와
-`interfaces-info`(RS485·I/O·USB command 안내)다. 독립 `assets` page는 만들지 않으며
+`wifi-ap-web`(QR·웹 4-switch), `date-time`(수동 설정·SNTP 상태),
+`interfaces-info`(RS485·I/O·USB command·업데이트 기반 안내)까지 구현돼 있다. 남은 page는
+`camera-gallery`(촬영·저장·보기·삭제)다. 독립 `assets` page나 firmware updater page는 만들지 않으며
 asset pipeline은 폰트와 WAV를 배포하는 내부 기반으로만 사용한다. 상세 상태는
 `_plan/2026-11/20261108_001_PageByPageDevelopmentRoadmap.md`에서 관리한다.
 
@@ -151,6 +151,39 @@ Dashboard의 `날짜와 시간` card에서는 현재 날짜·시각과 출처, R
 전까지 RTC 접근을 비활성화하고 `RTC 칩 확인 전`으로 표시한다. Wi-Fi IP를 얻은 HMI의
 시스템 시각은 `Asia/Seoul` 정책으로 SNTP 동기화하며, 실제 RTC 유지와 전원 재인가 동작은
 기기 접근이 가능할 때 별도로 확인한다.
+
+Dashboard의 `인터페이스와 업데이트` card는 한 page 안에서 항목 목록과 상세 설명을
+오간다. RS485, GPIO, PWM, USB CDC command, 저장소/MSC, asset updater, RTC와
+firmware update foundation을 각각 열어 제공 범위, 제품 연결 지점, 조합 순서, 아직
+구현하지 않은 범위와 검증 방법을 확인할 수 있다. 이 page는 설명만 표시하며 실제
+hardware, network 또는 update 작업을 시작하지 않는다.
+
+재사용 가능한 hardware 계약은 `modules/interfaces/include/hmi/interfaces/`에 있다.
+`Rs485Port`, `GpioPort`, `PwmPort`, `UsbCommandPort`는 모두 비소유 context와 callback만
+보관한다. 제품 pin, protocol, credential, task와 ISR은 이 계약에 넣지 않고 별도 adapter가
+구현한다. 지원하지 않는 기능은 `CapabilityState::unsupported`와 결정적인 오류값으로
+표현하므로 UI가 board 내부 header를 직접 포함할 필요가 없다.
+
+firmware update 기반은 `modules/update/include/hmi/update/`에 있다. 권장 조합 순서는 다음과 같다.
+
+1. `decode_manifest`로 크기 제한, strict JSON, 서명, device/target/만료 binding을 검증한다.
+2. `ArtifactDownloader`로 4 KiB 이하 chunk를 이어받아 staging에 저장하고 SHA-256을 확인한다.
+3. `InstallJournal`과 `AssetLifecycle`로 A/B CRC record, 설치 단계와 active/previous/pending
+   generation을 durable하게 기록한다.
+4. 제품 adapter가 `FirmwareWriterPort`와 `BootControlPort`를 구현해 실제 partition write,
+   pending image 선택, 실행 확인, rollback과 재시작을 연결한다.
+5. `BootCoordinator`의 순수 결정을 부팅 초기에 적용하고, 정상 확인 뒤에만 journal과
+   generation을 확정한다.
+
+저장소, 다운로드 transport, crypto, partition과 reboot의 실제 구현은 의도적으로 포함하지
+않는다. 따라서 이 기반 코드만으로 장치를 갱신하거나 재부팅하지 않으며, 제품 정책과
+credential을 가진 adapter가 명시적으로 연결돼야 한다. USB 관련 기능도 서로 다르다.
+
+- USB CDC command 계약은 bounded frame을 command dispatcher에 전달하는 기반이다.
+- USB MSC는 `SD 저장소` page가 SD ownership을 HMI와 PC 사이에서 전환하는 기존 기능이다.
+- CDC asset updater는 font/WAV bundle을 SD에 전달하는 기존 개발 도구이며 firmware updater가 아니다.
+
+구현 범위와 검증 근거는 `_plan/2026-11/20261108_019_InterfaceOverviewPage.md`에 기록돼 있다.
 
 Dashboard의 `SD 저장소` card에서는 mount 상태, HMI/PC owner, FAT 여부와
 전체·사용·여유 용량을 확인한다. `PC에 연결`을 누르는 순간 전체 화면 잠금이 표시되고

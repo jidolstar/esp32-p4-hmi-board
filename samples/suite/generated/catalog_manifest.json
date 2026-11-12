@@ -1,5 +1,5 @@
 {
-  "content_hash": "d88bbd8febc8b2d5ef60f8222abd61a1e06038970b9b67a888f7f993d248bd6d",
+  "content_hash": "06f98b7cd91bd26aa8c2fff4d05168e417b2ed919db942eb84dc446bd24577a8",
   "cpp_namespace": "hmi::samples::suite::generated",
   "entries": [
     {
@@ -11,6 +11,51 @@
       "key": "common.open",
       "placeholders": [],
       "role": "control"
+    },
+    {
+      "key": "dashboard.card.date_time.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.display_audio.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.interfaces_info.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.sd_storage.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.text_input.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.ui_basics.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.wav_sounds.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.wifi.title",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "dashboard.card.wifi_ap_web.title",
+      "placeholders": [],
+      "role": "card_title"
     },
     {
       "key": "dashboard.title",
@@ -283,6 +328,376 @@
       "role": "page_title"
     },
     {
+      "key": "interfaces.badge",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.list.hint",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.section.connect",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "interfaces.section.excluded",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "interfaces.section.limits",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "interfaces.section.provided",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "interfaces.section.purpose",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "interfaces.section.steps",
+      "placeholders": [],
+      "role": "field_label"
+    },
+    {
+      "key": "interfaces.status.foundation",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.status.implemented",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.firmware_update.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "interfaces.topic.gpio.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.gpio.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.gpio.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.gpio.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.gpio.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.gpio.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.gpio.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.gpio.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "interfaces.topic.pwm.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.pwm.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.pwm.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.pwm.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.pwm.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.pwm.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.pwm.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.pwm.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "interfaces.topic.rs485.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.rs485.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.rs485.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.rs485.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.rs485.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.rs485.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.rs485.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.rs485.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "interfaces.topic.storage_files.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.storage_files.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.storage_files.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.storage_files.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.storage_files.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.storage_files.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.storage_files.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.storage_files.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.usb_assets.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "interfaces.topic.usb_command.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_command.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_command.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_command.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_command.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_command.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_command.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.usb_command.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.connect",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.excluded",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.limits",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.provided",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.purpose",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.steps",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.summary",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "interfaces.topic.usb_msc.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
       "key": "locale.en",
       "placeholders": [],
       "role": "control"
@@ -314,6 +729,16 @@
     },
     {
       "key": "page.display_audio.title",
+      "placeholders": [],
+      "role": "page_title"
+    },
+    {
+      "key": "page.interfaces_info.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.interfaces_info.title",
       "placeholders": [],
       "role": "page_title"
     },
@@ -1677,10 +2102,10 @@
   "schema_version": 1,
   "sources": {
     "i18n/catalog.json": "e6b7aec4af6fb6f1a603a8858ee77742031952718c9aa6a0f7b3eaa6b0972ae3",
-    "i18n/en.yaml": "30c8cdb1e868ae6257aaab7f43699c58f191563e17615c56a97e48ea1a499740",
-    "i18n/ko.yaml": "5d6ea28cdb1bee9acf58b24c7f0fd07cf351daaa1e549293f2133dd708aab990",
-    "i18n/typography.yaml": "e059715e2e11ba45c031ff3af17df87731e8bb50978dbc57836ab15e218e90b0"
+    "i18n/en.yaml": "850a16357b55f1450c55191f249959ca36f20040623810d44346b33c6e0d0652",
+    "i18n/ko.yaml": "79e554c0a5a1a73678eb1b091bada84549932fb4fa5f95f61349ac58c1de04ac",
+    "i18n/typography.yaml": "e64437d2830903f3f1fbf55dddb45a050e695d769a46eba05963abf90d84c4b1"
   },
   "symbol_prefix": "hmi_sample_suite",
-  "text_count": 319
+  "text_count": 404
 }

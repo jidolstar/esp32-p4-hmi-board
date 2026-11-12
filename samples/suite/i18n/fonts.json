@@ -21,6 +21,13 @@
         "extra_characters": "0123456789"
       },
       {
+        "id": "card_title_24_bold",
+        "size": 24,
+        "weight": "bold",
+        "roles": ["card_title"],
+        "extra_characters": ""
+      },
+      {
         "id": "body_18_regular",
         "size": 18,
         "weight": "regular",
