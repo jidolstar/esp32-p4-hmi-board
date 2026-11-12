@@ -1,7 +1,7 @@
 # 범용 HMI 시작 프로젝트: 페이지 단위 개발 로드맵
 
 작성: 2026-11-08. 갱신: 2026-11-12. 상태: `in_progress` (S01~S07 `complete`,
-S08 `blocked` (C5 최종 실기기 검증 대기), S09~S10 `complete`).
+S08 기본 기능 `complete` (C5 사용자 수용, C5-R·F1 후속), S09~S10 `complete`).
 
 ## 1. 재편 결론
 
@@ -40,7 +40,7 @@ S08 `blocked` (C5 최종 실기기 검증 대기), S09~S10 `complete`).
 | S05 | `sd-storage` | `complete` | `_plan/2026-11/20261108_015_SdUsbMscPage.md` | SD 상태, 전역 앱 잠금과 PC USB MSC 접근 |
 | S06 | `wav-sounds` | `complete` | `_plan/2026-11/20261108_016_RegisteredWavPage.md` | 목록·progress·pause/resume 실기기 수용과 사용자 승인 완료 |
 | S07 | `wifi-ap-web` | `complete` | `_plan/2026-11/20261108_018_WifiApWebControlPage.md` | AP+STA·두 QR·웹/HMI 4스위치 동기화와 사용자 승인 완료 |
-| S08 | `camera-gallery` | `blocked` (C5 최종 실기기 검증 대기) | `_plan/2026-11/20261108_017_CameraGalleryPage.md` | preview·촬영·SD 저장·보기·삭제. 얼굴 검출은 C5 이후 F1 |
+| S08 | `camera-gallery` | `complete` (기본 기능 C5 사용자 수용) | `_plan/2026-11/20261108_017_CameraGalleryPage.md` | 미리보기·촬영·SD 저장·보기·삭제. 장시간·예외 실기기 검증은 C5-R, 얼굴 검출은 F1 |
 | S09 | `interfaces-info` | `complete` | `_plan/2026-11/20261108_019_InterfaceOverviewPage.md` | RS485·GPIO·PWM·USB·storage·update 8항목 목록→상세 안내와 중립 core, 실기기 수용 완료 |
 | S10 | `date-time` | `complete` | `_plan/2026-11/20261111_001_DateTimeRtcPage.md` | 수동 설정·SNTP 기반과 화면 완료, 실제 RTC 활성화는 별도 후속 |
 

@@ -1,6 +1,6 @@
 # S08 상세 계획: Camera & Gallery Page
 
-작성: 2026-11-08. 전면 구체화: 2026-11-11. 구현 상태: `blocked` (C5 최종 실기기 검증 대기).
+작성: 2026-11-08. 전면 구체화: 2026-11-11. 구현 상태: 기본 갤러리 C5 `complete` (사용자 수용), C5-R·F1 `pending`.
 선행 조건: S07 `wifi-ap-web` complete.
 
 ## 1. 목적과 결정 요약
@@ -537,7 +537,7 @@ Board private driver, frame pool과 기존 SD ownership을 common port에 연결
 - 보정 펌웨어에서 사용자가 `[camera] white balance applied samples=111338 R=205 G=100 B=119`를
   확인했다. 표본 111,338개를 바탕으로 R 2.05배, G 1.00배, B 1.19배가 적용됐다.
   재업로드 후 LCD와 새 JPEG 모두 색감이 좋아졌음을 사용자가 확인했다.
-- 사용자 요청으로 C3를 시작한다. SD 미장착·공간 부족의 실기기 실패 경로는 C5에서 확인한다.
+- 사용자 요청으로 C3를 시작했다. SD 미장착·공간 부족의 실기기 실패 경로는 C5-R에서 확인한다.
 
 **종료 조건**
 
@@ -600,7 +600,7 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 
 - C2 complete.
 
-### C5. 최종 통합·성능·실기기 수용 — `blocked`
+### C5. 최종 통합·수용 — `complete`
 
 **목표**
 
@@ -609,13 +609,12 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 **범위**
 
 - final Windows/HMI/isolation regression
-- 10분 preview, 반복 촬영/삭제/page 왕복과 reboot recovery
-- SD/MSC 경합, corrupt file와 no-camera recovery
+- 기본 촬영·저장·보기·삭제 및 SD/MSC 연동 수용
 - README와 최종 사용자 승인
 
 **산출물**
 
-- RAM/PSRAM/DMA/stack/flash/FPS/write latency 기록
+- HMI 정적 RAM·flash 기록과 실기기 측정용 로그
 - 실기기 수용 기록과 대표 capture
 - `README.md` 사용법, 지원 camera와 제한
 
@@ -626,7 +625,7 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 - `python tools/project.py build --host hmi --profile sample-suite`가 통과한다.
 - `python tools/project.py build --host hmi --profile main`이 통과한다.
 - camera/storage direct tests와 `git diff --check`가 통과한다.
-- HMI build의 RAM/flash와 runtime memory/stack 측정이 문서화된다.
+- HMI build의 RAM/flash와 runtime memory/stack 측정 방법이 문서화된다.
 
 **자동 검증 결과**
 
@@ -640,12 +639,25 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
   확인했다. C5 통합 시 Camera & Gallery, CSI, JPEG 인코더·디코더 심볼과 C2 진단 빌드도 확인했다.
 - 60 ms UI timer가 받는 미리보기 프레임률을 10초마다 출력한다. 저장마다 JPEG 인코딩 시간과
   SD 쓰기 시간을 출력하고, 카메라 시작·종료 때 PSRAM과 내부 DMA 여유, worker stack을 출력한다.
-  최종 이미지의 실측값은 사용자 확인 후 기록한다.
+  최종 이미지의 실측값은 C5-R에서 기록한다.
 
-**수동 검증**
+**실기기 근거와 사용자 승인**
 
-- 일반 `hmi-sample-suite`를 올리고 Dashboard의 **카메라와 사진**을 연다. 카메라 미리보기,
-  촬영, 오른쪽 목록 열기, 삭제 취소·확인, 미리보기 복귀와 Dashboard 복귀를 확인한다.
+- C2 실기기에서 미리보기 방향, 촬영, LCD에서 다시 열기, 보정 후 LCD·JPEG 색감과 Windows에서
+  USB MSC로 JPEG 열기를 사용자가 확인했다. SD 재마운트 후 미리보기 복귀도 로그에 남았다.
+- 2026-11-12 사용자가 C5 종료와 Git 반영을 요청했다. 기존 실기기 근거와 C5 자동 검사 결과를
+  바탕으로 기본 기능을 수용했다. 일반 펌웨어의 장시간·반복·예외 시험과 성능 실측은 C5-R로 이관한다.
+
+**종료 조건과 의존**
+
+- C3 완료, C5 자동 검사 통과, 확보한 실기기 근거와 사용자 완료 승인 기록.
+
+### C5-R. 일반 펌웨어 장시간·예외 실기기 검증 — `pending`
+
+**검증 범위**
+
+- 일반 `hmi-sample-suite`를 올리고 Dashboard의 **카메라와 사진**에서 미리보기, 촬영, 오른쪽 목록
+  열기, 삭제 취소·확인, 미리보기 복귀와 Dashboard 복귀를 확인한다.
 - preview 10분, 촬영 30회, viewer/삭제 10회와 page 왕복 10회를 수행한다. 115200 serial에서
   `[camera] preview fps=`, `preview_started`·`preview_stopped` 및 `save bytes=`를 확인해
   FPS, PSRAM·DMA·stack 여유, JPEG 인코딩·SD 쓰기 시간을 기록한다.
@@ -653,15 +665,11 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 - PC MSC 진입/복귀 뒤 gallery rescan과 새 촬영을 확인한다.
 - 전원을 끈 뒤 SD를 빼고 부팅한다. 미리보기는 유지되고 촬영 버튼은 비활성화되며 SD 안내가
   표시된다. 여유 공간이 부족한 시험용 SD에서 촬영하면 저장 오류를 표시하고 기존 JPEG는 유지된다.
-- 사용자가 S08 완료를 명시적으로 승인한다.
 
-**종료 조건**
+**종료 조건과 의존**
 
-- 모든 자동 gate, 필수 실기기 확인과 사용자 승인이 기록된다.
-
-**의존**
-
-- C3 complete, 사용자 직접 upload.
+- 일반 펌웨어 실기기 체크리스트 결과와 시리얼 측정값을 기록한다.
+- C5 완료와 사용자 직접 업로드가 필요하다.
 
 ### F1. 얼굴 특징점 재검증·구현 — `pending`
 
@@ -702,7 +710,8 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 | C1 | `complete` | common lifecycle/storage contract와 Windows direct tests | C2 |
 | C2 | `complete` | 실기기 preview·capture·PC MSC와 보정 후 색상 확인 | C3 |
 | C3 | `complete` | 공통 화면과 Windows 상호작용·레이아웃, HMI 빌드 확인 | C5 |
-| C5 | `blocked` | 최종 로컬 빌드·테스트 통과, 일반 펌웨어 실기기 확인 대기 | F1 |
+| C5 | `complete` | 자동 검증 통과, 기본 기능 사용자 수용 | C5-R, F1 |
+| C5-R | `pending` | 일반 펌웨어의 장시간·예외 실기기 검증과 성능 실측 | — |
 | F1 | `pending` | 얼굴 특징점 재검증 및 포함 판정 | — |
 
 ## 11. 위험과 대응
@@ -734,12 +743,12 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 - [ ] task stack이나 snapshot에 full frame/image가 없다.
 - [ ] atomic write, `.tmp` recovery, path escape, filename collision과 delete 범위 test가 통과한다.
 - [ ] SD 없음, PC MSC owner, lease busy, full과 corrupt file test가 통과한다.
-- [ ] Windows fixture의 start/capture/view/delete/re-entry/destruction test가 통과한다.
-- [ ] `python tools/assets/typography/generate.py --config samples/suite/i18n/catalog.json --check`가 통과한다.
-- [ ] `python tools/project.py check --host windows --profile sample-suite`가 통과한다.
-- [ ] `python tools/project.py check --scope isolation`이 통과한다.
-- [ ] `python tools/project.py build --host hmi --profile sample-suite`가 통과한다.
-- [ ] `python tools/project.py build --host hmi --profile main`이 통과한다.
+- [x] Windows fixture의 start/capture/view/delete/re-entry/destruction test가 통과한다.
+- [x] `python tools/assets/typography/generate.py --config samples/suite/i18n/catalog.json --check`가 통과한다.
+- [x] `python tools/project.py check --host windows --profile sample-suite`가 통과한다.
+- [x] `python tools/project.py check --scope isolation`이 통과한다.
+- [x] `python tools/project.py build --host hmi --profile sample-suite`가 통과한다.
+- [x] `python tools/project.py build --host hmi --profile main`이 통과한다.
 - [ ] UI/module의 Board internal include와 Board의 LVGL widget 생성 검색이 0건이다.
 - [ ] RAM/PSRAM/internal heap/largest DMA block, worker stack, preview FPS와 SD write
   latency, firmware flash가 기록되고 gate를 만족한다.
@@ -756,4 +765,4 @@ Windows와 HMI가 공유하는 1024×600 preview·촬영·목록·보기·삭제
 - [ ] PC MSC 전환과 HMI 복귀 뒤 rescan/촬영/삭제가 정상이고 filesystem 손상이 없다.
 - [ ] page 왕복 10회와 10분 preview 뒤 reset·멈춤·ghost callback·frame 고갈이 없다.
 - [ ] 한국어/영어와 light/dark에서 clipping, multiline line spacing과 touch target이 적절하다.
-- [ ] 사용자가 기본 Camera & Gallery의 동작을 확인하고 S08 완료를 승인한다.
+- [x] 2026-11-12 사용자가 기본 Camera & Gallery의 C5 완료를 승인했다. 위 미확인 항목은 C5-R에 남긴다.
