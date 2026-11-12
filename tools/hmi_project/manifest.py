@@ -16,6 +16,7 @@ SUPPORTED_KINDS = ("application", "sample")
 SUPPORTED_MODULES = frozenset(
     {
         "audio",
+        "camera",
         "connectivity",
         "i18n",
         "interfaces",

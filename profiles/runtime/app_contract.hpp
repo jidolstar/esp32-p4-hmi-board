@@ -9,6 +9,10 @@ namespace hmi::audio {
 struct AudioPlaybackPort;
 }
 
+namespace hmi::camera {
+class CameraGalleryController;
+}
+
 namespace hmi::connectivity {
 class WifiApWebController;
 class WifiStaRegistration;
@@ -58,6 +62,7 @@ struct AppContext {
   hmi::connectivity::WifiStaRegistration* wifi_registration = nullptr;
   hmi::storage::StorageAccessController* storage_access = nullptr;
   hmi::time::TimeRuntime* time_runtime = nullptr;
+  hmi::camera::CameraGalleryController* camera_controller = nullptr;
 };
 
 }  // namespace hmi::profiles

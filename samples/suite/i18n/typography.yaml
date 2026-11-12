@@ -1,5 +1,30 @@
 schema_version: 1
 roles:
+  dashboard.card.camera_gallery.title: card_title
+  page.camera_gallery.title: page_title
+  page.camera_gallery.description: body
+  camera_gallery.gallery: card_title
+  camera_gallery.capture: control
+  camera_gallery.preview: control
+  camera_gallery.retry: control
+  camera_gallery.delete: control
+  camera_gallery.cancel: control
+  camera_gallery.previous: control
+  camera_gallery.next: control
+  camera_gallery.confirm: card_title
+  camera_gallery.empty: body
+  camera_gallery.starting: status
+  camera_gallery.saving: status
+  camera_gallery.loading: status
+  camera_gallery.saved: status
+  camera_gallery.unavailable: error
+  camera_gallery.no_sd: error
+  camera_gallery.pc_owner: status
+  camera_gallery.full: error
+  camera_gallery.write_error: error
+  camera_gallery.read_error: error
+  camera_gallery.delete_error: error
+  camera_gallery.busy: status
   common.back: control
   common.open: control
   theme.light: control
@@ -330,7 +355,6 @@ roles:
   date_time.apply.system_error: error
   page.interfaces_info.title: page_title
   page.interfaces_info.description: body
-  interfaces.badge: status
   interfaces.list.hint: body
   interfaces.status.implemented: status
   interfaces.status.foundation: status

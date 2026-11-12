@@ -1,0 +1,13 @@
+function(hmi_add_camera_test name source)
+  add_executable(${name}_test ${source})
+  target_link_libraries(${name}_test PRIVATE hmi_selected_app)
+  if(MSVC)
+    target_compile_options(${name}_test PRIVATE /W4 /UNDEBUG)
+  else()
+    target_compile_options(${name}_test PRIVATE -Wall -Wextra -Wpedantic -UNDEBUG)
+  endif()
+  add_test(NAME ${name} COMMAND ${name}_test)
+endfunction()
+
+hmi_add_camera_test(hmi_camera_contract tests/camera_contract_test.cpp)
+hmi_add_camera_test(hmi_camera_gallery_controller tests/camera_gallery_controller_test.cpp)

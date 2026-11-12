@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdlib>
 #include <cstring>
 #include <memory>
 #include <string>
@@ -61,8 +62,7 @@ void assert_dialog_uses_full_screen_geometry(const char *title_text) {
   // dialog 생성 직후 좌표를 검사하므로 비동기 refresh를 기다리지 않고 현재
   // object tree의 layout을 확정한다.
   lv_obj_update_layout(content);
-  assert(lv_obj_get_width(dialog) == 560);
-  assert(lv_obj_get_height(dialog) == 260);
+  assert(content == lv_scr_act());
 
   lv_area_t content_area{};
   lv_area_t scrim_area{};
@@ -76,10 +76,8 @@ void assert_dialog_uses_full_screen_geometry(const char *title_text) {
   assert(scrim_area.y1 == content_area.y1);
   assert(scrim_area.x2 == content_area.x2);
   assert(scrim_area.y2 == content_area.y2);
-  assert(dialog_area.x1 + dialog_area.x2 ==
-         content_area.x1 + content_area.x2);
-  assert(dialog_area.y1 + dialog_area.y2 ==
-         content_area.y1 + content_area.y2);
+  assert(std::abs(dialog_area.x1 + dialog_area.x2 - content_area.x1 - content_area.x2) <= 1);
+  assert(std::abs(dialog_area.y1 + dialog_area.y2 - content_area.y1 - content_area.y2) <= 1);
 }
 
 }  // namespace

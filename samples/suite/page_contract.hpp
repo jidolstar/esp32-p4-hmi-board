@@ -59,6 +59,11 @@ struct PageContext {
   void *user_data = nullptr;
 };
 
+/** 페이지 수명 동안 유지되는 선택적 runtime이다. 화면 재생성 전에 다시 주입하지 않는다. */
+struct PageRuntime {
+  hmi::camera::CameraGalleryController* camera_controller = nullptr;
+};
+
 /**
  * Dashboard가 수명만 관리하는 sample page의 최소 계약이다.
  *
@@ -72,6 +77,7 @@ class SamplePage {
   SamplePage(const SamplePage &) = delete;
   SamplePage &operator=(const SamplePage &) = delete;
   virtual ~SamplePage() = default;
+  virtual void bind_runtime(const PageRuntime&) noexcept {}
 
   virtual bool create(lv_obj_t *parent, const PageContext &context) = 0;
   virtual void destroy() noexcept = 0;

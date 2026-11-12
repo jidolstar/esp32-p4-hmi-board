@@ -3,6 +3,7 @@
 #include <array>
 #include <limits>
 
+#include "components/overlay_text.hpp"
 #include "components/page_header.hpp"
 #include "hmi/i18n/format.hpp"
 #include "hmi/ui/components.hpp"
@@ -10,7 +11,7 @@
 #include "generated/text_catalog.hpp"
 
 namespace hmi::samples::suite {
-static_assert(sizeof(UiBasicsPage) <= 264U,
+static_assert(sizeof(UiBasicsPage) <= 288U,
               "UI Basics controller must not retain a large embedded model");
 namespace {
 
@@ -327,9 +328,9 @@ void UiBasicsPage::handle_event(lv_event_t *event) {
       self->show_toast();
     } else if (target == self->dialog_button_) {
       self->open_dialog();
-    } else if (target == self->dialog_cancel_button_) {
+    } else if (target == self->confirmation_.cancel) {
       self->resolve_dialog(false);
-    } else if (target == self->dialog_confirm_button_) {
+    } else if (target == self->confirmation_.confirm) {
       self->resolve_dialog(true);
     }
   }
@@ -353,126 +354,40 @@ void UiBasicsPage::record_long_press() noexcept {
 
 bool UiBasicsPage::show_toast() noexcept {
   clear_overlay();
-  overlay_ = lv_obj_create(root_);
-  if (overlay_ == nullptr) {
+  if (!root_ || !toast_.show(root_, *context_.theme,
+          overlay_text(context_.locale, generated::TextId::ui_basics_toast_success),
+          1200, &UiBasicsPage::handle_toast_expired, this)) {
     return false;
   }
-  context_.theme->apply_toast(overlay_);
-  lv_obj_add_flag(overlay_, LV_OBJ_FLAG_FLOATING);
-  lv_obj_set_size(overlay_, 520, 64);
-  lv_obj_align(overlay_, LV_ALIGN_BOTTOM_MID, 0, -18);
-  lv_obj_clear_flag(overlay_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_t *label = create_fixed_label(
-      overlay_, context_.locale, generated::TextId::ui_basics_toast_success,
-      *context_.theme, hmi::ui::TextRole::kInverse);
-  if (label == nullptr) {
-    clear_overlay();
-    return false;
-  }
-  lv_obj_center(label);
-  toast_timer_ = lv_timer_create(&UiBasicsPage::handle_toast_timer, 1200, this);
-  if (toast_timer_ == nullptr) {
-    clear_overlay();
-    return false;
-  }
-  lv_timer_set_repeat_count(toast_timer_, 1);
   state_.overlay = OverlayState::kToast;
   state_.last_action = PageAction::kToastShown;
   update_status();
   return true;
 }
 
-void UiBasicsPage::handle_toast_timer(lv_timer_t *timer) {
-  auto *self =
-      static_cast<UiBasicsPage *>(timer == nullptr ? nullptr : timer->user_data);
-  if (self != nullptr) {
-    self->toast_timer_ = nullptr;
-    self->expire_toast();
-  }
+void UiBasicsPage::handle_toast_expired(void* context) noexcept {
+  static_cast<UiBasicsPage*>(context)->expire_toast();
 }
 
 void UiBasicsPage::expire_toast() noexcept {
-  if (toast_timer_ != nullptr) {
-    lv_timer_del(toast_timer_);
-    toast_timer_ = nullptr;
-  }
-  if (state_.overlay == OverlayState::kToast && overlay_ != nullptr) {
-    lv_obj_del(overlay_);
-    overlay_ = nullptr;
-    state_.overlay = OverlayState::kNone;
-    state_.last_action = PageAction::kToastExpired;
-    update_status();
-  }
+  if (state_.overlay != OverlayState::kToast) return;
+  toast_.dismiss();
+  state_.overlay = OverlayState::kNone;
+  state_.last_action = PageAction::kToastExpired;
+  update_status();
 }
 
 bool UiBasicsPage::open_dialog() noexcept {
   clear_overlay();
-  lv_obj_t *content = root_ == nullptr ? nullptr : lv_obj_get_parent(root_);
-  if (content == nullptr) {
-    return false;
-  }
-  // dim layer는 page root의 18px padding 영향을 받지 않도록 화면
-  // content의 직계 자식으로 둔다.
-  overlay_ = lv_obj_create(content);
-  if (overlay_ == nullptr) {
-    return false;
-  }
-  context_.theme->apply_scrim(overlay_);
-  lv_obj_add_flag(overlay_, LV_OBJ_FLAG_FLOATING);
-  lv_obj_set_size(overlay_, LV_PCT(100), LV_PCT(100));
-  lv_obj_set_pos(overlay_, 0, 0);
-  lv_obj_clear_flag(overlay_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_add_flag(overlay_, LV_OBJ_FLAG_CLICKABLE);
-
-  lv_obj_t *dialog = lv_obj_create(overlay_);
-  if (dialog == nullptr) {
-    clear_overlay();
-    return false;
-  }
-  context_.theme->apply_dialog(dialog);
-  lv_obj_set_size(dialog, 560, 260);
-  lv_obj_center(dialog);
-  lv_obj_clear_flag(dialog, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(dialog, 26, 0);
-  lv_obj_set_style_pad_row(dialog, 16, 0);
-  lv_obj_set_flex_flow(dialog, LV_FLEX_FLOW_COLUMN);
-  lv_obj_set_flex_align(dialog, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-
-  lv_obj_t *title = create_fixed_label(
-      dialog, context_.locale, generated::TextId::ui_basics_dialog_title,
-      *context_.theme, hmi::ui::TextRole::kTitle);
-  lv_obj_t *body = create_fixed_label(
-      dialog, context_.locale, generated::TextId::ui_basics_dialog_body,
-      *context_.theme, hmi::ui::TextRole::kMuted);
-  if (title == nullptr || body == nullptr) {
-    clear_overlay();
-    return false;
-  }
-  hmi::ui::configure_multiline(body, 480, 62, 6, LV_TEXT_ALIGN_CENTER);
-
-  lv_obj_t *buttons = lv_obj_create(dialog);
-  if (buttons == nullptr) {
-    clear_overlay();
-    return false;
-  }
-  configure_row(buttons, *context_.theme);
-  lv_obj_set_width(buttons, 450);
-  lv_obj_set_style_pad_column(buttons, 14, 0);
-  dialog_cancel_button_ = create_fixed_button(
-      buttons, context_.locale, generated::TextId::ui_basics_dialog_cancel,
-      *context_.theme, hmi::ui::ButtonVariant::kSecondary,
-      &UiBasicsPage::handle_event, this);
-  dialog_confirm_button_ = create_fixed_button(
-      buttons, context_.locale, generated::TextId::ui_basics_dialog_confirm,
-      *context_.theme, hmi::ui::ButtonVariant::kPrimary,
-      &UiBasicsPage::handle_event, this);
-  if (dialog_cancel_button_ == nullptr || dialog_confirm_button_ == nullptr) {
-    clear_overlay();
-    return false;
-  }
-  lv_obj_set_size(dialog_cancel_button_, 210, 52);
-  lv_obj_set_size(dialog_confirm_button_, 210, 52);
+  if (!root_) return false;
+  using TextId = generated::TextId;
+  confirmation_ = hmi::ui::show_confirmation(root_, *context_.theme, {
+      overlay_text(context_.locale, TextId::ui_basics_dialog_title),
+      overlay_text(context_.locale, TextId::ui_basics_dialog_body),
+      overlay_text(context_.locale, TextId::ui_basics_dialog_cancel),
+      overlay_text(context_.locale, TextId::ui_basics_dialog_confirm),
+      &UiBasicsPage::handle_event, &UiBasicsPage::handle_event, this});
+  if (!confirmation_) return false;
   state_.overlay = OverlayState::kConfirm;
   state_.last_action = PageAction::kDialogOpened;
   update_status();
@@ -480,15 +395,8 @@ bool UiBasicsPage::open_dialog() noexcept {
 }
 
 void UiBasicsPage::resolve_dialog(bool confirmed) noexcept {
-  if (state_.overlay != OverlayState::kConfirm) {
-    return;
-  }
-  if (overlay_ != nullptr) {
-    lv_obj_del(overlay_);
-  }
-  overlay_ = nullptr;
-  dialog_cancel_button_ = nullptr;
-  dialog_confirm_button_ = nullptr;
+  if (state_.overlay != OverlayState::kConfirm) return;
+  confirmation_.close();
   state_.overlay = OverlayState::kNone;
   state_.last_action = confirmed ? PageAction::kDialogConfirmed
                                  : PageAction::kDialogCancelled;
@@ -541,16 +449,8 @@ void UiBasicsPage::update_status() noexcept {
 }
 
 void UiBasicsPage::clear_overlay() noexcept {
-  if (toast_timer_ != nullptr) {
-    lv_timer_del(toast_timer_);
-    toast_timer_ = nullptr;
-  }
-  if (overlay_ != nullptr) {
-    lv_obj_del(overlay_);
-  }
-  overlay_ = nullptr;
-  dialog_cancel_button_ = nullptr;
-  dialog_confirm_button_ = nullptr;
+  toast_.dismiss();
+  confirmation_.close();
   state_.overlay = OverlayState::kNone;
 }
 

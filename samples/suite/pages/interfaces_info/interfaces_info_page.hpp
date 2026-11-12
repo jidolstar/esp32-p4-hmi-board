@@ -11,7 +11,7 @@
 namespace hmi::samples::suite {
 
 /**
- * 여덟 기반 기능을 한 page의 목록과 상세 view로 설명한다.
+ * 보드 인터페이스, SD 저장소와 업데이트 기능을 목록과 상세 문서로 안내한다.
  *
  * page는 정적 descriptor와 LVGL widget만 사용한다. Board, platform adapter와 update engine을
  * 생성하지 않으며 locale/theme rebuild 동안 model의 선택 topic을 유지한다.

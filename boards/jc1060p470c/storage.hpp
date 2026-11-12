@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
+#include <string_view>
 
 namespace hmi::boards::jc1060p470c {
 
@@ -12,6 +13,7 @@ class SdStorage;
 }  // namespace internal
 
 enum class StorageOwner : std::uint8_t { none, hmi, usb_msc };
+enum class FileVisitResult : std::uint8_t { success, missing, failed };
 
 /** UI와 platform adapter가 복사해 사용할 수 있는 bounded 저장소 snapshot이다. */
 struct StorageStatus {
@@ -60,6 +62,9 @@ enum class UsbMscEnterResult : std::uint8_t {
  */
 class Storage {
  public:
+  using FileVisitor = void (*)(void* context, std::string_view name,
+                               std::uint64_t bytes) noexcept;
+
   class ExclusiveLease {
    public:
     ExclusiveLease() = default;
@@ -92,11 +97,17 @@ class Storage {
                     std::size_t& bytes_read) const noexcept;
   bool write_file(const char* path, const std::uint8_t* data,
                   std::size_t size) noexcept;
+  /** 새 regular file만 생성하고 sync한다. 쓰기 실패 시 부분 파일이 남을 수 있다. */
+  bool write_new_file(const char* path, const std::uint8_t* data,
+                      std::size_t size) noexcept;
+  /** 바로 아래 regular file을 방문한다. 콜백 동안만 이름을 읽고 열거 중 항목을 바꾸지 않는다. */
+  FileVisitResult visit_regular_files(const char* path, void* context, FileVisitor visitor) const noexcept;
   bool append_file(const char* path, const std::uint8_t* data,
                    std::size_t size) noexcept;
   bool truncate_file(const char* path, std::uint64_t size) noexcept;
   bool mkdirs(const char* path) noexcept;
   bool remove_file(const char* path) noexcept;
+  bool remove_regular_file(const char* path) noexcept;
   bool remove_tree(const char* path) noexcept;
   bool rename_path(const char* from, const char* to) noexcept;
   [[nodiscard]] ExclusiveLease acquire_exclusive_lease() noexcept;

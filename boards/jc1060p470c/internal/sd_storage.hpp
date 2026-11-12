@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <atomic>
 
+#include "freertos/FreeRTOS.h"
+
 #include "internal/storage_access_guard.hpp"
 #include "storage.hpp"
 
@@ -50,11 +52,15 @@ class SdStorage {
   std::FILE* open_read_stream(const char* path) const noexcept;
   bool write_file(const char* path, const std::uint8_t* data,
                   std::size_t size) noexcept;
+  bool write_new_file(const char* path, const std::uint8_t* data,
+                      std::size_t size) noexcept;
+  FileVisitResult visit_regular_files(const char* path, void* context, Storage::FileVisitor visitor) const noexcept;
   bool append_file(const char* path, const std::uint8_t* data,
                    std::size_t size) noexcept;
   bool truncate_file(const char* path, std::uint64_t size) noexcept;
   bool mkdirs(const char* path) noexcept;
   bool remove_file(const char* path) noexcept;
+  bool remove_regular_file(const char* path) noexcept;
   bool remove_tree(const char* path) noexcept;
   bool rename_path(const char* from, const char* to) noexcept;
 
@@ -68,6 +74,8 @@ class SdStorage {
   std::atomic<bool> mounted_{false};
   std::atomic<std::uint32_t> generation_{0U};
   StorageAccessGuard access_{};
+  // 32-bit CPU에서 갤러리 worker와 상태 조회가 64-bit 용량 캐시를 공유한다.
+  mutable portMUX_TYPE capacity_mux_ = portMUX_INITIALIZER_UNLOCKED;
   std::uint64_t total_bytes_ = 0U;
   mutable std::uint64_t last_free_bytes_ = 0U;
 };

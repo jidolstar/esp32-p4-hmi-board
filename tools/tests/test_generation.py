@@ -86,6 +86,35 @@ class GenerationTest(unittest.TestCase):
         self.assertIn("using SelectedProfileApp = hmi::apps::main::MainApp;", selected)
         self.assertIn('kSelectedAssetRoot[] = "A:apps/main/"', selected)
 
+    def test_camera_module_and_windows_fixtures_follow_profile_selection(self) -> None:
+        sample = self.registry.get("sample-suite")
+        common = {
+            "modules/camera/src/camera_gallery_controller.cpp",
+            "modules/camera/src/gallery_index.cpp",
+        }
+        fixtures = {
+            "platform/windows/camera/virtual_camera_port.cpp",
+            "platform/windows/camera/virtual_gallery_storage.cpp",
+        }
+        sd_files = "platform/hmi/camera/gallery_sd_files.cpp"
+        hmi_camera = {
+            sd_files,
+            "platform/hmi/camera/gallery_jpeg.cpp",
+            "platform/hmi/camera/camera_gallery_worker.cpp",
+            "boards/jc1060p470c/camera.cpp",
+            "boards/jc1060p470c/internal/mipi_csi_camera.cpp",
+        }
+        for host in ("windows", "hmi"):
+            with self.subTest(host=host):
+                selected = resolve_profile_inputs(REPOSITORY_ROOT, sample, host)
+                main = resolve_profile_inputs(REPOSITORY_ROOT, self.profile, host)
+                sources = set(selected["all_sources"])
+                self.assertLessEqual(common, sources)
+                self.assertEqual(fixtures & sources, fixtures if host == "windows" else set())
+                self.assertTrue((common | fixtures).isdisjoint(main["all_sources"]))
+                self.assertEqual(hmi_camera & sources, hmi_camera if host == "hmi" else set())
+                self.assertTrue(hmi_camera.isdisjoint(main["all_sources"]))
+
     def test_sample_suite_generation_owns_page_factory_and_sources(self) -> None:
         target = prepare_profile(
             REPOSITORY_ROOT,
@@ -107,8 +136,9 @@ class GenerationTest(unittest.TestCase):
                 "sd-storage",
                 "wav-sounds",
                 "wifi-ap-web",
-                "interfaces-info",
+                "camera-gallery",
                 "date-time",
+                "interfaces-info",
             ],
             [page["id"] for page in resolved["pages"]],
         )
@@ -140,9 +170,15 @@ class GenerationTest(unittest.TestCase):
             "samples/suite/pages/interfaces_info/interfaces_info_page.cpp",
             resolved["source_groups"]["pages"],
         )
+        self.assertIn(
+            "samples/suite/pages/camera_gallery/camera_gallery_page.cpp",
+            resolved["source_groups"]["pages"],
+        )
         self.assertEqual(
             [
                 "modules/audio/src/playback.cpp",
+                "modules/camera/src/camera_gallery_controller.cpp",
+                "modules/camera/src/gallery_index.cpp",
                 "modules/connectivity/src/wifi_ap_runtime.cpp",
                 "modules/connectivity/src/wifi_ap_web_controller.cpp",
                 "modules/connectivity/src/wifi_ap_web_protocol.cpp",
@@ -179,6 +215,8 @@ class GenerationTest(unittest.TestCase):
                 "modules/update/src/asset_store.cpp",
                 "modules/update/src/boot_coordinator.cpp",
                 "modules/update/src/engine.cpp",
+                "platform/windows/camera/virtual_camera_port.cpp",
+                "platform/windows/camera/virtual_gallery_storage.cpp",
                 "platform/windows/connectivity/virtual_wifi_ap.cpp",
                 "platform/windows/connectivity/virtual_wifi_sta.cpp",
                 "platform/windows/storage/virtual_storage_access.cpp",
@@ -216,6 +254,9 @@ class GenerationTest(unittest.TestCase):
         self.assertIn("-D HMI_PROFILE_HAS_CONNECTIVITY=1", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_STORAGE=1", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_TIME=1", platformio_input)
+        self.assertIn("-D HMI_PROFILE_HAS_CAMERA=1", platformio_input)
+        self.assertIn("[env:hmi-sample-suite-camera-check]", platformio_input)
+        self.assertIn("-D HMI_CAMERA_C2_CHECK=1", platformio_input)
         self.assertIn(
             "+<platform/hmi/connectivity/esp_hosted_wifi_sta.cpp>",
             platformio_input,
@@ -285,6 +326,8 @@ class GenerationTest(unittest.TestCase):
         self.assertIn("-D HMI_PROFILE_HAS_CONNECTIVITY=0", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_STORAGE=0", platformio_input)
         self.assertIn("-D HMI_PROFILE_HAS_TIME=0", platformio_input)
+        self.assertNotIn("HMI_PROFILE_HAS_CAMERA", platformio_input)
+        self.assertNotIn("-camera-check]", platformio_input)
         self.assertNotIn("platform/hmi/connectivity", platformio_input)
         self.assertNotIn("asset_usb_updater.cpp", platformio_input)
         self.assertNotIn("audio_service.cpp", platformio_input)

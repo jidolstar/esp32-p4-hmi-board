@@ -1,7 +1,117 @@
 {
-  "content_hash": "06f98b7cd91bd26aa8c2fff4d05168e417b2ed919db942eb84dc446bd24577a8",
+  "content_hash": "b5e3db2ed522df5ecd3714aa35f9e919a3db47fe791dd76fbc1fcabd8639123f",
   "cpp_namespace": "hmi::samples::suite::generated",
   "entries": [
+    {
+      "key": "camera_gallery.busy",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "camera_gallery.cancel",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "camera_gallery.capture",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "camera_gallery.confirm",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "camera_gallery.delete",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "camera_gallery.delete_error",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "camera_gallery.empty",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "camera_gallery.full",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "camera_gallery.gallery",
+      "placeholders": [],
+      "role": "card_title"
+    },
+    {
+      "key": "camera_gallery.loading",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "camera_gallery.next",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "camera_gallery.no_sd",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "camera_gallery.pc_owner",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "camera_gallery.preview",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "camera_gallery.previous",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "camera_gallery.read_error",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "camera_gallery.retry",
+      "placeholders": [],
+      "role": "control"
+    },
+    {
+      "key": "camera_gallery.saved",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "camera_gallery.saving",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "camera_gallery.starting",
+      "placeholders": [],
+      "role": "status"
+    },
+    {
+      "key": "camera_gallery.unavailable",
+      "placeholders": [],
+      "role": "error"
+    },
+    {
+      "key": "camera_gallery.write_error",
+      "placeholders": [],
+      "role": "error"
+    },
     {
       "key": "common.back",
       "placeholders": [],
@@ -11,6 +121,11 @@
       "key": "common.open",
       "placeholders": [],
       "role": "control"
+    },
+    {
+      "key": "dashboard.card.camera_gallery.title",
+      "placeholders": [],
+      "role": "card_title"
     },
     {
       "key": "dashboard.card.date_time.title",
@@ -326,11 +441,6 @@
         }
       ],
       "role": "page_title"
-    },
-    {
-      "key": "interfaces.badge",
-      "placeholders": [],
-      "role": "status"
     },
     {
       "key": "interfaces.list.hint",
@@ -711,6 +821,16 @@
       "key": "locale.label",
       "placeholders": [],
       "role": "field_label"
+    },
+    {
+      "key": "page.camera_gallery.description",
+      "placeholders": [],
+      "role": "body"
+    },
+    {
+      "key": "page.camera_gallery.title",
+      "placeholders": [],
+      "role": "page_title"
     },
     {
       "key": "page.date_time.description",
@@ -2102,10 +2222,10 @@
   "schema_version": 1,
   "sources": {
     "i18n/catalog.json": "e6b7aec4af6fb6f1a603a8858ee77742031952718c9aa6a0f7b3eaa6b0972ae3",
-    "i18n/en.yaml": "850a16357b55f1450c55191f249959ca36f20040623810d44346b33c6e0d0652",
-    "i18n/ko.yaml": "79e554c0a5a1a73678eb1b091bada84549932fb4fa5f95f61349ac58c1de04ac",
-    "i18n/typography.yaml": "e64437d2830903f3f1fbf55dddb45a050e695d769a46eba05963abf90d84c4b1"
+    "i18n/en.yaml": "58908c0dcf952df229bc970b705f201bf5f65cb25766eb0255ed2ea1f36ea8fa",
+    "i18n/ko.yaml": "dd17e1a6d95c4d701965a57f4747bae653f9faccfc0103f32e31545acdc0b61a",
+    "i18n/typography.yaml": "e1c8200a65b38a779fd18aedb331cd8946e03c9628ae867f6ae8a0961b889ca3"
   },
   "symbol_prefix": "hmi_sample_suite",
-  "text_count": 404
+  "text_count": 428
 }

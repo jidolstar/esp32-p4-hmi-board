@@ -145,26 +145,23 @@
       "data_key": "wifi_ap_web"
     },
     {
-      "id": "interfaces-info",
-      "dashboard_title_key": "dashboard.card.interfaces_info.title",
-      "title_key": "page.interfaces_info.title",
-      "description_key": "page.interfaces_info.description",
-      "order": 90,
+      "id": "camera-gallery",
+      "dashboard_title_key": "dashboard.card.camera_gallery.title",
+      "title_key": "page.camera_gallery.title",
+      "description_key": "page.camera_gallery.description",
+      "order": 80,
       "entry": {
-        "header": "pages/interfaces_info/interfaces_info_page.hpp",
-        "type": "hmi::samples::suite::InterfacesInfoPage"
+        "header": "pages/camera_gallery/camera_gallery_page.hpp",
+        "type": "hmi::samples::suite::CameraGalleryPage"
       },
       "sources": {
-        "common": [
-          "pages/interfaces_info/interfaces_info_model.cpp",
-          "pages/interfaces_info/interfaces_info_page.cpp"
-        ],
+        "common": ["pages/camera_gallery/camera_gallery_page.cpp"],
         "windows": [],
         "hmi": []
       },
-      "capabilities": ["i18n", "interfaces", "update"],
-      "verification": ["interfaces_info_state", "interfaces_info_interaction"],
-      "data_key": "interfaces_info"
+      "capabilities": ["camera", "i18n", "storage"],
+      "verification": ["camera_gallery_controller", "camera_gallery_interaction"],
+      "data_key": "camera_gallery"
     },
     {
       "id": "date-time",
@@ -184,6 +181,28 @@
       "capabilities": ["connectivity", "i18n", "time"],
       "verification": ["date_time_state", "date_time_interaction"],
       "data_key": "date_time"
+    },
+    {
+      "id": "interfaces-info",
+      "dashboard_title_key": "dashboard.card.interfaces_info.title",
+      "title_key": "page.interfaces_info.title",
+      "description_key": "page.interfaces_info.description",
+      "order": 110,
+      "entry": {
+        "header": "pages/interfaces_info/interfaces_info_page.hpp",
+        "type": "hmi::samples::suite::InterfacesInfoPage"
+      },
+      "sources": {
+        "common": [
+          "pages/interfaces_info/interfaces_info_model.cpp",
+          "pages/interfaces_info/interfaces_info_page.cpp"
+        ],
+        "windows": [],
+        "hmi": []
+      },
+      "capabilities": ["i18n", "interfaces", "update"],
+      "verification": ["interfaces_info_state", "interfaces_info_interaction"],
+      "data_key": "interfaces_info"
     }
   ]
 }

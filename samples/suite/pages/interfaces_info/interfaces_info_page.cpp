@@ -68,7 +68,6 @@ bool InterfacesInfoPage::create(lv_obj_t* parent,
 bool InterfacesInfoPage::create_header(lv_obj_t* parent) noexcept {
   PageHeaderSpec spec;
   spec.title = TextId::page_interfaces_info_title;
-  spec.badge = TextId::interfaces_badge;
   spec.locale = context_.locale;
   spec.back_event = &InterfacesInfoPage::handle_event;
   spec.locale_ko_event = &InterfacesInfoPage::handle_event;
@@ -88,9 +87,13 @@ bool InterfacesInfoPage::create_header(lv_obj_t* parent) noexcept {
 
 lv_obj_t* InterfacesInfoPage::create_label(
     lv_obj_t* parent, TextId id, hmi::ui::TextRole role) noexcept {
-  lv_obj_t* label = hmi::ui::create_label(
-      parent, generated::text(context_.locale, id).data(), *context_.theme,
-      role);
+  lv_obj_t* label = lv_label_create(parent);
+  if (label == nullptr) {
+    return nullptr;
+  }
+  // 정적 카탈로그 문자열을 참조해 긴 안내 문구를 LVGL 힙에 복사하지 않는다.
+  lv_label_set_text_static(label, generated::text(context_.locale, id).data());
+  context_.theme->apply_label(label, role);
   apply_fixed_font(label, id);
   return label;
 }
@@ -113,7 +116,7 @@ bool InterfacesInfoPage::render_list() noexcept {
     return false;
   }
   theme.apply_status(intro);
-  lv_obj_set_size(intro, LV_PCT(100), 62);
+  lv_obj_set_size(intro, LV_PCT(100), LV_SIZE_CONTENT);
   lv_obj_clear_flag(intro, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_style_pad_all(intro, 12, 0);
   lv_obj_t* hint = create_label(intro, TextId::interfaces_list_hint,
@@ -121,8 +124,8 @@ bool InterfacesInfoPage::render_list() noexcept {
   if (hint == nullptr) {
     return false;
   }
-  hmi::ui::configure_multiline(hint, 930, 38, 5, LV_TEXT_ALIGN_LEFT);
-  lv_obj_center(hint);
+  hmi::ui::configure_multiline(hint, LV_PCT(100), LV_SIZE_CONTENT, 5,
+                               LV_TEXT_ALIGN_LEFT);
 
   theme.apply_surface(list);
   lv_obj_set_width(list, LV_PCT(100));
@@ -140,6 +143,8 @@ bool InterfacesInfoPage::render_list() noexcept {
       return false;
     }
     rows_[index] = row;
+    // 목록 모양을 유지하면서 누를 때는 보조 버튼과 같은 피드백을 표시한다.
+    theme.apply_button(row, hmi::ui::ButtonVariant::kSecondary);
     theme.apply_list_item(row);
     lv_obj_set_size(row, LV_PCT(100), 88);
     lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);
@@ -159,7 +164,7 @@ bool InterfacesInfoPage::render_list() noexcept {
     }
     lv_obj_clear_flag(text, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_width(text, 0);
-    lv_obj_set_height(text, LV_PCT(100));
+    lv_obj_set_height(text, LV_SIZE_CONTENT);
     lv_obj_set_flex_grow(text, 1);
     lv_obj_set_style_pad_row(text, 4, 0);
     lv_obj_t* title = create_label(text, topic.title,
@@ -171,13 +176,13 @@ bool InterfacesInfoPage::render_list() noexcept {
     }
     lv_obj_clear_flag(title, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_clear_flag(summary, LV_OBJ_FLAG_CLICKABLE);
-    hmi::ui::configure_multiline(summary, 720, 38, 5,
+    hmi::ui::configure_multiline(summary, LV_PCT(100), LV_SIZE_CONTENT, 5,
                                  LV_TEXT_ALIGN_LEFT);
 
     theme.apply_chip(chip);
     lv_obj_clear_flag(chip, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_clear_flag(chip, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_set_size(chip, 148, 38);
+    lv_obj_set_size(chip, 166, 38);
     lv_obj_set_style_pad_all(chip, 6, 0);
     lv_obj_t* status = create_label(chip, topic.status,
                                     hmi::ui::TextRole::kAccent);
@@ -197,8 +202,10 @@ bool InterfacesInfoPage::create_detail_section(
     return false;
   }
   context_.theme->apply_card(section);
-  lv_obj_set_size(section, LV_PCT(100), 122);
-  lv_obj_clear_flag(section, LV_OBJ_FLAG_SCROLLABLE);
+  lv_obj_set_size(section, LV_PCT(100), LV_SIZE_CONTENT);
+  // 설명을 누른 지점에서도 상위 컨테이너가 드래그 스크롤을 받는다.
+  lv_obj_clear_flag(section, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE |
+                                LV_OBJ_FLAG_CLICK_FOCUSABLE);
   lv_obj_set_style_pad_all(section, 12, 0);
   lv_obj_set_style_pad_row(section, 6, 0);
   lv_obj_set_flex_flow(section, LV_FLEX_FLOW_COLUMN);
@@ -209,7 +216,7 @@ bool InterfacesInfoPage::create_detail_section(
   if (title == nullptr || paragraph == nullptr) {
     return false;
   }
-  hmi::ui::configure_multiline(paragraph, 920, 66, 5,
+  hmi::ui::configure_multiline(paragraph, LV_PCT(100), LV_SIZE_CONTENT, 7,
                                LV_TEXT_ALIGN_LEFT);
   return true;
 }
@@ -224,6 +231,7 @@ bool InterfacesInfoPage::render_detail() noexcept {
   theme.apply_surface(scroll);
   lv_obj_set_width(scroll, LV_PCT(100));
   lv_obj_set_flex_grow(scroll, 1);
+  lv_obj_clear_flag(scroll, LV_OBJ_FLAG_CLICK_FOCUSABLE);
   lv_obj_set_scroll_dir(scroll, LV_DIR_VER);
   lv_obj_set_style_pad_all(scroll, 14, 0);
   lv_obj_set_style_pad_row(scroll, 10, 0);
@@ -233,6 +241,7 @@ bool InterfacesInfoPage::render_detail() noexcept {
   if (heading == nullptr) {
     return false;
   }
+  lv_obj_clear_flag(heading, LV_OBJ_FLAG_CLICKABLE);
   lv_obj_set_size(heading, LV_PCT(100), 52);
   lv_obj_set_flex_align(heading, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
                         LV_FLEX_ALIGN_CENTER);
@@ -244,12 +253,13 @@ bool InterfacesInfoPage::render_detail() noexcept {
     return false;
   }
   theme.apply_transparent(spacer);
+  lv_obj_clear_flag(spacer, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
   lv_obj_set_height(spacer, 1);
   lv_obj_set_flex_grow(spacer, 1);
   theme.apply_chip(chip);
   lv_obj_clear_flag(chip, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_clear_flag(chip, LV_OBJ_FLAG_CLICKABLE);
-  lv_obj_set_size(chip, 160, 38);
+  lv_obj_set_size(chip, 166, 38);
   lv_obj_t* status = create_label(chip, topic.status,
                                   hmi::ui::TextRole::kAccent);
   if (status == nullptr) {

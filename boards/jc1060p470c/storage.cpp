@@ -87,6 +87,17 @@ bool Storage::write_file(const char* path, const std::uint8_t* data,
   return lease && storage_->write_file(path, data, size);
 }
 
+bool Storage::write_new_file(const char* path, const std::uint8_t* data,
+                             std::size_t size) noexcept {
+  const ScopedFileLease lease(storage_);
+  return lease && storage_->write_new_file(path, data, size);
+}
+
+FileVisitResult Storage::visit_regular_files(const char* path, void* context, FileVisitor visitor) const noexcept {
+  const ScopedFileLease lease(storage_);
+  return lease ? storage_->visit_regular_files(path, context, visitor) : FileVisitResult::failed;
+}
+
 bool Storage::append_file(const char* path, const std::uint8_t* data,
                           std::size_t size) noexcept {
   const ScopedFileLease lease(storage_);
@@ -106,6 +117,11 @@ bool Storage::mkdirs(const char* path) noexcept {
 bool Storage::remove_file(const char* path) noexcept {
   const ScopedFileLease lease(storage_);
   return lease && storage_->remove_file(path);
+}
+
+bool Storage::remove_regular_file(const char* path) noexcept {
+  const ScopedFileLease lease(storage_);
+  return lease && storage_->remove_regular_file(path);
 }
 
 bool Storage::remove_tree(const char* path) noexcept {

@@ -1,4 +1,7 @@
 if(BUILD_TESTING)
+  add_subdirectory("${CMAKE_SOURCE_DIR}/modules/camera"
+    "${CMAKE_CURRENT_BINARY_DIR}/camera-tests")
+
   function(hmi_add_sample_suite_test target source test_name)
     add_executable(${target} ${source})
     target_compile_features(${target} PRIVATE cxx_std_17)
@@ -17,6 +20,10 @@ if(BUILD_TESTING)
     hmi_sample_suite_navigation_test
     tests/navigation_test.cpp
     hmi_sample_suite_navigation)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_camera_gallery_interaction_test
+    pages/camera_gallery/tests/camera_gallery_interaction_test.cpp
+    hmi_sample_suite_camera_gallery_interaction)
   hmi_add_sample_suite_test(
     hmi_board_storage_access_guard_test
     "${CMAKE_SOURCE_DIR}/boards/jc1060p470c/tests/storage_access_guard_test.cpp"
@@ -207,6 +214,8 @@ if(BUILD_TESTING)
     hmi_sample_suite_interfaces_info_interaction_test
     pages/interfaces_info/tests/interfaces_info_interaction_test.cpp
     hmi_sample_suite_interfaces_info_interaction)
+  target_link_libraries(hmi_sample_suite_interfaces_info_interaction_test PRIVATE
+    hmi_windows_pointer_test_driver)
   set_tests_properties(
     hmi_sample_suite_date_time_state
     hmi_sample_suite_date_time_interaction

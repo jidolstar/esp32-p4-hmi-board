@@ -24,7 +24,7 @@
     "hmi": []
   },
   "include_dirs": ["."],
-  "modules": ["audio", "connectivity", "i18n", "interfaces", "settings", "storage", "text", "time", "ui", "update"],
+  "modules": ["audio", "camera", "connectivity", "i18n", "interfaces", "settings", "storage", "text", "time", "ui", "update"],
   "hosts": {
     "windows": { "enabled": true },
     "hmi": { "enabled": true, "board": "jc1060p470c" }
@@ -54,6 +54,9 @@
       "hmi_sample_suite_windows_smoke",
       "hmi_board_storage_access_guard",
       "hmi_board_camera_frame_lease_tracker",
+      "hmi_camera_contract",
+      "hmi_camera_gallery_controller",
+      "hmi_sample_suite_camera_gallery_interaction",
       "hmi_board_wav_reader",
       "hmi_board_msc_sector_transfer",
       "hmi_board_usb_msc_event_state",

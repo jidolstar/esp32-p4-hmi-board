@@ -32,9 +32,16 @@
 #include "hmi/storage/storage_access_controller.hpp"
 #include "storage/board_storage_access.hpp"
 #endif
+#if HMI_PROFILE_HAS_CAMERA
+#include "camera/camera_gallery_worker.hpp"
+#include "hmi/camera/camera_gallery_controller.hpp"
+#endif
 #if HMI_PROFILE_HAS_TIME
 #include "hmi/time/time_sync_controller.hpp"
 #include "time/esp_network_time.hpp"
+#endif
+#if defined(HMI_CAMERA_C2_CHECK)
+#include "diagnostics/jc1060p470c_camera_gallery_check/check.hpp"
 #endif
 
 namespace {
@@ -64,6 +71,20 @@ hmi::profiles::generated::SelectedProfileApp &app() {
 }
 
 bool board_ready = false;
+#if HMI_PROFILE_HAS_CAMERA
+using CameraWorker = hmi::platform::hmi_host::camera::CameraGalleryWorker;
+
+CameraWorker& camera_worker() {
+  static CameraWorker worker(board().camera(), board().storage(),
+                             hmi::profiles::generated::kSelectedAssetStorageRoot);
+  return worker;
+}
+
+hmi::camera::CameraGalleryController& camera_gallery() {
+  static hmi::camera::CameraGalleryController controller(camera_worker(), camera_worker());
+  return controller;
+}
+#endif
 #if HMI_PROFILE_HAS_CONNECTIVITY
 bool wifi_ready = false;
 #endif
@@ -271,6 +292,15 @@ void setup() {
     return;
   }
 
+#if defined(HMI_CAMERA_C2_CHECK)
+  board().begin_storage();
+  if (!storage_port().begin() || !hmi::diagnostics::camera_gallery::begin(
+          board(), storage_access(), hmi::profiles::generated::kSelectedAssetStorageRoot)) {
+    HMI_LOG_ERROR("[C2] diagnostic initialization failed\r\n");
+  }
+  return;
+#endif
+
   hmi::profiles::AppContext app_context;
   app_context.host_name = "hmi";
 #if HMI_PROFILE_HAS_AUDIO
@@ -337,6 +367,13 @@ void setup() {
     app_context.storage_access = &storage_access();
   }
 #endif
+#if HMI_PROFILE_HAS_CAMERA
+  if (camera_worker().begin()) {
+    app_context.camera_controller = &camera_gallery();
+  } else {
+    HMI_LOG_ERROR("[camera] gallery worker unavailable\r\n");
+  }
+#endif
   if (!app().create(app_context)) {
     HMI_LOG_ERROR("[hmi-profile] app creation failed\r\n");
     return;
@@ -345,6 +382,14 @@ void setup() {
 }
 
 void loop() {
+#if defined(HMI_CAMERA_C2_CHECK)
+  if (board_ready) {
+    hmi::diagnostics::camera_gallery::tick(millis());
+    board().tick();
+  }
+  delay(1);
+  return;
+#endif
   if (board_ready) {
     board().tick();
     service_asset_update_ui();
@@ -357,6 +402,10 @@ void loop() {
 #endif
 #if HMI_PROFILE_HAS_STORAGE
   if (storage_access_ready) {
+#if HMI_PROFILE_HAS_CAMERA
+    // SD worker에 raw owner 전환을 보내기 전에 camera 파일 작업을 정리한다.
+    camera_gallery().update_storage(storage_access().snapshot());
+#endif
     storage_access().tick(millis());
   }
 #endif

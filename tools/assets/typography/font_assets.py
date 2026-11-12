@@ -419,7 +419,7 @@ def build_fixed_outputs(
                         inside_converter_options = False
                     continue
                 normalized_lines.append(line)
-            content = ("\n".join(normalized_lines) + "\n").encode("utf-8")
+            content = ("\n".join(normalized_lines).rstrip("\n") + "\n").encode("utf-8")
             relative = f"fonts/fixed/{style.id}.c"
             outputs[relative] = content
             style_entries.append(

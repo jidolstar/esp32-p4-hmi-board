@@ -26,6 +26,7 @@ bool SampleSuiteApp::create(const hmi::profiles::AppContext &context) {
   wifi_registration_ = context.wifi_registration;
   storage_access_ = context.storage_access;
   time_runtime_ = context.time_runtime;
+  camera_controller_ = context.camera_controller;
   screen_ = lv_obj_create(nullptr);
   if (screen_ == nullptr) {
     theme_.reset();
@@ -241,6 +242,7 @@ bool SampleSuiteApp::show_page(std::size_t descriptor_index) noexcept {
   if (!page) {
     return false;
   }
+  page->bind_runtime({camera_controller_});
   PageContext page_context = make_page_context();
   if (!page->create(content_, page_context)) {
     page->destroy();
@@ -429,6 +431,7 @@ void SampleSuiteApp::destroy() noexcept {
   storage_audio_stopped_ = false;
   wifi_registration_ = nullptr;
   storage_access_ = nullptr;
+  camera_controller_ = nullptr;
   time_runtime_ = nullptr;
 }
 

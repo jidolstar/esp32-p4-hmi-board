@@ -6,6 +6,7 @@
 
 #include <src/extra/libs/qrcode/lv_qrcode.h>
 
+#include "components/overlay_text.hpp"
 #include "components/page_header.hpp"
 #include "generated/fixed_fonts.hpp"
 #include "generated/text_catalog.hpp"
@@ -534,89 +535,19 @@ void WifiApWebPage::update_switches() noexcept {
   }
 }
 
-void WifiApWebPage::show_stop_confirmation(
-    const bool leave_after_stop) noexcept {
-  if (confirm_scrim_ != nullptr || root_ == nullptr || context_.theme == nullptr) {
-    return;
-  }
-  lv_obj_t* screen = lv_obj_get_screen(root_);
-  if (screen == nullptr) {
-    return;
-  }
-  leave_on_confirm_ = leave_after_stop;
-  hmi::ui::UiTheme& theme = *context_.theme;
-  // page root는 세로 flex이므로 modal을 그 아래에 두면 body item으로 배치된다.
-  // screen 직속 layer로 만들어 header를 포함한 전체 화면의 입력과 시각을 함께 막는다.
-  confirm_scrim_ = lv_obj_create(screen);
-  if (confirm_scrim_ == nullptr) {
-    return;
-  }
-  theme.apply_scrim(confirm_scrim_);
-  lv_obj_set_size(confirm_scrim_, LV_PCT(100), LV_PCT(100));
-  lv_obj_set_pos(confirm_scrim_, 0, 0);
-  lv_obj_clear_flag(confirm_scrim_, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_flex_flow(confirm_scrim_, LV_FLEX_FLOW_COLUMN);
-  lv_obj_set_flex_align(confirm_scrim_, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-  lv_obj_move_foreground(confirm_scrim_);
-
-  lv_obj_t* dialog = lv_obj_create(confirm_scrim_);
-  if (dialog == nullptr) {
-    close_confirmation();
-    return;
-  }
-  theme.apply_dialog(dialog);
-  lv_obj_set_size(dialog, 560, 280);
-  lv_obj_clear_flag(dialog, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(dialog, 24, 0);
-  lv_obj_set_style_pad_row(dialog, 14, 0);
-  lv_obj_set_flex_flow(dialog, LV_FLEX_FLOW_COLUMN);
-  lv_obj_t* title = create_label(
-      dialog, context_.locale, generated::TextId::wifi_ap_dialog_stop_title,
-      theme, hmi::ui::TextRole::kTitle);
-  lv_obj_t* body = create_label(
-      dialog, context_.locale, generated::TextId::wifi_ap_dialog_stop_body,
-      theme, hmi::ui::TextRole::kBody);
-  if (title == nullptr || body == nullptr) {
-    close_confirmation();
-    return;
-  }
-  hmi::ui::configure_multiline(body, 512, 90, 6, LV_TEXT_ALIGN_LEFT);
-  lv_obj_t* row = lv_obj_create(dialog);
-  if (row == nullptr) {
-    close_confirmation();
-    return;
-  }
-  theme.apply_transparent(row);
-  lv_obj_set_size(row, LV_PCT(100), 56);
-  lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_pad_all(row, 0, 0);
-  lv_obj_set_style_pad_column(row, 10, 0);
-  lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(row, LV_FLEX_ALIGN_END, LV_FLEX_ALIGN_CENTER,
-                        LV_FLEX_ALIGN_CENTER);
-  lv_obj_t* cancel = create_button(
-      row, context_.locale, generated::TextId::wifi_ap_action_cancel, theme,
-      hmi::ui::ButtonVariant::kSecondary,
-      &WifiApWebPage::handle_confirm_cancel, this);
-  lv_obj_t* stop = create_button(
-      row, context_.locale, generated::TextId::wifi_ap_action_confirm_stop,
-      theme, hmi::ui::ButtonVariant::kPrimary,
-      &WifiApWebPage::handle_confirm_stop, this);
-  if (cancel == nullptr || stop == nullptr) {
-    close_confirmation();
-    return;
-  }
-  lv_obj_set_size(cancel, 150, 52);
-  lv_obj_set_size(stop, 150, 52);
+void WifiApWebPage::show_stop_confirmation(const bool leave_after_stop) noexcept {
+  if (confirmation_ || !root_ || !context_.theme) return;
+  using TextId = generated::TextId;
+  confirmation_ = hmi::ui::show_confirmation(root_, *context_.theme, {
+      overlay_text(context_.locale, TextId::wifi_ap_dialog_stop_title),
+      overlay_text(context_.locale, TextId::wifi_ap_dialog_stop_body),
+      overlay_text(context_.locale, TextId::wifi_ap_action_cancel),
+      overlay_text(context_.locale, TextId::wifi_ap_action_confirm_stop),
+      &WifiApWebPage::handle_confirm_cancel, &WifiApWebPage::handle_confirm_stop, this});
+  if (confirmation_) leave_on_confirm_ = leave_after_stop;
 }
 
-void WifiApWebPage::close_confirmation() noexcept {
-  if (confirm_scrim_ != nullptr) {
-    lv_obj_del(confirm_scrim_);
-  }
-  confirm_scrim_ = nullptr;
-}
+void WifiApWebPage::close_confirmation() noexcept { confirmation_.close(); }
 
 void WifiApWebPage::handle_back(lv_event_t* event) {
   if (event == nullptr || lv_event_get_code(event) != LV_EVENT_SHORT_CLICKED) {

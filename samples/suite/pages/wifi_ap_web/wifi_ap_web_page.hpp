@@ -5,6 +5,7 @@
 #include <lvgl.h>
 
 #include "hmi/connectivity/wifi_ap_web_controller.hpp"
+#include "hmi/ui/components.hpp"
 #include "page_contract.hpp"
 
 namespace hmi::samples::suite {
@@ -67,7 +68,7 @@ class WifiApWebPage final : public SamplePage {
   lv_obj_t* qr_ = nullptr;
   lv_obj_t* switch_cards_[hmi::connectivity::kWifiApWebSwitchCount]{};
   lv_obj_t* switch_value_labels_[hmi::connectivity::kWifiApWebSwitchCount]{};
-  lv_obj_t* confirm_scrim_ = nullptr;
+  hmi::ui::ConfirmationWidgets confirmation_{};
   lv_timer_t* timer_ = nullptr;
   VisualState visual_state_ = VisualState::invalid;
   bool ever_web_connected_ = false;

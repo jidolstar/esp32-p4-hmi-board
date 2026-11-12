@@ -33,6 +33,14 @@
 #include "internal/usb_msc_driver.hpp"
 #endif
 
+#ifndef HMI_PROFILE_HAS_CAMERA
+#define HMI_PROFILE_HAS_CAMERA 0
+#endif
+
+#if HMI_PROFILE_HAS_CAMERA
+#include "camera.hpp"
+#endif
+
 namespace hmi::boards::jc1060p470c {
 
 namespace internal {
@@ -88,6 +96,11 @@ class Board {
   /** SD 구현 세부사항을 숨긴 Board-owned 저장소 facade를 반환한다. */
   Storage& storage() noexcept { return storage_facade_; }
 
+#if HMI_PROFILE_HAS_CAMERA
+  /** Board 초기화 뒤 공유 SCCB와 CSI를 사용하는 카메라 서비스다. */
+  Camera& camera() noexcept { return camera_; }
+#endif
+
   /** file lease가 없을 때 SD를 USB MSC raw owner로 전환한다. */
   UsbMscEnterResult enter_usb_msc() noexcept;
 
@@ -105,6 +118,9 @@ class Board {
 
   TwoWire touch_i2c_{1};
   internal::MipiDsiDisplay display_;
+#if HMI_PROFILE_HAS_CAMERA
+  Camera camera_{touch_i2c_};
+#endif
   internal::TouchController touch_;
   internal::SdStorage storage_;
   Storage storage_facade_;

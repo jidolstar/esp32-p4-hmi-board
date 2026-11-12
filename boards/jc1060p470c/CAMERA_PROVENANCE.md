@@ -1,6 +1,6 @@
 # JC1060P470C-I-W-Y camera provenance
 
-상태: C0 완료, C0.5 얼굴 5점 검출 feasibility 진행 중.
+상태: C0/C1 완료, C2 진행 중. 얼굴 검출 재검증은 기본 Camera & Gallery 수용 뒤 F1에서 진행한다.
 
 이 문서는 S08 camera/gallery 구현에 사용할 수 있는 값과 아직 확정하면 안 되는 값을
 구분한다. 제조사 데모의 설정은 강한 근거지만, 사용자가 가진 보드와 camera module이 같은
@@ -42,7 +42,7 @@ panel 이름과 camera module label을 혼동하지 않는다.
 | sensor size/rate | 1288×728 @ 30 fps | sdkconfig + mode table | 진단 목표 |
 | MIPI clock | 400 MHz | mode table | sensor driver 소유 |
 | capture buffer | 2개 | 제조사 `EXAMPLE_CAM_BUF_NUM` | 최소 pool 상한 |
-| preview output | ISP를 거친 RGB565 | 제조사 app format/ISP config | C1 preview 후보 |
+| preview output | ISP를 거친 little-endian RGB565 | 제조사 app format 및 `RGBP` 실기기 진단 | C2 카메라 입력 후보 |
 | capture input | Bayer RAW10 | sensor mode | ISP 없이 UI에 직접 표시 금지 |
 
 OV02C10 Kconfig help 한 줄은 1288×728 mode를 “2-lane”이라고 설명하지만, 같은 component의
@@ -51,7 +51,8 @@ mode 이름, 파일 이름과 실제 `.lane_num`은 모두 1-lane이다. C0 진�
 
 GPIO 7/8은 현재 touch bus의 SDA/SCL과 같다. 제조사 camera app도 기존 I2C bus handle을 받을
 수 있게 되어 있으므로 최종 제품 adapter에서는 Board가 버스를 소유하고 공유해야 한다.
-camera code가 별도 I2C owner를 생성하는 방식은 진단에만 허용한다.
+제품의 Board는 `TwoWire(1)`에서 touch와 audio를 운영한다. camera code가 별도 I2C owner를
+생성하는 방식은 진단에만 허용한다.
 
 ## component/build 결정
 
@@ -59,8 +60,8 @@ camera code가 별도 I2C owner를 생성하는 방식은 진단에만 허용한
   않는다.
 - 설치된 Arduino framework에는 low-level CSI driver가 있지만 `esp_video`, sensor와 IPA
   component source가 없다.
-- 따라서 `diagnostics/jc1060p470c_camera_probe/`만 ESP-IDF 5.5.4 standalone build로 격리한다.
-  제품 source와 `Board` public facade에는 아직 연결하지 않는다.
+- C0의 `diagnostics/jc1060p470c_camera_probe/`는 ESP-IDF 5.5.4 standalone build로 격리했다.
+  제품 카메라 연결은 C2 범위다.
 - 실기기 esptool 응답은 chip revision v1.3이다. ESP32-P4의 v1.x와 v3.x build는 상호
   호환되지 않으므로 진단 `sdkconfig.defaults`는 v1.0~v1.99를 선택한다. bootloader와 app
   header도 같은 revision 범위, 유효한 checksum/hash로 확인했으며 revision 불일치 시
@@ -74,8 +75,11 @@ camera code가 별도 I2C owner를 생성하는 방식은 진단에만 허용한
   Guition commit `c2dfeca968a0dc30fbb50c05a740cc91c1d3c43c`의 관련 source 8개를 각각
   SHA-256으로 고정해 configure 시 가져온다. platform package나 managed component는 수정하지
   않는다.
-- 실제 제품 통합 방식은 C0의 30-frame 성공 후 C1 시작 전에 결정한다. platform package를
-  직접 수정하는 방식은 허용하지 않는다.
+- C2는 Arduino SDK CSI/ISP 및 `esp_driver_jpeg`를 사용한다. `internal/ov02c10_1288x728.hpp`의
+  227개 register 값과 순서는 C0 다운로드의 원본 SHA-256
+  `205e442701083fe22b4e1679e921fc36a070d90b629f10645ecb1e2314f17e22`과 대조했다.
+  CSI는 기존 DSI 2.5 V PHY 전원을 공유한다. JPEG는 4:2:0 baseline으로 저장하며 파일당 상한은
+  1 MiB다. LCD 색상과 JPEG 왕복 decode는 C2 실기기에서 확인한다.
 
 ## buffer와 반환 계약
 
@@ -120,4 +124,4 @@ camera code가 별도 I2C owner를 생성하는 방식은 진단에만 허용한
 `0x300A/0x300B` PID register를 읽고 기대 PID와 다르면 초기화를 실패시키므로 정상 stream과
 30/30 PASS는 sensor의 직접 확인 근거다. SoC revision도 esptool로 v1.3을 확인했다. 따라서
 C0 판정은 `complete`다. 보드/panel과 module label 사진은 선택적 provenance 보강 자료로
-남기며, RAW10 probe만으로 판단할 수 없는 방향·색상·tearing은 C1 preview에서 확인한다.
+남기며, RAW10 probe에서 확인하지 못한 방향·색상·tearing은 C2 실기기 preview에서 확인한다.

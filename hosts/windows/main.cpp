@@ -20,6 +20,12 @@
 #define HMI_WINDOWS_HAS_STORAGE 0
 #endif
 #include "selected_profile.hpp"
+#if __has_include("hmi/camera/camera_gallery_controller.hpp")
+#define HMI_WINDOWS_HAS_CAMERA 1
+#include "camera/virtual_camera_port.hpp"
+#include "camera/virtual_gallery_storage.hpp"
+#include "hmi/camera/camera_gallery_controller.hpp"
+#endif
 #include "settings/memory_level_settings.hpp"
 #if HMI_PROFILE_HAS_AUDIO
 #include "audio/sdl_wav_playback.hpp"
@@ -190,6 +196,16 @@ int main(int argc, char **argv) {
       hmi::storage::StorageAccessController storage_access(storage_port);
       storage_access.tick(lv_tick_get());
 #endif
+#if HMI_WINDOWS_HAS_CAMERA
+      hmi::platform::windows::camera::VirtualCameraPort camera_port;
+      hmi::platform::windows::camera::VirtualGalleryStorage gallery_port;
+      hmi::camera::CameraGalleryController camera_gallery(camera_port, gallery_port);
+      const auto advance_camera = [&] {
+        camera_gallery.update_storage(storage_access.snapshot());
+        camera_port.advance();
+        gallery_port.advance();
+      };
+#endif
 #if HMI_PROFILE_HAS_TIME
       hmi::platform::windows::time::VirtualTimeSyncPorts virtual_time;
       hmi::time::DateTimeModel date_time;
@@ -222,6 +238,9 @@ int main(int argc, char **argv) {
 #if HMI_WINDOWS_HAS_STORAGE
       app_context.storage_access = &storage_access;
 #endif
+#if HMI_WINDOWS_HAS_CAMERA
+      app_context.camera_controller = &camera_gallery;
+#endif
 #if HMI_PROFILE_HAS_TIME
       if (time_ready) {
         app_context.time_runtime = &time_runtime;
@@ -241,6 +260,9 @@ int main(int argc, char **argv) {
             wifi_registration.tick(lv_tick_get());
             wifi_ap_web.tick(lv_tick_get());
           }
+#endif
+#if HMI_WINDOWS_HAS_CAMERA
+          advance_camera();
 #endif
 #if HMI_WINDOWS_HAS_STORAGE
           storage_access.tick(lv_tick_get());
@@ -269,6 +291,9 @@ int main(int argc, char **argv) {
             wifi_registration.tick(lv_tick_get());
             wifi_ap_web.tick(lv_tick_get());
           }
+#endif
+#if HMI_WINDOWS_HAS_CAMERA
+          advance_camera();
 #endif
 #if HMI_WINDOWS_HAS_STORAGE
           storage_access.tick(lv_tick_get());

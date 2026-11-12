@@ -5,7 +5,9 @@
 
 #include <cstdio>
 #include <cstring>
+#include <cerrno>
 #include <dirent.h>
+#include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -60,13 +62,16 @@ bool SdStorage::begin() {
       continue;
     }
 
-    total_bytes_ = SD_MMC.totalBytes();
+    const std::uint64_t total = SD_MMC.totalBytes();
     const std::uint64_t used = SD_MMC.usedBytes();
-    last_free_bytes_ = used <= total_bytes_ ? total_bytes_ - used : 0U;
+    portENTER_CRITICAL(&capacity_mux_);
+    total_bytes_ = total;
+    last_free_bytes_ = used <= total ? total - used : 0U;
+    portEXIT_CRITICAL(&capacity_mux_);
     mounted_.store(true, std::memory_order_release);
     generation_.fetch_add(1U, std::memory_order_acq_rel);
     HMI_LOG_INFO("[storage] SD ready bytes=%llu freq=%ukHz\r\n",
-                 static_cast<unsigned long long>(total_bytes_),
+                 static_cast<unsigned long long>(total),
                  static_cast<unsigned>(frequency_khz));
     return true;
   }
@@ -81,8 +86,10 @@ void SdStorage::end() noexcept {
     generation_.fetch_add(1U, std::memory_order_acq_rel);
   }
   access_.end_raw_access();
+  portENTER_CRITICAL(&capacity_mux_);
   total_bytes_ = 0U;
   last_free_bytes_ = 0U;
+  portEXIT_CRITICAL(&capacity_mux_);
 }
 
 bool SdStorage::ready() const noexcept {
@@ -95,8 +102,10 @@ StorageStatus SdStorage::status() const noexcept {
   const bool physical_mount = mounted_.load(std::memory_order_acquire);
   const bool raw_access = access_.raw_access_active();
   result.mounted = physical_mount && !raw_access;
+  portENTER_CRITICAL(&capacity_mux_);
   result.total_bytes = total_bytes_;
   result.free_bytes = last_free_bytes_;
+  portEXIT_CRITICAL(&capacity_mux_);
   result.generation = generation_.load(std::memory_order_acquire);
   result.owner = raw_access
                      ? StorageOwner::usb_msc
@@ -143,10 +152,12 @@ std::uint64_t SdStorage::free_bytes() const noexcept {
   if (!ready()) {
     return 0U;
   }
-  const std::uint64_t total = total_bytes_;
   const std::uint64_t used = SD_MMC.usedBytes();
-  last_free_bytes_ = used <= total ? total - used : 0U;
-  return last_free_bytes_;
+  portENTER_CRITICAL(&capacity_mux_);
+  const std::uint64_t free = used <= total_bytes_ ? total_bytes_ - used : 0U;
+  last_free_bytes_ = free;
+  portEXIT_CRITICAL(&capacity_mux_);
+  return free;
 }
 
 bool SdStorage::file_size(const char* path, std::uint64_t& size) const noexcept {
@@ -215,6 +226,70 @@ bool SdStorage::write_file(const char* path, const std::uint8_t* data,
   return write_with_mode(path, data, size, "wb");
 }
 
+bool SdStorage::write_new_file(const char* path, const std::uint8_t* data,
+                               std::size_t size) noexcept {
+  char full_path[256]{};
+  if ((size != 0U && data == nullptr) || !resolve_path(path, full_path, sizeof(full_path))) {
+    return false;
+  }
+  const int fd = ::open(full_path, O_CREAT | O_EXCL | O_WRONLY, 0644);
+  if (fd < 0) {
+    return false;
+  }
+  std::size_t written = 0U;
+  while (written < size) {
+    const auto chunk = ::write(fd, data + written, size - written);
+    if (chunk <= 0) {
+      break;
+    }
+    written += static_cast<std::size_t>(chunk);
+  }
+  const bool synced = written == size && ::fsync(fd) == 0;
+  const bool closed = ::close(fd) == 0;
+  return synced && closed;
+}
+
+FileVisitResult SdStorage::visit_regular_files(const char* path, void* context,
+                                               Storage::FileVisitor visitor) const noexcept {
+  char full_path[256]{};
+  if (!visitor || !resolve_path(path, full_path, sizeof(full_path))) {
+    return FileVisitResult::failed;
+  }
+  DIR* directory = ::opendir(full_path);
+  if (!directory) {
+    return errno == ENOENT ? FileVisitResult::missing : FileVisitResult::failed;
+  }
+  bool read_ok = false;
+  for (;;) {
+    errno = 0;
+    const dirent* entry = ::readdir(directory);
+    if (!entry) {
+      read_ok = errno == 0;
+      break;
+    }
+    if (entry->d_type == DT_DIR) {
+      continue;
+    }
+    char child[256]{};
+    const int count = std::snprintf(child, sizeof(child), "%s/%s", full_path, entry->d_name);
+    struct stat info {};
+    if (count <= 0 || static_cast<std::size_t>(count) >= sizeof(child)) {
+      continue;
+    }
+    if (::stat(child, &info) != 0) {
+      if (errno == ENOENT) {
+        continue;
+      }
+      break;
+    }
+    if (S_ISREG(info.st_mode) && info.st_size >= 0) {
+      visitor(context, entry->d_name, static_cast<std::uint64_t>(info.st_size));
+    }
+  }
+  const bool closed = ::closedir(directory) == 0;
+  return read_ok && closed ? FileVisitResult::success : FileVisitResult::failed;
+}
+
 bool SdStorage::append_file(const char* path, const std::uint8_t* data,
                             std::size_t size) noexcept {
   return write_with_mode(path, data, size, "ab");
@@ -269,6 +344,13 @@ bool SdStorage::remove_file(const char* path) noexcept {
   }
   struct stat info {};
   return ::stat(full_path, &info) != 0 || std::remove(full_path) == 0;
+}
+
+bool SdStorage::remove_regular_file(const char* path) noexcept {
+  char full_path[256]{};
+  struct stat info {};
+  return resolve_path(path, full_path, sizeof(full_path)) &&
+         ::stat(full_path, &info) == 0 && S_ISREG(info.st_mode) && ::unlink(full_path) == 0;
 }
 
 bool SdStorage::remove_tree_impl(const char* full_path, unsigned depth) noexcept {

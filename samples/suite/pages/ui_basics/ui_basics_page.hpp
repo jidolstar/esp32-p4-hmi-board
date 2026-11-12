@@ -2,6 +2,7 @@
 
 #include <lvgl.h>
 
+#include "hmi/ui/components.hpp"
 #include "page_contract.hpp"
 
 namespace hmi::samples::suite {
@@ -33,7 +34,7 @@ class UiBasicsPage final : public SamplePage {
 
  private:
   static void handle_event(lv_event_t *event);
-  static void handle_toast_timer(lv_timer_t *timer);
+  static void handle_toast_expired(void* context) noexcept;
   void update_status() noexcept;
   void clear_overlay() noexcept;
 
@@ -49,10 +50,8 @@ class UiBasicsPage final : public SamplePage {
   lv_obj_t *hold_button_ = nullptr;
   lv_obj_t *toast_button_ = nullptr;
   lv_obj_t *dialog_button_ = nullptr;
-  lv_obj_t *dialog_cancel_button_ = nullptr;
-  lv_obj_t *dialog_confirm_button_ = nullptr;
-  lv_obj_t *overlay_ = nullptr;
-  lv_timer_t *toast_timer_ = nullptr;
+  hmi::ui::ConfirmationWidgets confirmation_{};
+  hmi::ui::Toast toast_{};
 };
 
 }  // namespace hmi::samples::suite

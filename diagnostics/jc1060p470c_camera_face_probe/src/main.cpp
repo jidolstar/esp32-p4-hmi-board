@@ -6,12 +6,13 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <fcntl.h>
 #include <inttypes.h>
 #include <new>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
-#include <sys/select.h>
+#include <sys/time.h>
 #include <unistd.h>
 
 #include "esp_check.h"
@@ -21,6 +22,7 @@
 #include "esp_timer.h"
 #include "esp_video_device.h"
 #include "esp_video_init.h"
+#include "esp_video_ioctl.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "human_face_detect.hpp"
@@ -38,10 +40,80 @@ constexpr int kCameraSccbFrequencyHz = 100000;
 constexpr uint32_t kFrameWidth = 1288;
 constexpr uint32_t kFrameHeight = 728;
 constexpr uint32_t kBufferCount = 2;
-constexpr uint32_t kWarmupFrames = 5;
+constexpr int64_t kAimingTimeUs = 20'000'000;
+constexpr int64_t kPreviewIntervalUs = 2'000'000;
+constexpr size_t kPreviewWidth = 160;
+constexpr size_t kPreviewHeight = 90;
+constexpr size_t kPreviewPixels = kPreviewWidth * kPreviewHeight;
+constexpr size_t kDetectorWidth = 160;
+constexpr size_t kDetectorHeight = 120;
+constexpr size_t kDetectorBytes = kDetectorWidth * kDetectorHeight * 3;
 constexpr uint32_t kDetectionAttempts = 30;
 constexpr int kFrameTimeoutSeconds = 2;
 constexpr size_t kExpectedKeypointValues = 10;
+
+// 직렬 전송용 축소 영상만 보관한다. 원본 DMA 버퍼는 출력 전에 드라이버로 반환한다.
+static_assert(kPreviewPixels % 3 == 0, "preview Base64 groups must contain three pixels");
+char preview_base64[kPreviewPixels / 3 * 4 + 1];
+
+struct RgbPixel {
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+};
+
+constexpr size_t sample_coordinate(size_t index, size_t source_size, size_t output_size)
+{
+    return ((2 * index + 1) * source_size) / (2 * output_size);
+}
+
+RgbPixel sample_rgb565_le(const uint8_t *pixels, size_t x, size_t y, size_t width, size_t height)
+{
+    const size_t row = sample_coordinate(y, kFrameHeight, height);
+    const size_t col = sample_coordinate(x, kFrameWidth, width);
+    const size_t offset = (row * kFrameWidth + col) * 2;
+    const unsigned pixel = pixels[offset] | (static_cast<unsigned>(pixels[offset + 1]) << 8);
+    return {
+        static_cast<uint8_t>(((pixel >> 11) & 31U) * 255U / 31U),
+        static_cast<uint8_t>(((pixel >> 5) & 63U) * 255U / 63U),
+        static_cast<uint8_t>((pixel & 31U) * 255U / 31U),
+    };
+}
+
+unsigned sample_preview_gray(const uint8_t *pixels, size_t index)
+{
+    const RgbPixel pixel = sample_rgb565_le(pixels, index % kPreviewWidth, index / kPreviewWidth,
+                                          kPreviewWidth, kPreviewHeight);
+    return (77U * pixel.red + 150U * pixel.green + 29U * pixel.blue) >> 8;
+}
+
+// RGBP는 little-endian이다. ESP-DL P4의 RGB565 big-endian 경로를 피하도록 RGB888로 변환한다.
+void prepare_detector_input(const uint8_t *pixels, uint8_t *rgb888)
+{
+    for (size_t y = 0; y < kDetectorHeight; ++y) {
+        for (size_t x = 0; x < kDetectorWidth; ++x) {
+            const RgbPixel pixel = sample_rgb565_le(pixels, x, y, kDetectorWidth, kDetectorHeight);
+            *rgb888++ = pixel.red;
+            *rgb888++ = pixel.green;
+            *rgb888++ = pixel.blue;
+        }
+    }
+}
+
+void prepare_preview(const uint8_t *pixels)
+{
+    constexpr char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    size_t out = 0;
+    for (size_t index = 0; index < kPreviewPixels; index += 3) {
+        const uint32_t packed = (sample_preview_gray(pixels, index) << 16) |
+                                (sample_preview_gray(pixels, index + 1) << 8) |
+                                sample_preview_gray(pixels, index + 2);
+        preview_base64[out++] = alphabet[packed >> 18];
+        preview_base64[out++] = alphabet[(packed >> 12) & 63U];
+        preview_base64[out++] = alphabet[(packed >> 6) & 63U];
+        preview_base64[out++] = alphabet[packed & 63U];
+    }
+}
 
 struct MappedBuffer {
     void *address = nullptr;
@@ -114,27 +186,6 @@ esp_err_t initialize_camera()
     return esp_video_init(&video_config);
 }
 
-esp_err_t wait_for_frame(int fd)
-{
-    fd_set read_fds;
-    FD_ZERO(&read_fds);
-    FD_SET(fd, &read_fds);
-    struct timeval timeout = {
-        .tv_sec = kFrameTimeoutSeconds,
-        .tv_usec = 0,
-    };
-    const int result = select(fd + 1, &read_fds, nullptr, nullptr, &timeout);
-    if (result == 0) {
-        ESP_LOGE(kTag, "frame timeout seconds=%d", kFrameTimeoutSeconds);
-        return ESP_ERR_TIMEOUT;
-    }
-    if (result < 0) {
-        ESP_LOGE(kTag, "select failed");
-        return ESP_FAIL;
-    }
-    return ESP_OK;
-}
-
 uint64_t box_area(const dl::detect::result_t &result)
 {
     if (result.box.size() < 4) {
@@ -155,26 +206,34 @@ bool validate_and_log_result(const dl::detect::result_t &result)
 
     const auto &point = result.keypoint;
     const bool box_in_bounds = result.box[0] >= 0 && result.box[1] >= 0 &&
-                               result.box[2] < static_cast<int>(kFrameWidth) &&
-                               result.box[3] < static_cast<int>(kFrameHeight) &&
+                               result.box[2] < static_cast<int>(kDetectorWidth) &&
+                               result.box[3] < static_cast<int>(kDetectorHeight) &&
                                result.box[0] < result.box[2] && result.box[1] < result.box[3];
     bool points_in_bounds = true;
     for (size_t index = 0; index < kExpectedKeypointValues; index += 2) {
         points_in_bounds = points_in_bounds && point[index] >= 0 && point[index + 1] >= 0 &&
-                           point[index] < static_cast<int>(kFrameWidth) &&
-                           point[index + 1] < static_cast<int>(kFrameHeight);
+                           point[index] < static_cast<int>(kDetectorWidth) &&
+                           point[index + 1] < static_cast<int>(kDetectorHeight);
     }
+    if (!box_in_bounds || !points_in_bounds) {
+        ESP_LOGW(kTag, "detector coordinates out of bounds");
+        return false;
+    }
+
+    const auto frame_x = [](int x) { return sample_coordinate(x, kFrameWidth, kDetectorWidth); };
+    const auto frame_y = [](int y) { return sample_coordinate(y, kFrameHeight, kDetectorHeight); };
 
     // raw 배열은 왼눈, 왼쪽 입꼬리, 코, 오른눈, 오른쪽 입꼬리 순서다.
     ESP_LOGI(kTag,
-             "score=%.6f box=[%d,%d,%d,%d] "
-             "left_eye=[%d,%d] left_mouth=[%d,%d] nose=[%d,%d] "
-             "right_eye=[%d,%d] right_mouth=[%d,%d]",
+             "score=%.6f box=[%zu,%zu,%zu,%zu] "
+             "left_eye=[%zu,%zu] left_mouth=[%zu,%zu] nose=[%zu,%zu] "
+             "right_eye=[%zu,%zu] right_mouth=[%zu,%zu]",
              result.score,
-             result.box[0], result.box[1], result.box[2], result.box[3],
-             point[0], point[1], point[2], point[3], point[4], point[5],
-             point[6], point[7], point[8], point[9]);
-    return result.score >= 0.5F && box_in_bounds && points_in_bounds;
+             frame_x(result.box[0]), frame_y(result.box[1]), frame_x(result.box[2]), frame_y(result.box[3]),
+             frame_x(point[0]), frame_y(point[1]), frame_x(point[2]), frame_y(point[3]),
+             frame_x(point[4]), frame_y(point[5]), frame_x(point[6]), frame_y(point[7]),
+             frame_x(point[8]), frame_y(point[9]));
+    return result.score >= 0.5F;
 }
 
 esp_err_t capture_and_detect()
@@ -198,13 +257,22 @@ esp_err_t capture_and_detect()
         .memory = V4L2_MEMORY_MMAP,
     };
     HumanFaceDetect *detector = nullptr;
+    uint8_t *detector_rgb = nullptr;
     int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     bool detected = false;
     uint32_t frame_number = 0;
+    uint32_t attempts = 0;
+    int64_t aim_until_us = 0;
+    int64_t next_preview_us = 0;
+    struct timeval frame_timeout = {.tv_sec = kFrameTimeoutSeconds, .tv_usec = 0};
 
-    int fd = open(ESP_VIDEO_MIPI_CSI_DEVICE_NAME, O_RDONLY | O_NONBLOCK);
+    int fd = open(ESP_VIDEO_MIPI_CSI_DEVICE_NAME, O_RDONLY);
     ESP_RETURN_ON_FALSE(fd >= 0, ESP_FAIL, kTag, "open %s failed",
                         ESP_VIDEO_MIPI_CSI_DEVICE_NAME);
+
+    // esp_video VFS에는 select 준비 통지가 없으므로 DQBUF 자체의 대기 시간을 제한한다.
+    ESP_GOTO_ON_FALSE(ioctl(fd, VIDIOC_S_DQBUF_TIMEOUT, &frame_timeout) == 0,
+                      ESP_FAIL, cleanup, kTag, "VIDIOC_S_DQBUF_TIMEOUT failed");
 
     ESP_GOTO_ON_FALSE(ioctl(fd, VIDIOC_S_FMT, &format) == 0, ESP_FAIL,
                       cleanup, kTag, "VIDIOC_S_FMT RGB565 1288x728 failed");
@@ -242,17 +310,22 @@ esp_err_t capture_and_detect()
     }
     log_heap_snapshot("camera_buffers_ready");
 
+    detector_rgb = static_cast<uint8_t *>(heap_caps_malloc(kDetectorBytes, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT));
+    ESP_GOTO_ON_FALSE(detector_rgb != nullptr, ESP_ERR_NO_MEM, cleanup, kTag,
+                      "detector RGB888 scratch allocation failed");
     detector = new (std::nothrow) HumanFaceDetect();
     ESP_GOTO_ON_FALSE(detector != nullptr, ESP_ERR_NO_MEM, cleanup, kTag,
                       "detector allocation failed");
     log_heap_snapshot("model_loaded");
+    ESP_LOGI(kTag, "detector input RGB888 %zux%zu scratch_psram=%zu",
+             kDetectorWidth, kDetectorHeight, kDetectorBytes);
 
     ESP_GOTO_ON_FALSE(ioctl(fd, VIDIOC_STREAMON, &type) == 0, ESP_FAIL,
                       cleanup_detector, kTag, "VIDIOC_STREAMON failed");
 
-    while (!detected && frame_number < kWarmupFrames + kDetectionAttempts) {
-        ESP_GOTO_ON_ERROR(wait_for_frame(fd), cleanup_stream, kTag,
-                          "frame wait failed frame=%" PRIu32, frame_number);
+    aim_until_us = esp_timer_get_time() + kAimingTimeUs;
+    ESP_LOGI(kTag, "camera preview active for 20 seconds; detection follows");
+    while (!detected && attempts < kDetectionAttempts) {
         struct v4l2_buffer buffer = {
             .type = V4L2_BUF_TYPE_VIDEO_CAPTURE,
             .memory = V4L2_MEMORY_MMAP,
@@ -261,17 +334,36 @@ esp_err_t capture_and_detect()
                           cleanup_stream, kTag, "VIDIOC_DQBUF failed");
         ESP_GOTO_ON_FALSE(buffer.index < kBufferCount, ESP_FAIL, cleanup_stream,
                           kTag, "invalid buffer index=%" PRIu32, buffer.index);
+        constexpr size_t frame_bytes = kFrameWidth * kFrameHeight * 2;
+        ESP_GOTO_ON_FALSE(buffer.bytesused >= frame_bytes &&
+                              buffers[buffer.index].length >= frame_bytes,
+                          ESP_FAIL, cleanup_stream, kTag, "incomplete RGB565 frame");
         ++frame_number;
-        ESP_LOGI(kTag, "camera frame=%" PRIu32 " index=%" PRIu32 " bytes=%" PRIu32,
-                 frame_number, buffer.index, buffer.bytesused);
+        const int64_t now_us = esp_timer_get_time();
+        const bool show_preview = now_us < aim_until_us && now_us >= next_preview_us;
+        const bool run_detection = now_us >= aim_until_us;
+        const auto *pixels = static_cast<const uint8_t *>(buffers[buffer.index].address);
 
-        if (frame_number > kWarmupFrames) {
-            // detector가 반환할 때까지 V4L2 buffer를 빌려 두어 frame lifetime을 보장한다.
+        if (show_preview) {
+            prepare_preview(pixels);
+            next_preview_us = now_us + kPreviewIntervalUs;
+        } else if (run_detection) {
+            prepare_detector_input(pixels, detector_rgb);
+        }
+
+        // 변환이 끝나면 DMA 버퍼를 돌려주고 추론은 PSRAM scratch만 사용한다.
+        ESP_GOTO_ON_FALSE(ioctl(fd, VIDIOC_QBUF, &buffer) == 0, ESP_FAIL,
+                          cleanup_stream, kTag, "return QBUF index=%" PRIu32 " failed",
+                          buffer.index);
+        if (run_detection) {
+            ++attempts;
+            ESP_LOGI(kTag, "camera frame=%" PRIu32 " index=%" PRIu32 " bytes=%" PRIu32,
+                     frame_number, buffer.index, buffer.bytesused);
             dl::image::img_t image = {
-                .data = buffers[buffer.index].address,
-                .width = static_cast<int>(format.fmt.pix.width),
-                .height = static_cast<int>(format.fmt.pix.height),
-                .pix_type = dl::image::DL_IMAGE_PIX_TYPE_RGB565,
+                .data = detector_rgb,
+                .width = static_cast<int>(kDetectorWidth),
+                .height = static_cast<int>(kDetectorHeight),
+                .pix_type = dl::image::DL_IMAGE_PIX_TYPE_RGB888,
             };
             const int64_t started_us = esp_timer_get_time();
             auto &results = detector->run(image);
@@ -287,11 +379,11 @@ esp_err_t capture_and_detect()
                 detected = validate_and_log_result(*largest);
             }
             log_heap_snapshot("inference_done");
+        } else if (show_preview) {
+            const int64_t seconds_left = (aim_until_us - now_us + 999'999) / 1'000'000;
+            std::printf("PREVIEW %" PRId64 " %s\n", seconds_left, preview_base64);
+            std::fflush(stdout);
         }
-
-        ESP_GOTO_ON_FALSE(ioctl(fd, VIDIOC_QBUF, &buffer) == 0, ESP_FAIL,
-                          cleanup_stream, kTag, "return QBUF index=%" PRIu32 " failed",
-                          buffer.index);
     }
 
     ret = detected ? ESP_OK : ESP_ERR_NOT_FOUND;
@@ -305,6 +397,7 @@ cleanup_detector:
     delete detector;
     log_heap_snapshot("detector_released");
 cleanup:
+    heap_caps_free(detector_rgb);
     for (MappedBuffer &buffer : buffers) {
         if (buffer.address != nullptr && buffer.address != MAP_FAILED) {
             munmap(buffer.address, buffer.length);

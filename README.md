@@ -1,20 +1,17 @@
 # HMI Starter 시작하기
 
-이 저장소는 Windows 시뮬레이터와 JC1060P470C ESP32-P4 HMI에서 같은 앱 코드를 실행하는 범용 HMI 시작 프로젝트다. 현재 두 실행 profile을 제공한다.
+이 저장소는 Windows 시뮬레이터와 JC1060P470C ESP32-P4 HMI에서 같은 앱 코드를 실행하는 범용 HMI 시작 프로젝트다.
 
 | Profile | 목적 | 현재 화면 |
 | --- | --- | --- |
 | `main` | 새 응용 기능을 시작하는 최소 앱 | 외부 자산 없는 실행·입력 진단 화면 |
-| `sample-suite` | 공통 기능을 page 단위로 탐색하는 진단 앱 | Dashboard, UI·입력·화면/음량·Wi-Fi·SD Storage·등록 WAV·Wi-Fi AP/Web·날짜/시간·인터페이스/업데이트 안내 page |
+| `sample-suite` | 기능별 예제와 실기기 검증 | UI·입력·화면/음량·Wi-Fi·SD/USB MSC·등록 WAV·Wi-Fi AP/Web·카메라와 사진·날짜와 시간·인터페이스 안내 |
 
-`sample-suite`의 Dashboard는 생성된 page descriptor만 사용한다. 현재 활성 page 하나만 만들며 page 구현끼리 참조하지 않는다. 한·영 i18n과 키보드 입력의 기반은 `_plan/2026-11/20261107_004_BilingualI18nAndTextInput.md`, 완성된 입력 UX와 검증 기준은 `_plan/2026-11/20261108_010_TextInputUxCompletion.md`에 기록돼 있다.
+Windows에서 예제를 열려면 저장소 루트에서 `samples_run_windows.bat`를 실행한다.
+HMI 펌웨어는 `samples_build_hmi.bat`로 빌드하고 [사용자 업로드 절차](#6-사용자가-수행하는-hmi-upload)에 따라 올린다.
 
-`wifi`(STA 설정), `sd-storage`(PC USB MSC 접근), `wav-sounds`(등록 음원 재생),
-`wifi-ap-web`(QR·웹 4-switch), `date-time`(수동 설정·SNTP 상태),
-`interfaces-info`(RS485·I/O·USB command·업데이트 기반 안내)까지 구현돼 있다. 남은 page는
-`camera-gallery`(촬영·저장·보기·삭제)다. 독립 `assets` page나 firmware updater page는 만들지 않으며
-asset pipeline은 폰트와 WAV를 배포하는 내부 기반으로만 사용한다. 상세 상태는
-`_plan/2026-11/20261108_001_PageByPageDevelopmentRoadmap.md`에서 관리한다.
+[자동 검사](#4-자동-검사) · [카메라와 사진](#카메라와-사진) ·
+[개발 로드맵](_plan/2026-11/20261108_001_PageByPageDevelopmentRoadmap.md)
 
 ## 1. 지원 환경
 
@@ -130,6 +127,24 @@ metadata는 `samples/suite/pages/wav_sounds/wav_catalog.json`, 원본은
 asset bundle을 SD에 설치해야 실제 HMI에서 재생된다. 구현·실기기 수용 근거는
 `_plan/2026-11/20261108_016_RegisteredWavPage.md`에 기록돼 있다.
 
+### 카메라와 사진
+
+Dashboard의 **카메라와 사진**에서 미리보기를 시작하고 **촬영**을 누른다. 오른쪽 목록에서
+사진을 열거나 삭제할 수 있다. 새 사진의 썸네일은 저장이 끝나면 바로 표시되며, 페이지 안에
+최대 4개를 보관한다. 마지막 사진을 삭제하면 미리보기로 돌아간다. Windows 시뮬레이터는
+가상 카메라를 사용하고 사진을 실행 중 메모리에 보관한다.
+
+JC1060P470C의 OV02C10으로 촬영한 1288×728 JPEG는 SD의
+`hmi/sample-suite/camera-gallery/`에 저장된다. 화이트밸런스는 미리보기를 시작할 때 계산한다.
+PC에서 파일을 확인하려면 Dashboard의 **SD 저장소**에서 **PC에 연결**을 누르고, 보드의
+별도 USB-C OTG 포트(회로도 `USB2`)를 사용한다. Windows에서 안전하게 제거한 후 HMI로
+복귀하면 다시 촬영할 수 있다.
+
+OV02C10 촬영, 화이트밸런스, PC에서 JPEG 열기는 실기기에서 확인했다. 일반 `hmi-sample-suite`의
+반복 촬영·삭제와 SD 예외 검증은 C5에 남아 있으며, 얼굴 검출은 C5 이후 단계다. 115200 시리얼의
+`[camera]` 로그에서 미리보기 FPS, JPEG 인코딩·SD 쓰기 시간, 메모리 여유를 확인할 수 있다.
+[S08 개발 계획](_plan/2026-11/20261108_017_CameraGalleryPage.md)
+
 Dashboard의 `Wi-Fi 설정` card에서는 주변 AP 검색, 보안 AP 선택·비밀번호 입력,
 연결·저장·연결 해제와 한국어/영어 상태 문구를 확인한다.
 
@@ -160,11 +175,10 @@ Dashboard의 `날짜와 시간` card에서는 현재 날짜·시각과 출처, R
 시스템 시각은 `Asia/Seoul` 정책으로 SNTP 동기화하며, 실제 RTC 유지와 전원 재인가 동작은
 기기 접근이 가능할 때 별도로 확인한다.
 
-Dashboard의 `인터페이스와 업데이트` card는 한 page 안에서 항목 목록과 상세 설명을
-오간다. RS485, GPIO, PWM, USB CDC command, 저장소/MSC, asset updater, RTC와
-firmware update foundation을 각각 열어 제공 범위, 제품 연결 지점, 조합 순서, 아직
-구현하지 않은 범위와 검증 방법을 확인할 수 있다. 이 page는 설명만 표시하며 실제
-hardware, network 또는 update 작업을 시작하지 않는다.
+Dashboard에서 `날짜와 시간` 다음에 있는 `사용 가능한 기능` 카드를 열면 RS485, GPIO, PWM,
+USB CDC 명령, SD 파일 접근, USB 대용량 저장소, USB 자산 업데이트, 펌웨어 업데이트 기반을
+확인할 수 있다. 각 항목은 용도, 지원 범위, 연결 지점, 사용 절차와 제품 적용 요건을 설명한다.
+목록의 `사용 가능`은 이미 구현된 기능에, `연동 필요`는 제품별 연결이 필요한 기반에 표시한다.
 
 재사용 가능한 hardware 계약은 `modules/interfaces/include/hmi/interfaces/`에 있다.
 `Rs485Port`, `GpioPort`, `PwmPort`, `UsbCommandPort`는 모두 비소유 context와 callback만
@@ -258,10 +272,10 @@ pio run -e hmi-sample-suite
 - `.pio/build/hmi/main/hmi-main/firmware.bin`
 - `.pio/build/hmi/sample-suite/hmi-sample-suite/firmware.bin`
 
-`Text Input`의 동적 font, `Display & Audio`의 preview WAV와 `등록 WAV`의 다섯 효과음은
-sample 전역 SD 카드 자산이다. 다음 명령으로 SHA-256 manifest와 SD tree를 만든다.
-전역 catalog·fixed font와 user font manifest를 다시 생성하거나 stale 여부만
-확인하려면 다음 owner config 기반 명령을 사용한다.
+### SD 카드 자산
+
+`Text Input`의 동적 폰트와 `Display & Audio`, `등록 WAV`의 음원은 SD 카드에 설치한다.
+런타임 폰트 생성과 자산 묶음 제작에는 다음 명령을 사용한다.
 
 ```powershell
 python tools/assets/typography/generate.py --config samples/suite/i18n/catalog.json
@@ -270,15 +284,12 @@ python tools/assets/typography/generate_user.py --config samples/suite/i18n/cata
 python tools/assets/typography/generate_user.py --config samples/suite/i18n/catalog.json --check
 ```
 
-생성 원본은 `samples/suite/i18n/`, firmware fixed font와 manifest는
-`samples/suite/generated/`, SD에 복사할 runtime font는 `samples/suite/assets/fonts/`가
-각각 소유한다. 다음 명령으로 SHA-256 manifest와 SD tree를 만든다.
-
 fixed UI font는 SD asset이 아니다. `generate.py`가
 `samples/suite/generated/fonts/fixed/*.c`의 LVGL C 배열로 만들고 firmware build에
 포함한다. 따라서 catalog·typography·fixed font가 바뀌면 `generate.py` 실행 후 firmware를
 다시 build/upload해야 한다. 사용자가 입력하는 동적 문자열용 `user_*.bin`만
-`samples/suite/assets/fonts/`에 생성되어 SD asset으로 전송된다.
+`samples/suite/assets/fonts/`에 생성되어 SD asset으로 전송된다. SHA-256 manifest와 SD 폴더를
+생성하려면 자산을 묶는다.
 
 ```powershell
 python tools/project.py bundle-assets --profile sample-suite
@@ -318,9 +329,10 @@ HMI로 돌아오거나 PC 안전 제거/USB 분리 후 SD 재마운트가 끝난
 `COM16`은 장치 관리자에서 확인한 HMI USB CDC port로 바꾼다. 전송기는 현재
 firmware의 profile ID가 `sample-suite`인지 확인하고, `dist/sd/hmi/sample-suite/`의
 각 파일을 SHA-256으로 검증한다. HMI는 `/hmi/sample-suite.__incoming`에 먼저 기록한
-뒤 journal과 backup을 사용해 `/hmi/sample-suite`를 교체하므로 다른 SD directory는
-수정하지 않는다. 성공 후 Dashboard로 돌아갔다가 `Text Input`을 다시 열면 새 font를
-로드한다. 전송 중 USB나 전원이 끊기면 다시 같은 명령을 실행한다.
+뒤 journal과 backup을 사용해 `/hmi/sample-suite` 전체를 교체한다. 이 경로 아래에
+촬영한 사진이 있으므로 USB 자산 전송 전에 `hmi/sample-suite/camera-gallery/`를
+PC에 복사해 둔다. 전송이 끝나면 Dashboard에서 `Text Input`을 다시 열어 새 폰트를 로드한다.
+전송 중 USB나 전원이 끊기면 다시 같은 명령을 실행한다.
 
 `HMI asset protocol did not answer`는 선택한 COM port에 updater receiver가 없다는
 뜻이다. Serial Monitor를 닫고, USB updater가 포함된 최신 `hmi-sample-suite`를 다시
@@ -338,10 +350,14 @@ Codex 자동 작업은 upload·flash·장치 변경을 수행하지 않는다. �
 
 ```powershell
 python tools/project.py prepare --host hmi --profile sample-suite
-& "$env:USERPROFILE\.platformio\penv\Scripts\pio.exe" run -d . -c .generated/hmi/sample-suite/platformio.ini -e hmi-sample-suite -t upload
+$boardPort = 'COM3'
+pio run -d . -c .generated/hmi/sample-suite/platformio.ini -e hmi-sample-suite -t upload --upload-port $boardPort
+pio device monitor --port $boardPort --baud 115200
 ```
 
-VS Code PlatformIO를 사용하는 경우에도 `hmi-sample-suite` 환경을 선택한 뒤 사용자가 Upload를 실행한다. 연결 port와 보드 상태는 사용자가 확인한다.
+`$boardPort`는 장치 관리자에 표시된 포트로 바꾸고, 업로드 전에 기존 시리얼 모니터를 닫는다.
+`pio`가 PATH에 없으면 명령의 `pio`를 `& 'PlatformIO의 pio.exe 경로'`로 바꾼다.
+VS Code에서는 `hmi-sample-suite` 환경의 **Upload**를 사용한다.
 
 ## 7. 실기기 수동 확인
 
@@ -388,7 +404,9 @@ VS Code PlatformIO를 사용하는 경우에도 `hmi-sample-suite` 환경을 선
 39. 보드 revision과 RTC 칩/register 호환성, CR1220 충전 금지 bit를 확인한 뒤에만 RTC adapter를 활성화한다.
 40. RTC adapter 활성화 뒤 전원 재인가 유지, Wi-Fi IP 획득 후 KST 보정과 RTC 기록 조건을 확인한다.
 
-확인 결과를 P6 근거로 기록하기 전에는 firmware compile 성공을 실기기 완료로 간주하지 않는다.
+카메라와 사진에서는 미리보기, 촬영 후 썸네일 표시, 사진 열기, 삭제 취소·확인, 마지막 삭제 후
+미리보기 복귀를 확인한다. 반복 촬영·삭제 및 SD 미장착·공간 부족 검증은
+[S08 개발 계획](_plan/2026-11/20261108_017_CameraGalleryPage.md)의 C5에 기록한다.
 
 ## 8. 생성물과 실행 데이터
 
@@ -443,8 +461,8 @@ Remove-Item -Recurse -Force .pio/build/hmi/main,.pio/build/hmi/sample-suite
 
 ## 11. 현재 미구현 범위
 
-- camera preview·촬영·SD gallery·보기·삭제
-- RS485·GPIO/PWM·USB command의 최소 public contract와 안내 page
+- 카메라 얼굴 특징점 검출
+- RS485·GPIO/PWM·USB 명령의 제품별 장치 연동
 - 실물 확인을 거친 RTC register adapter와 CR1220 유지 시각 수용
 - main-only export, Windows bundle, CI와 외부 배포 자동화
 

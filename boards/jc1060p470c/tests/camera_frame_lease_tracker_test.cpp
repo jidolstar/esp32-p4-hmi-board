@@ -2,8 +2,10 @@
 #include <cstdint>
 
 #include "boards/jc1060p470c/internal/camera_frame_lease_tracker.hpp"
+#include "boards/jc1060p470c/internal/csi_frame_slots.hpp"
 
 using hmi::boards::jc1060p470c::internal::CameraFrameLeaseTracker;
+using hmi::boards::jc1060p470c::internal::CsiFrameSlots;
 
 int main() {
   CameraFrameLeaseTracker<2U> tracker;
@@ -44,6 +46,40 @@ int main() {
   assert(tracker.outstanding() == 0U);
   assert(!tracker.release(outstanding));
   assert(tracker.stop() == 0U);
+
+  CsiFrameSlots slots;
+  assert(slots.borrow().id == 0U);
+  const auto first_dma = slots.next_dma();
+  const auto second_dma = slots.next_dma();
+  assert(first_dma != second_dma);
+  slots.complete(first_dma, true);
+  const auto loan = slots.borrow();
+  assert(loan.index == first_dma && loan.id != 0U);
+
+  // CSI가 다음 DMA를 먼저 요청하는 동안 대여 중인 슬롯은 덮어쓰지 않는다.
+  assert(slots.next_dma() == second_dma);
+  slots.complete(second_dma, true);
+  assert(slots.borrow().id == 0U && slots.borrowed());
+  slots.release(loan.id);
+  assert(slots.next_dma() == first_dma);
+  slots.complete(second_dma, true);
+  const auto next_loan = slots.borrow();
+  assert(next_loan.index == second_dma && next_loan.id != loan.id);
+  slots.release(loan.id);
+  assert(slots.borrowed());
+  slots.release(next_loan.id);
+  assert(!slots.borrowed());
+
+  slots.clear();
+  const auto restarted_dma = slots.next_dma();
+  const auto following_dma = slots.next_dma();
+  slots.complete(restarted_dma, false);
+  assert(slots.borrow().id == 0U);
+  assert(slots.next_dma() == restarted_dma);
+  slots.complete(following_dma, true);
+  const auto restarted_loan = slots.borrow();
+  assert(restarted_loan.id != 0U && restarted_loan.id != next_loan.id);
+  slots.release(restarted_loan.id);
 
   assert(tracker.start());
   const auto restarted = tracker.acquire(300U, 100U);
