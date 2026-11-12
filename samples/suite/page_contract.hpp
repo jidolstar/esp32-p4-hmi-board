@@ -84,6 +84,8 @@ using PageFactory = SamplePage *(*)() noexcept;
 
 struct PageDescriptor {
   const char *id;
+  // page header와 카드의 글꼴 역할을 독립적으로 선택할 수 있도록 키를 분리한다.
+  const char *dashboard_title_key;
   const char *title_key;
   const char *description_key;
   std::uint16_t order;

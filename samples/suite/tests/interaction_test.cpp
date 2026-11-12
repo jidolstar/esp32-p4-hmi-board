@@ -7,6 +7,7 @@
 
 #include "app.hpp"
 #include "components/page_header.hpp"
+#include "generated/fixed_fonts.hpp"
 #include "pointer_test_driver.hpp"
 #include "sdl_lvgl_port.hpp"
 
@@ -170,6 +171,15 @@ int main(int argc, char **argv) {
   assert(date_time_title != nullptr);
   assert(date_time_description != nullptr);
   assert(ui_basics_description != nullptr);
+  const lv_font_t *card_title_font =
+      hmi::samples::suite::generated::fixed_font(
+          hmi::samples::suite::generated::TypographyRole::card_title);
+  assert(lv_obj_get_style_text_font(ui_basics_title, LV_PART_MAIN) ==
+         card_title_font);
+  assert(lv_obj_get_style_text_font(text_input_title, LV_PART_MAIN) ==
+         card_title_font);
+  assert(lv_obj_get_style_text_font(date_time_title, LV_PART_MAIN) ==
+         card_title_font);
   lv_obj_t *date_time_card = lv_obj_get_parent(date_time_title);
   assert(date_time_card != nullptr);
   lv_obj_update_layout(lv_scr_act());

@@ -1,6 +1,6 @@
 # S10 계획: 날짜·시각, RTC와 네트워크 동기화 Page
 
-작성: 2026-11-11. 상태: `blocked` (D0~D3 `complete`, D4 실기기 접근 대기).
+작성: 2026-11-11. 갱신: 2026-11-12. 상태: `complete` (D0~D4 `complete`).
 의존: S04 Wi-Fi 기반과 sample-suite 공통 UI. S08과 독립적이며 S09 완료를 요구하지 않는다.
 
 2026-11-11 사용자 결정으로 실기기 확인은 현재 수행할 수 없다. 소프트웨어 구현과 자동
@@ -156,25 +156,26 @@ footer와의 세로 중심 차이가 2px 이내인지 검증한다.
 `_artifacts/s10/date-time-grouped-left-footer.png`의 1024×600 Windows 화면에서 여섯 편집
 필드, 네 상태 구획과 하단 안내의 잘림·겹침·정렬을 확인했다. Windows 전체 49/49도 통과했다.
 
-### D4. 통합과 수용 — `blocked`
+### D4. 통합과 수용 — `complete`
 
-- **목표:** Wi-Fi·RTC·수동 설정 경로가 함께 동작하고 다른 sample과 격리됨을 확인한다.
-- **범위:** sample-suite Windows check/tests, HMI build, isolation, README와 실기기 확인.
-- **산출물:** build/test, RAM/flash, 실제 RTC/NTP/수동 설정 수용 기록.
+- **목표:** 네트워크·수동 설정 경로가 동작하고 다른 sample과 격리됨을 확인한다.
+- **범위:** sample-suite Windows check/tests, HMI build, isolation, README와 네트워크 기반
+  실기기 확인. 실제 RTC register adapter 활성화는 S10 범위에서 제외한다.
+- **산출물:** build/test, RAM/flash, 실제 네트워크 날짜·시각 갱신과 사용자 수용 기록.
 - **자동 검증:** affected tests, Windows profile check, HMI build, isolation과 diff check를 통과한다.
-- **수동 검증:** 실제 board revision과 RTC 칩/register 호환성, CR1220 충전 금지 bit,
-  RTC 부팅값, Wi-Fi 연결 후 KST 보정, 24시간 정책의 진단 snapshot, 수동 설정과 재부팅
-  유지, RTC 없음/오류를 확인한다. 기기 접근 전에는 이 단계가 `blocked`다.
-- **종료 조건:** [x] 모든 자동 검사 [x] 메모리 기록 [ ] 실기기 시간 경로
-  [ ] 사용자 수용.
+- **수동 검증:** Wi-Fi 연결 뒤 네트워크 기반 날짜·시각 갱신과 page 표시를 확인하고 사용자가
+  S10 완료를 승인한다.
+- **종료 조건:** [x] 모든 자동 검사 [x] 메모리 기록 [x] 실기기 네트워크 시간 경로
+  [x] 사용자 수용.
 - **의존:** D3 complete.
 
 **2026-11-11 자동 통합 근거:** Windows profile 49/49, Python generator/manifest 58/58,
 typography catalog 321개 parity/stale 검사와 네 profile isolation 검사가 통과했다. ESP32-P4
 `hmi-sample-suite` compile은 RAM 88,080/512,000바이트(17.2%), Flash
 1,605,382/6,553,600바이트(24.5%)로 성공했다. upload/flash는 실행하지 않았다. 남은 blocker는
-사용자가 현재 다른 장소에 있어 실제 보드 revision·RTC·CR1220·SNTP·LCD/touch를 확인할 수
-없다는 점뿐이다.
+2026-11-12 사용자가 실기기에서 네트워크 기반 날짜·시각 갱신을 확인하고 S10 완료를
+승인했다. 실제 RTC 칩·register·CR1220 유지 동작은 검증되지 않았으며
+`_plan/2026-11/20261112_001_RtcHardwareEnablement.md`의 별도 후속 gate로 이동했다.
 
 ## 위험과 완화
 
@@ -202,11 +203,10 @@ typography catalog 321개 parity/stale 검사와 네 profile isolation 검사가
 
 ## Manual Verification Checklist
 
-- [ ] 실제 보드 revision과 RTC 칩 또는 register 호환 근거를 확인한다.
-- [ ] CR1220 장착 상태에서 충전 enable bit가 꺼져 있고 RTC가 검출된다.
-- [ ] 전원 재인가 뒤 유효 RTC 시각으로 화면이 시작한다.
-- [ ] Wi-Fi IP 획득 뒤 KST 네트워크 시각으로 보정되고 필요한 경우에만 RTC가 기록된다.
-- [ ] 수동 날짜·시각 설정, 월말/윤년, RTC write 실패 안내가 정확하다.
-- [ ] RTC 미검출·시각 무효·네트워크 실패에서도 page가 멈추지 않고 상태를 설명한다.
-- [ ] 실제 LCD/touch에서 날짜·시각 editor와 상태 문구가 잘리거나 겹치지 않는다.
-- [ ] 사용자가 S10 완료를 승인한다.
+- [x] 사용자가 실기기에서 네트워크 기반 날짜·시각 갱신을 확인한다.
+- [x] 사용자가 S10의 현재 범위와 RTC 비활성 상태를 포함해 완료를 승인한다.
+
+## S10 범위 밖 후속 작업
+
+실제 RTC adapter 활성화, CR1220 충전 금지 설정과 전원 재인가 유지 검증은 완료된 S10을
+다시 열지 않고 `_plan/2026-11/20261112_001_RtcHardwareEnablement.md`에서 별도로 진행한다.

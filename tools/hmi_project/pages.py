@@ -20,6 +20,7 @@ _PAGE_KEYS = frozenset(
     {"id", "title_key", "description_key", "order", "entry", "sources",
      "capabilities", "verification", "data_key"}
 )
+_PAGE_OPTIONAL_KEYS = frozenset({"dashboard_title_key"})
 
 
 @dataclass(frozen=True)
@@ -140,8 +141,15 @@ def load_page_registry(repository_root: Path, profile: Profile) -> PageRegistry 
         page_path = f"{label}.pages[{index}]"
         if not isinstance(raw, dict):
             _fail("invalid-type", page_path, "must be an object")
-        _exact(raw, _PAGE_KEYS, page_path)
+        expected_keys = _PAGE_KEYS | (raw.keys() & _PAGE_OPTIONAL_KEYS)
+        _exact(raw, expected_keys, page_path)
         page_id = _text(raw["id"], f"{page_path}.id", _ID)
+        if "dashboard_title_key" in raw:
+            _text(
+                raw["dashboard_title_key"],
+                f"{page_path}.dashboard_title_key",
+                _CATALOG_KEY,
+            )
         _text(raw["title_key"], f"{page_path}.title_key", _CATALOG_KEY)
         _text(raw["description_key"], f"{page_path}.description_key", _CATALOG_KEY)
         if type(raw["order"]) is not int or raw["order"] < 0:
@@ -219,7 +227,10 @@ def load_page_registry(repository_root: Path, profile: Profile) -> PageRegistry 
         entry.get("key") for entry in entries if isinstance(entry, dict)
     }
     for page in pages:
-        for field in ("title_key", "description_key"):
+        fields = ["title_key", "description_key"]
+        if "dashboard_title_key" in page.data:
+            fields.append("dashboard_title_key")
+        for field in fields:
             key = page.data[field]
             if key not in catalog_keys:
                 _fail(

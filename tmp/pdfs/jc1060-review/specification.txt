@@ -1,0 +1,66 @@
+
+===== PAGE 1 =====
+7.0 inch ESP32P4 module
+JC1060WP470C_I_W_Y
+
+===== PAGE 2 =====
+7.0 Inch JC1060P470C_I_W_Y 第2 页 共6 页
+List
+Product description .........................................................3
+Features .......................................................................... 3
+Product parameters ........................................................ 4
+Interface Description .......................................................5
+Product Size .....................................................................6
+
+===== PAGE 3 =====
+7.0 Inch JC1060P470C_I_W_Y 第3 页 共6 页
+Product description
+This LCD module uses ESP32-P4 module as the main control, the main control is
+a dual-core MCU, integrated WI-FI and Bluetooth functions, the main frequency can
+reach 400MHz,768 KB HP L2MEM,32 KB LP SRAM, 128 KB HP ROM , 32M
+PSRAM,Flash size is 16MB, The display resolution is 1024*600, without touch or
+Capacitive touch. The module includes LCD display screen, backlight control circuit,
+touch screen control circuit . Reserve the TF card interface ,IO port interface, this
+module supports development in arduino IDE, ESP IDE, Micropython and Guition.
+Features
+●7.0-inch color screen, support 24 BIT RGB 16.7M color display, display
+rich colors
+●1024X600 resolution
+●The sample program has been programmed in the factory and can be
+plugged in
+●With TF card slot for easy expansion storage
+●Provide arduino library functions and sample programs to facilitate
+rapid secondary development
+●Support one-click download program
+●Lithium battery interface circuit
+●Military-grade process standards, long-term stable work
+
+===== PAGE 4 =====
+7.0 Inch JC1060P470C_I_W_Y 第4 页 共6 页
+Product parameters
+Name Describe Remark
+Display color 16.7M color
+SKU Capacitance touch:JC1060P470C_I_W_Y
+Size 7.0 inch
+Type TFT
+Driver chip JD9165
+Resolution 1024*600(Pixel)
+Effective display area 155.01* 86.72(mm)
+Module size 181.80*113.72(mm)
+View IPS
+Operating
+temperature
+-20℃~70℃
+storage temperature -30℃~80℃
+Operating Voltage 5V
+Power consumption About 600mA
+Product weight About 300g
+
+===== PAGE 5 =====
+7.0 Inch JC1060P470C_I_W_Y 第5 页 共6 页
+Interface Description
+
+
+===== PAGE 6 =====
+7.0 Inch JC1060P470C_I_W_Y 第6 页 共6 页
+

@@ -113,6 +113,7 @@ if(BUILD_TESTING)
     hmi_sample_suite_font_render)
   target_sources(hmi_sample_suite_font_render_test PRIVATE
     generated/fonts/fixed/title_32_bold.c
+    generated/fonts/fixed/card_title_24_bold.c
     generated/fonts/fixed/body_18_regular.c
     generated/fonts/fixed/control_18_bold.c
     generated/fonts/fixed/status_16_regular.c
@@ -123,6 +124,38 @@ if(BUILD_TESTING)
     hmi_i18n_format_test
     "${CMAKE_SOURCE_DIR}/modules/i18n/tests/format_test.cpp"
     hmi_i18n_format)
+  hmi_add_sample_suite_test(
+    hmi_interfaces_contract_test
+    "${CMAKE_SOURCE_DIR}/modules/interfaces/tests/interfaces_contract_test.cpp"
+    hmi_interfaces_contract)
+  hmi_add_sample_suite_test(
+    hmi_update_manifest_test
+    "${CMAKE_SOURCE_DIR}/modules/update/tests/update_manifest_test.cpp"
+    hmi_update_manifest)
+  hmi_add_sample_suite_test(
+    hmi_update_download_test
+    "${CMAKE_SOURCE_DIR}/modules/update/tests/update_download_test.cpp"
+    hmi_update_download)
+  hmi_add_sample_suite_test(
+    hmi_update_memory_test
+    "${CMAKE_SOURCE_DIR}/modules/update/tests/update_memory_test.cpp"
+    hmi_update_memory)
+  hmi_add_sample_suite_test(
+    hmi_update_journal_test
+    "${CMAKE_SOURCE_DIR}/modules/update/tests/update_journal_test.cpp"
+    hmi_update_journal)
+  hmi_add_sample_suite_test(
+    hmi_update_lifecycle_test
+    "${CMAKE_SOURCE_DIR}/modules/update/tests/update_lifecycle_test.cpp"
+    hmi_update_lifecycle)
+  hmi_add_sample_suite_test(
+    hmi_update_boot_test
+    "${CMAKE_SOURCE_DIR}/modules/update/tests/update_boot_test.cpp"
+    hmi_update_boot)
+  hmi_add_sample_suite_test(
+    hmi_update_engine_test
+    "${CMAKE_SOURCE_DIR}/modules/update/tests/update_engine_test.cpp"
+    hmi_update_engine)
   hmi_add_sample_suite_test(
     hmi_settings_level_test
     "${CMAKE_SOURCE_DIR}/modules/settings/tests/level_settings_test.cpp"
@@ -166,9 +199,19 @@ if(BUILD_TESTING)
     hmi_sample_suite_date_time_interaction_test
     pages/date_time/tests/date_time_interaction_test.cpp
     hmi_sample_suite_date_time_interaction)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_interfaces_info_state_test
+    pages/interfaces_info/tests/interfaces_info_state_test.cpp
+    hmi_sample_suite_interfaces_info_state)
+  hmi_add_sample_suite_test(
+    hmi_sample_suite_interfaces_info_interaction_test
+    pages/interfaces_info/tests/interfaces_info_interaction_test.cpp
+    hmi_sample_suite_interfaces_info_interaction)
   set_tests_properties(
     hmi_sample_suite_date_time_state
     hmi_sample_suite_date_time_interaction
+    hmi_sample_suite_interfaces_info_state
+    hmi_sample_suite_interfaces_info_interaction
     PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
   hmi_add_sample_suite_test(
     hmi_audio_playback_test

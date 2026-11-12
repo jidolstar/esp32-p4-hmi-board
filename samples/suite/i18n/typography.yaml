@@ -5,6 +5,15 @@ roles:
   theme.light: control
   theme.dark: control
   dashboard.title: page_title
+  dashboard.card.ui_basics.title: card_title
+  dashboard.card.text_input.title: card_title
+  dashboard.card.display_audio.title: card_title
+  dashboard.card.wifi.title: card_title
+  dashboard.card.sd_storage.title: card_title
+  dashboard.card.wav_sounds.title: card_title
+  dashboard.card.wifi_ap_web.title: card_title
+  dashboard.card.interfaces_info.title: card_title
+  dashboard.card.date_time.title: card_title
   page.ui_basics.title: page_title
   page.ui_basics.description: body
   ui_basics.badge: status
@@ -319,3 +328,79 @@ roles:
   date_time.apply.partial: error
   date_time.apply.invalid: error
   date_time.apply.system_error: error
+  page.interfaces_info.title: page_title
+  page.interfaces_info.description: body
+  interfaces.badge: status
+  interfaces.list.hint: body
+  interfaces.status.implemented: status
+  interfaces.status.foundation: status
+  interfaces.section.purpose: field_label
+  interfaces.section.provided: field_label
+  interfaces.section.connect: field_label
+  interfaces.section.steps: field_label
+  interfaces.section.limits: field_label
+  interfaces.section.excluded: field_label
+  interfaces.topic.rs485.title: page_title
+  interfaces.topic.rs485.summary: status
+  interfaces.topic.rs485.purpose: body
+  interfaces.topic.rs485.provided: body
+  interfaces.topic.rs485.connect: body
+  interfaces.topic.rs485.steps: body
+  interfaces.topic.rs485.limits: body
+  interfaces.topic.rs485.excluded: body
+  interfaces.topic.gpio.title: page_title
+  interfaces.topic.gpio.summary: status
+  interfaces.topic.gpio.purpose: body
+  interfaces.topic.gpio.provided: body
+  interfaces.topic.gpio.connect: body
+  interfaces.topic.gpio.steps: body
+  interfaces.topic.gpio.limits: body
+  interfaces.topic.gpio.excluded: body
+  interfaces.topic.pwm.title: page_title
+  interfaces.topic.pwm.summary: status
+  interfaces.topic.pwm.purpose: body
+  interfaces.topic.pwm.provided: body
+  interfaces.topic.pwm.connect: body
+  interfaces.topic.pwm.steps: body
+  interfaces.topic.pwm.limits: body
+  interfaces.topic.pwm.excluded: body
+  interfaces.topic.usb_command.title: page_title
+  interfaces.topic.usb_command.summary: status
+  interfaces.topic.usb_command.purpose: body
+  interfaces.topic.usb_command.provided: body
+  interfaces.topic.usb_command.connect: body
+  interfaces.topic.usb_command.steps: body
+  interfaces.topic.usb_command.limits: body
+  interfaces.topic.usb_command.excluded: body
+  interfaces.topic.storage_files.title: page_title
+  interfaces.topic.storage_files.summary: status
+  interfaces.topic.storage_files.purpose: body
+  interfaces.topic.storage_files.provided: body
+  interfaces.topic.storage_files.connect: body
+  interfaces.topic.storage_files.steps: body
+  interfaces.topic.storage_files.limits: body
+  interfaces.topic.storage_files.excluded: body
+  interfaces.topic.usb_msc.title: page_title
+  interfaces.topic.usb_msc.summary: status
+  interfaces.topic.usb_msc.purpose: body
+  interfaces.topic.usb_msc.provided: body
+  interfaces.topic.usb_msc.connect: body
+  interfaces.topic.usb_msc.steps: body
+  interfaces.topic.usb_msc.limits: body
+  interfaces.topic.usb_msc.excluded: body
+  interfaces.topic.usb_assets.title: page_title
+  interfaces.topic.usb_assets.summary: status
+  interfaces.topic.usb_assets.purpose: body
+  interfaces.topic.usb_assets.provided: body
+  interfaces.topic.usb_assets.connect: body
+  interfaces.topic.usb_assets.steps: body
+  interfaces.topic.usb_assets.limits: body
+  interfaces.topic.usb_assets.excluded: body
+  interfaces.topic.firmware_update.title: page_title
+  interfaces.topic.firmware_update.summary: status
+  interfaces.topic.firmware_update.purpose: body
+  interfaces.topic.firmware_update.provided: body
+  interfaces.topic.firmware_update.connect: body
+  interfaces.topic.firmware_update.steps: body
+  interfaces.topic.firmware_update.limits: body
+  interfaces.topic.firmware_update.excluded: body

@@ -6,6 +6,7 @@
 #include "text_catalog.hpp"
 
 LV_FONT_DECLARE(hmi_sample_suite_title_32_bold);
+LV_FONT_DECLARE(hmi_sample_suite_card_title_24_bold);
 LV_FONT_DECLARE(hmi_sample_suite_body_18_regular);
 LV_FONT_DECLARE(hmi_sample_suite_control_18_bold);
 LV_FONT_DECLARE(hmi_sample_suite_status_16_regular);
@@ -16,6 +17,7 @@ namespace hmi::samples::suite::generated {
 [[nodiscard]] inline const lv_font_t *fixed_font(TypographyRole role) noexcept {
   switch (role) {
     case TypographyRole::page_title: return &hmi_sample_suite_title_32_bold;
+    case TypographyRole::card_title: return &hmi_sample_suite_card_title_24_bold;
     case TypographyRole::body: return &hmi_sample_suite_body_18_regular;
     case TypographyRole::field_label: return &hmi_sample_suite_control_18_bold;
     case TypographyRole::placeholder: return &hmi_sample_suite_body_18_regular;
