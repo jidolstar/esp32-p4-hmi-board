@@ -125,8 +125,15 @@ int main() {
   assert(!page.text_snapshot().composing);
   assert(page.text_snapshot().codepoints == 1U);
   assert(page.text_snapshot().cursor == 1U);
-  assert(page.complete());
+
+  lv_obj_t* memo_placeholder = find_label(lv_scr_act(), "Enter a memo");
+  assert(memo_placeholder != nullptr);
+  lv_area_t memo_area{};
+  lv_obj_get_coords(memo_placeholder, &memo_area);
+  hmi::platform::windows::testing::click_pointer(
+      port, (memo_area.x1 + memo_area.x2) / 2, (memo_area.y1 + memo_area.y2) / 2);
   assert(page.text_snapshot().active_field == TextFieldId::memo);
+  assert(page.text_snapshot().cursor == 0U);
   assert(page.field_text(TextFieldId::name) == "한");
 
   assert(page.handle_utf8_input("AB"));
@@ -142,6 +149,17 @@ int main() {
   assert(page.press_character(0U));
   assert(page.text_snapshot().codepoints == 1U);
   assert(page.field_text(TextFieldId::value) == "1");
+
+  lv_obj_t* memo_first_glyph = find_label(lv_scr_act(), "A");
+  assert(memo_first_glyph != nullptr);
+  lv_area_t glyph_area{};
+  lv_obj_get_coords(memo_first_glyph, &glyph_area);
+  hmi::platform::windows::testing::click_pointer(
+      port, glyph_area.x1, (glyph_area.y1 + glyph_area.y2) / 2);
+  assert(page.text_snapshot().active_field == TextFieldId::memo);
+  assert(page.text_snapshot().cursor == 0U);
+  assert(page.complete());
+  assert(page.text_snapshot().active_field == TextFieldId::value);
   assert(page.text_snapshot().locale == Locale::en_us);
   assert(page.complete());
   assert(page.text_snapshot().flow == TextInputFlowState::review);

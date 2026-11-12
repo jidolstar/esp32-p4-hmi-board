@@ -304,7 +304,8 @@ bool TextInputPage::create_fields(lv_obj_t* parent) noexcept {
     }
     context_.theme->apply_transparent(value_host);
     lv_obj_set_size(value_host, LV_PCT(100), 38);
-    lv_obj_clear_flag(value_host, LV_OBJ_FLAG_SCROLLABLE);
+    // 입력 줄이 숨겨진 빈 필드에서는 카드가 안내 문구 영역의 터치를 받는다.
+    lv_obj_clear_flag(value_host, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_style_pad_all(value_host, 0, 0);
 
     placeholder_labels_[index] = create_fixed_label(
